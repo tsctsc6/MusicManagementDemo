@@ -62,3 +62,6 @@ nunit-*.xml
 # IDE
 /.vs
 /.idea
+
+# env
+appsettings.Development.json
