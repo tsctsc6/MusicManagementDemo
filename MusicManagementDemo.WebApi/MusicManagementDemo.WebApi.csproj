@@ -11,4 +11,8 @@
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.8" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MusicManagementDemo.Infrastructure\MusicManagementDemo.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

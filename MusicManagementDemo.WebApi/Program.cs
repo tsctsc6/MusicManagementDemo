@@ -1,3 +1,7 @@
+using MusicManagementDemo.Application;
+using MusicManagementDemo.Domain;
+using MusicManagementDemo.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddHealthChecks();
+
+builder.Services.AddApplication().AddDomain().AddInfrastructure();
 
 var app = builder.Build();
 
