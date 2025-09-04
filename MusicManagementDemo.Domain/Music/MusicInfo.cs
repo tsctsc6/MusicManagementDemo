@@ -1,16 +1,19 @@
 ﻿using MusicManagementDemo.SharedKernel;
+using NpgsqlTypes;
 
 namespace MusicManagementDemo.Domain.Music;
 
 public sealed class MusicInfo : Entity
 {
-    private Guid Id { get; set; }
+    public Guid Id { get; set; }
     
-    private string Title { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
     
-    private string Artist { get; set; } = string.Empty;
+    public string Artist { get; set; } = string.Empty;
     
-    private string Album { get; set; } = string.Empty;
+    public string Album { get; set; } = string.Empty;
     
-    private string FilePath { get; set; } = string.Empty;
+    public string FilePath { get; set; } = string.Empty;
+    
+    public NpgsqlTsVector TitleTSV { get; set; }
 }

@@ -10,7 +10,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddHealthChecks();
 
-builder.Services.AddApplication().AddDomain().AddInfrastructure();
+builder.Services.AddApplication().AddDomain().AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
