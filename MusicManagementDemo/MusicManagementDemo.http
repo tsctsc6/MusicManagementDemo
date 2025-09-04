@@ -1,0 +1,6 @@
+@MusicManagementDemo_HostAddress = http://localhost:5095
+
+GET {{MusicManagementDemo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
