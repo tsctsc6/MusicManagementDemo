@@ -1,6 +1,6 @@
 ﻿using MusicManagementDemo.SharedKernel;
 
-namespace MusicManagementDemo.Domain.MusicInfo;
+namespace MusicManagementDemo.Domain.Music;
 
 public sealed class MusicInfo : Entity
 {
