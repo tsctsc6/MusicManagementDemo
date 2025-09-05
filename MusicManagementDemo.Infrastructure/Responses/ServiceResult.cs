@@ -1,9 +1,11 @@
-﻿namespace MusicManagementDemo.Infrastructure.Responses;
+﻿using MusicManagementDemo.SharedKernel;
 
-internal sealed record ServiceResult(
+namespace MusicManagementDemo.Infrastructure.Responses;
+
+public sealed record ServiceResult(
     bool IsFinish,
     int? Code,
-    IReadOnlyDictionary<string, string[]>? Errors
+    IReadOnlyList<string>? Errors
 ) : IServiceResult
 {
     public static ServiceResult Ok()
@@ -11,7 +13,7 @@ internal sealed record ServiceResult(
         return new ServiceResult(IsFinish: true, Code: 200, Errors: null);
     }
 
-    public static ServiceResult Err(int code, IReadOnlyDictionary<string, string[]>? errors = null)
+    public static ServiceResult Err(int code, IReadOnlyList<string>? errors = null)
     {
         return new ServiceResult(IsFinish: true, Code: code, Errors: errors);
     }
@@ -22,10 +24,10 @@ internal sealed record ServiceResult(
     }
 }
 
-internal sealed record ServiceResult<T>(
+public sealed record ServiceResult<T>(
     bool IsFinish,
     int? Code,
-    IReadOnlyDictionary<string, string[]>? Errors,
+    IReadOnlyList<string>? Errors,
     T? Data
 ) : IServiceResult
 {
@@ -34,7 +36,7 @@ internal sealed record ServiceResult<T>(
         return new ServiceResult<T>(IsFinish: true, Code: 200, Errors: null, Data: data);
     }
 
-    public static ServiceResult<T> Err(int code, IReadOnlyDictionary<string, string[]>? errors = null)
+    public static ServiceResult<T> Err(int code, IReadOnlyList<string>? errors = null)
     {
         return new ServiceResult<T>(IsFinish: true, Code: code, Errors: errors, Data: default);
     }
