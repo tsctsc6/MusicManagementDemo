@@ -9,6 +9,8 @@ public sealed class MusicAppDbContext(DbContextOptions<MusicAppDbContext> option
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema(Schemas.Identity);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MusicAppDbContext).Assembly);
+
+        modelBuilder.HasDefaultSchema(Schemas.Music);
     }
 }

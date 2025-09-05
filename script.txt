@@ -1,2 +1,4 @@
-dotnet ef migrations add 2025090501_MusicInitial -c MusicAppDbContext -p MusicManagementDemo.Infrastructure.csproj -o Migrations/Music --verbose
-dotnet ef migrations add 2025090501_IdentityInitial -c IdentityAppDbContext -p MusicManagementDemo.Infrastructure.csproj -o Migrations/Identity --verbose
+在解决方案目录中：
+
+dotnet ef migrations add 2025090501_MusicInitial -c MusicAppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/Music --verbose
+dotnet ef migrations add 2025090501_IdentityInitial -c IdentityAppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/Identity --verbose
