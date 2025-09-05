@@ -61,6 +61,7 @@ nunit-*.xml
 
 # IDE
 /.vs
+/MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj.user
 /.idea
 
 # env
