@@ -6,9 +6,13 @@ internal sealed class RegisterCommandValidator : AbstractValidator<RegisterComma
 {
     public RegisterCommandValidator()
     {
-        RuleFor(c => c.Email).Cascade(CascadeMode.Stop).NotEmpty().EmailAddress();
-        RuleFor(c => c.UserName).NotEmpty();
+        RuleFor(c => c.Email)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .EmailAddress()
+            .MaximumLength(256);
+        RuleFor(c => c.UserName).NotEmpty().MaximumLength(256);
         // ASP.NET Identity 会检查密码。
-        RuleFor(c => c.Password).NotEmpty();
+        RuleFor(c => c.Password).NotEmpty().MaximumLength(256);
     }
 }
