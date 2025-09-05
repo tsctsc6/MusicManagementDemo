@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.WebApi", "MusicManagementDemo.WebApi\MusicManagementDemo.WebApi.csproj", "{1166503B-753B-4F4D-8447-22F1631BF968}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{DABE292A-6A38-41D9-A9E4-80DA93458B0E}"
@@ -16,6 +19,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Application", "MusicManagementDemo.Application\MusicManagementDemo.Application.csproj", "{73B30323-B8F6-4E84-9B0B-B81865398101}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.SharedKernel", "MusicManagementDemo.SharedKernel\MusicManagementDemo.SharedKernel.csproj", "{B3E3A842-853A-462A-B26B-B7862BC15759}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MigrationScript", "MigrationScript", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		script.txt = script.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,5 +51,11 @@ Global
 		{B3E3A842-853A-462A-B26B-B7862BC15759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3E3A842-853A-462A-B26B-B7862BC15759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3E3A842-853A-462A-B26B-B7862BC15759}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8DB2980-39F0-42FD-BF01-5ECDFB50E674}
 	EndGlobalSection
 EndGlobal
