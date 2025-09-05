@@ -3,10 +3,11 @@ using MusicManagementDemo.Domain.Music;
 
 namespace MusicManagementDemo.Infrastructure.Database;
 
-public sealed class MusicAppDbContext(DbContextOptions<MusicAppDbContext> options) : DbContext(options)
+public sealed class MusicAppDbContext(DbContextOptions<MusicAppDbContext> options)
+    : DbContext(options)
 {
     public DbSet<MusicInfo> MusicInfo { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
