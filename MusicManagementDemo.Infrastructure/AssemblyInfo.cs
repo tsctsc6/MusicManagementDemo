@@ -32,7 +32,17 @@ public static class AssemblyInfo
     {
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MusicAppDbContext>(options => options.UseNpgsql(connectionString));
-        services.AddDbContext<IdentityAppDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<IdentityAppDbContext>(options => options.UseNpgsql(connectionString)
+        .UseSeeding((d2, _) =>
+        {
+            var d = (IdentityAppDbContext)d2;
+            d.Roles.Add(new()
+            {
+                Name = "Admin",
+                NormalizedName = "ADMIN",
+            });
+            d.SaveChanges();
+        }));
         return services;
     }
 
