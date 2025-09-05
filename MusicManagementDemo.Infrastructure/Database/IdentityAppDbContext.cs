@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Domain.Identity;
 
@@ -9,6 +10,7 @@ public sealed class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> 
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema(Schemas.Identity);
     }
 }
