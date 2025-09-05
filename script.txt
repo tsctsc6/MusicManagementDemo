@@ -1,4 +1,4 @@
-ÔÚ½â¾ö·½°¸Ä¿Â¼ÖÐ£º
+åœ¨è§£å†³æ–¹æ¡ˆç›®å½•ä¸­ï¼š
 
 dotnet ef migrations add 2025090501_MusicInitial -c MusicAppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/Music --verbose
 dotnet ef migrations add 2025090501_IdentityInitial -c IdentityAppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/Identity --verbose
