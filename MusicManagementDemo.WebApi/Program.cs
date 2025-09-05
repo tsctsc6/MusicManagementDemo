@@ -1,6 +1,8 @@
 using MusicManagementDemo.Application;
 using MusicManagementDemo.Domain;
 using MusicManagementDemo.Infrastructure;
+using MusicManagementDemo.WebApi.Endpoints;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,11 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddApplication().AddDomain().AddInfrastructure(builder.Configuration);
 
+builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
+
 var app = builder.Build();
+
+app.MapEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
