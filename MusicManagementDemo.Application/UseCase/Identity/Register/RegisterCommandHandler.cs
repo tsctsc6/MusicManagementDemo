@@ -1,15 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using MusicManagementDemo.Domain.Identity;
-using RustSharp;
+using MusicManagementDemo.Infrastructure.Responses;
+using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Register;
 
 internal sealed class RegisterCommandHandler(UserManager<ApplicationUser> userMgr)
-    : IRequestHandler<RegisterCommand, Result<Guid, string>>
+    : IRequestHandler<RegisterCommand, IServiceResult>
 {
-    public async Task<Result<Guid, string>> Handle(
+    public async Task<IServiceResult> Handle(
         RegisterCommand request,
         CancellationToken cancellationToken
     )
@@ -18,8 +18,8 @@ internal sealed class RegisterCommandHandler(UserManager<ApplicationUser> userMg
         var result = await userMgr.CreateAsync(user, request.Password);
         if (!result.Succeeded)
         {
-            return Result.Err(string.Join(" ", result.Errors.Select(e => e.Description)));
+            return ServiceResult.Err(5003, [.. result.Errors.Select(e => e.Description)]);
         }
-        return Result.Ok(Guid.Parse(user.Id));
+        return ServiceResult<Guid>.Ok(Guid.Parse(user.Id));
     }
 }
