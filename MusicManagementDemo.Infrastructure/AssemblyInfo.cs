@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MusicManagementDemo.Domain.Identity;
 using MusicManagementDemo.Infrastructure.Database;
-using System.Text;
 
 namespace MusicManagementDemo.Infrastructure;
 
@@ -22,6 +24,10 @@ public static class AssemblyInfo
         services.AddDatabase(configuration);
         services.AddJwt(configuration);
         services.AddAuthentication();
+        services
+            .AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<IdentityAppDbContext>()
+            .AddDefaultTokenProviders();
         return services;
     }
 
@@ -32,17 +38,18 @@ public static class AssemblyInfo
     {
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MusicAppDbContext>(options => options.UseNpgsql(connectionString));
-        services.AddDbContext<IdentityAppDbContext>(options => options.UseNpgsql(connectionString)
-        .UseSeeding((d2, _) =>
-        {
-            var d = (IdentityAppDbContext)d2;
-            d.Roles.Add(new()
-            {
-                Name = "Admin",
-                NormalizedName = "ADMIN",
-            });
-            d.SaveChanges();
-        }));
+        services.AddDbContext<IdentityAppDbContext>(options =>
+            options
+                .UseNpgsql(connectionString)
+                .UseSeeding(
+                    (d2, _) =>
+                    {
+                        var d = (IdentityAppDbContext)d2;
+                        d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
+                        d.SaveChanges();
+                    }
+                )
+        );
         return services;
     }
 
@@ -66,7 +73,9 @@ public static class AssemblyInfo
                     ValidateAudience = true,
                     ValidAudience = configuration["Jwt:Audience"],
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)),
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)
+                    ),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                 };
