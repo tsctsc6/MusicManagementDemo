@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MusicManagementDemo.Domain.Identity;
 using MusicManagementDemo.Infrastructure.Database;
+using System.ComponentModel;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MusicManagementDemo.Infrastructure;
 
@@ -28,6 +33,16 @@ public static class AssemblyInfo
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<IdentityAppDbContext>()
             .AddDefaultTokenProviders();
+        services.Configure<JsonOptions>(op =>
+        {
+            op.SerializerOptions.DefaultBufferSize = 1024;
+            op.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            op.SerializerOptions.MaxDepth = 12;
+            op.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            op.SerializerOptions.AllowTrailingCommas = false;
+            op.SerializerOptions.WriteIndented = false;
+            op.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        });
         return services;
     }
 
