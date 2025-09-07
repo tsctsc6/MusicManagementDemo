@@ -7,7 +7,7 @@ public sealed class ManagementAppDbContext(DbContextOptions<ManagementAppDbConte
     : DbContext(options)
 {
     public DbSet<Storage> Storage { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
