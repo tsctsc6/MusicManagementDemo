@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MusicManagementDemo.Domain.Identity;
+using MusicManagementDemo.Domain.Entity.Identity;
 
 namespace MusicManagementDemo.Infrastructure.Database;
 

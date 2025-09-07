@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using MusicManagementDemo.Domain.Identity;
+using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Infrastructure.Database;
 
 namespace MusicManagementDemo.Infrastructure;

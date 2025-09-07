@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MusicManagementDemo.Domain.Music;
+using MusicManagementDemo.Domain.Entity.Music;
 
 namespace MusicManagementDemo.Infrastructure.Database;
 

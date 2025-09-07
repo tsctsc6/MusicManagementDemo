@@ -1,9 +1,8 @@
-﻿using MusicManagementDemo.SharedKernel;
-using NpgsqlTypes;
+﻿using NpgsqlTypes;
 
-namespace MusicManagementDemo.Domain.Music;
+namespace MusicManagementDemo.Domain.Entity.Music;
 
-public sealed class MusicInfo : Entity
+public sealed class MusicInfo : SharedKernel.Entity
 {
     public Guid Id { get; set; }
     

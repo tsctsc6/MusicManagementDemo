@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using MusicManagementDemo.Domain.Identity;
+using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Infrastructure.Responses;
 using MusicManagementDemo.SharedKernel;
 

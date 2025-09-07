@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MusicManagementDemo.Domain.Identity;
 using MusicManagementDemo.Infrastructure.Responses;
 using MusicManagementDemo.SharedKernel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using MusicManagementDemo.Domain.Entity.Identity;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Login;
 
