@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -93,6 +94,8 @@ public static class AssemblyInfo
                     ),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
+                    RoleClaimType = "role",
+                    NameClaimType = JwtRegisteredClaimNames.UniqueName
                 };
             });
         return services;
