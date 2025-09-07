@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 {
     [DbContext(typeof(IdentityAppDbContext))]
-    [Migration("20250905033919_2025090501_IdentityInitial")]
+    [Migration("20250907103143_2025090501_IdentityInitial")]
     partial class _2025090501_IdentityInitial
     {
         /// <inheritdoc />
@@ -158,7 +158,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
                     b.ToTable("AspNetUserTokens", "id");
                 });
 
-            modelBuilder.Entity("MusicManagementDemo.Domain.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -233,7 +233,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MusicManagementDemo.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("MusicManagementDemo.Domain.Entity.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -242,7 +242,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MusicManagementDemo.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("MusicManagementDemo.Domain.Entity.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -257,7 +257,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MusicManagementDemo.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("MusicManagementDemo.Domain.Entity.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -266,7 +266,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("MusicManagementDemo.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("MusicManagementDemo.Domain.Entity.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
