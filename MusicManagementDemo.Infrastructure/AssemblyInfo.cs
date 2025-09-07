@@ -31,6 +31,7 @@ public static class AssemblyInfo
         services.AddDatabase(configuration);
         services.AddJwt(configuration);
         services.AddAuthentication();
+        services.AddAuthorization();
         services
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<IdentityAppDbContext>()
