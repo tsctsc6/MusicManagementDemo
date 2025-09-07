@@ -34,19 +34,10 @@ public static class AssemblyInfo
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<IdentityAppDbContext>()
             .AddDefaultTokenProviders();
-        services.Configure<JsonOptions>(op =>
-        {
-            op.SerializerOptions.DefaultBufferSize = 1024;
-            op.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            op.SerializerOptions.MaxDepth = 12;
-            op.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            op.SerializerOptions.AllowTrailingCommas = false;
-            op.SerializerOptions.WriteIndented = false;
-            op.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-        });
+        services.AddJsonOptions();
         return services;
     }
-
+    
     private static IServiceCollection AddDatabase(
         this IServiceCollection services,
         IConfiguration configuration
@@ -98,6 +89,21 @@ public static class AssemblyInfo
                     NameClaimType = JwtRegisteredClaimNames.UniqueName
                 };
             });
+        return services;
+    }
+    
+    private static IServiceCollection AddJsonOptions(this IServiceCollection services)
+    {
+        services.Configure<JsonOptions>(op =>
+        {
+            op.SerializerOptions.DefaultBufferSize = 1024;
+            op.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            op.SerializerOptions.MaxDepth = 12;
+            op.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            op.SerializerOptions.AllowTrailingCommas = false;
+            op.SerializerOptions.WriteIndented = false;
+            op.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        });
         return services;
     }
 }
