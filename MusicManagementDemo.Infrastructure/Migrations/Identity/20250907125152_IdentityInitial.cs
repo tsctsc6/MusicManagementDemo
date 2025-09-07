@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 {
     /// <inheritdoc />
-    public partial class _2025090501_IdentityInitial : Migration
+    public partial class IdentityInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

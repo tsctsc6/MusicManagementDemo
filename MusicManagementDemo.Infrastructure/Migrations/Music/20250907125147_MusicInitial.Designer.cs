@@ -13,8 +13,8 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Migrations.Music
 {
     [DbContext(typeof(MusicAppDbContext))]
-    [Migration("20250907103139_2025090501_MusicInitial")]
-    partial class _2025090501_MusicInitial
+    [Migration("20250907125147_MusicInitial")]
+    partial class MusicInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,29 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationUser", "music");
+                });
+
+            modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Management.Storage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Storage", "music");
                 });
 
             modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Music.MusicInfo", b =>

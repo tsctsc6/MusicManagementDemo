@@ -76,6 +76,29 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                     b.ToTable("ApplicationUser", "music");
                 });
 
+            modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Management.Storage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Storage", "music");
+                });
+
             modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Music.MusicInfo", b =>
                 {
                     b.Property<Guid>("Id")

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
 
 #nullable disable
@@ -7,7 +8,7 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Migrations.Music
 {
     /// <inheritdoc />
-    public partial class _2025090501_MusicInitial : Migration
+    public partial class MusicInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -87,6 +88,21 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                     table.PrimaryKey("PK_MusicList", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Storage",
+                schema: "music",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Path = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Storage", x => x.Id);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_MusicInfo_TitleTSV",
                 schema: "music",
@@ -112,6 +128,10 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
 
             migrationBuilder.DropTable(
                 name: "MusicList",
+                schema: "music");
+
+            migrationBuilder.DropTable(
+                name: "Storage",
                 schema: "music");
         }
     }

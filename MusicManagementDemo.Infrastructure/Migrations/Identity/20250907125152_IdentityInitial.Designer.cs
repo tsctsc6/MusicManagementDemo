@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 {
     [DbContext(typeof(IdentityAppDbContext))]
-    [Migration("20250907103143_2025090501_IdentityInitial")]
-    partial class _2025090501_IdentityInitial
+    [Migration("20250907125152_IdentityInitial")]
+    partial class IdentityInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
