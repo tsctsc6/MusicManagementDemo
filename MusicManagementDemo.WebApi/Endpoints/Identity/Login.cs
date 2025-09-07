@@ -3,9 +3,9 @@ using MusicManagementDemo.Application.UseCase.Identity.Login;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Identity;
 
-public class Login : IEndpoint
+internal sealed class Login : IEndpoint
 {
-    public sealed record Request(string Email, string UserName, string Password);
+    private sealed record Request(string Email, string UserName, string Password);
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
