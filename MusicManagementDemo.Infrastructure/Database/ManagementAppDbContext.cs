@@ -10,10 +10,7 @@ public sealed class ManagementAppDbContext(DbContextOptions<ManagementAppDbConte
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
-
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ManagementAppDbContext).Assembly);
-
         modelBuilder.HasDefaultSchema(Schemas.Management);
+        base.OnModelCreating(modelBuilder);
     }
 }

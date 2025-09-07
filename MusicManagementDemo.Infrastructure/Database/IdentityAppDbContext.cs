@@ -9,7 +9,7 @@ public sealed class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> 
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema(Schemas.Identity);
+        base.OnModelCreating(modelBuilder);
     }
 }
