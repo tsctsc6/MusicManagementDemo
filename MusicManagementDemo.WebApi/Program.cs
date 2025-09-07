@@ -16,6 +16,9 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapEndpoints();
 
 // Configure the HTTP request pipeline.
@@ -27,8 +30,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapHealthChecks("/health");
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.Run();
