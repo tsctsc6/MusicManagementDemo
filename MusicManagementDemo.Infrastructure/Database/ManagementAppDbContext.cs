@@ -3,7 +3,7 @@ using MusicManagementDemo.Domain.Entity.Management;
 
 namespace MusicManagementDemo.Infrastructure.Database;
 
-public sealed class ManagementAppContext(DbContextOptions<ManagementAppContext> options)
+public sealed class ManagementAppDbContext(DbContextOptions<ManagementAppDbContext> options)
     : DbContext(options)
 {
     public DbSet<Storage> Storage { get; set; }
@@ -12,7 +12,7 @@ public sealed class ManagementAppContext(DbContextOptions<ManagementAppContext> 
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ManagementAppContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ManagementAppDbContext).Assembly);
 
         modelBuilder.HasDefaultSchema(Schemas.Management);
     }
