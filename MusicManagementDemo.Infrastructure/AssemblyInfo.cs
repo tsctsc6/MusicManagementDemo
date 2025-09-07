@@ -26,7 +26,8 @@ public static class AssemblyInfo
         services
             .AddHealthChecks()
             .AddDbContextCheck<IdentityAppDbContext>()
-            .AddDbContextCheck<MusicAppDbContext>();
+            .AddDbContextCheck<MusicAppDbContext>()
+            .AddDbContextCheck<ManagementAppDbContext>();
         services.AddDatabase(configuration);
         services.AddJwt(configuration);
         services.AddAuthentication();
@@ -45,6 +46,7 @@ public static class AssemblyInfo
     {
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MusicAppDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<ManagementAppDbContext>(options => options.UseNpgsql(connectionString));
         services.AddDbContext<IdentityAppDbContext>(options =>
             options
                 .UseNpgsql(connectionString)
