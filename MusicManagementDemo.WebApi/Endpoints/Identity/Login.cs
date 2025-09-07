@@ -14,10 +14,7 @@ public class Login : IEndpoint
             async (Request request, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 var result = await mediator.Send(
-                    new LoginCommand(
-                        Email: request.Email,
-                        Password: request.Password
-                    ),
+                    new LoginCommand(Email: request.Email, Password: request.Password),
                     cancellationToken
                 );
                 return Results.Ok(result);

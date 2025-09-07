@@ -9,9 +9,9 @@ public class MusicListConfiguration : IEntityTypeConfiguration<MusicList>
     public void Configure(EntityTypeBuilder<MusicList> builder)
     {
         builder.HasKey(e => e.Id);
-        
+
         builder.Property(e => e.Name).HasMaxLength(100);
-        
+
         builder.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
     }
 }

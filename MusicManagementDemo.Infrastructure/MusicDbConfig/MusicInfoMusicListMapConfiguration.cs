@@ -9,7 +9,7 @@ public class MusicInfoMusicListMapConfiguration : IEntityTypeConfiguration<Music
     public void Configure(EntityTypeBuilder<MusicInfoMusicListMap> builder)
     {
         builder.HasKey(e => new { e.MusicListId, e.MusicInfoId });
-        
+
         builder.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
     }
 }

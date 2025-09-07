@@ -1,26 +1,32 @@
-﻿using MediatR;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Infrastructure.Responses;
 using MusicManagementDemo.SharedKernel;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using MusicManagementDemo.Domain.Entity.Identity;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Login;
 
-internal class LoginCommandHandler(UserManager<ApplicationUser> userMgr, SignInManager<ApplicationUser> signInMgr, IConfiguration config) : IRequestHandler<LoginCommand, IServiceResult>
+internal class LoginCommandHandler(
+    UserManager<ApplicationUser> userMgr,
+    SignInManager<ApplicationUser> signInMgr,
+    IConfiguration config
+) : IRequestHandler<LoginCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<IServiceResult> Handle(
+        LoginCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var user = await userMgr.FindByEmailAsync(request.Email);
         if (user == null)
             return ServiceResult.Err(5004, ["邮箱或密码错误"]);
 
-        var signInRes = await signInMgr.CheckPasswordSignInAsync(user, request 
-            .Password, false);
+        var signInRes = await signInMgr.CheckPasswordSignInAsync(user, request.Password, false);
         if (!signInRes.Succeeded)
             return ServiceResult.Err(5004, ["邮箱或密码错误"]);
 
@@ -28,7 +34,7 @@ internal class LoginCommandHandler(UserManager<ApplicationUser> userMgr, SignInM
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id),
-            new(JwtRegisteredClaimNames.UniqueName, user.UserName)
+            new(JwtRegisteredClaimNames.UniqueName, user.UserName),
         };
         // 加入角色声明
         var roles = await userMgr.GetRolesAsync(user);

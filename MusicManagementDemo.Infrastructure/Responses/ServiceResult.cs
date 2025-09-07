@@ -2,11 +2,8 @@
 
 namespace MusicManagementDemo.Infrastructure.Responses;
 
-public sealed record ServiceResult(
-    bool IsFinish,
-    int? Code,
-    IReadOnlyList<string>? Errors
-) : IServiceResult
+public sealed record ServiceResult(bool IsFinish, int? Code, IReadOnlyList<string>? Errors)
+    : IServiceResult
 {
     public static ServiceResult Ok()
     {

@@ -1,8 +1,8 @@
+using System.Reflection;
 using MusicManagementDemo.Application;
 using MusicManagementDemo.Domain;
 using MusicManagementDemo.Infrastructure;
 using MusicManagementDemo.WebApi.Endpoints;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
