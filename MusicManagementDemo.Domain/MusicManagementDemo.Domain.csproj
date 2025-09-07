@@ -18,7 +18,4 @@
     <ItemGroup>
         <ProjectReference Include="..\MusicManagementDemo.SharedKernel\MusicManagementDemo.SharedKernel.csproj" />
     </ItemGroup>
-    <ItemGroup>
-        <Folder Include="Entity\" />
-    </ItemGroup>
 </Project>

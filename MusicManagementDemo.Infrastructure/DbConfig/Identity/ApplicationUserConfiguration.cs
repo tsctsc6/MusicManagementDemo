@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MusicManagementDemo.Domain.Entity.Identity;
 
-namespace MusicManagementDemo.Infrastructure.IdentityDbConfig;
+namespace MusicManagementDemo.Infrastructure.DbConfig.Identity;
 
 public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {

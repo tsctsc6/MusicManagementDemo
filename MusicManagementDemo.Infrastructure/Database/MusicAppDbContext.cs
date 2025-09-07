@@ -7,6 +7,8 @@ public sealed class MusicAppDbContext(DbContextOptions<MusicAppDbContext> option
     : DbContext(options)
 {
     public DbSet<MusicInfo> MusicInfo { get; set; }
+    public DbSet<MusicList> MusicList { get; set; }
+    public DbSet<MusicInfoMusicListMap> MusicInfoMusicListMap { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
