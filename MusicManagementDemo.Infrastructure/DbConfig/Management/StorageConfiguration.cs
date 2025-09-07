@@ -9,6 +9,7 @@ public class StorageConfiguration : IEntityTypeConfiguration<Storage>
     public void Configure(EntityTypeBuilder<Storage> builder)
     {
         builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
 
