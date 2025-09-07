@@ -6,7 +6,7 @@ public class MusicList : SharedKernel.Entity
 
     public string Name { get; set; } = string.Empty;
 
-    public Guid UserId { get; set; }
+    public string UserId { get; set; } = Guid.Empty.ToString();
 
     public DateTime CreatedAt { get; set; }
 }
