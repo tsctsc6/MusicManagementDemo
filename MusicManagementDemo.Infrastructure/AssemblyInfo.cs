@@ -39,7 +39,7 @@ public static class AssemblyInfo
         services.AddJsonOptions();
         return services;
     }
-    
+
     private static IServiceCollection AddDatabase(
         this IServiceCollection services,
         IConfiguration configuration
@@ -47,7 +47,9 @@ public static class AssemblyInfo
     {
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MusicAppDbContext>(options => options.UseNpgsql(connectionString));
-        services.AddDbContext<ManagementAppDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<ManagementAppDbContext>(options =>
+            options.UseNpgsql(connectionString)
+        );
         services.AddDbContext<IdentityAppDbContext>(options =>
             options
                 .UseNpgsql(connectionString)
@@ -89,12 +91,12 @@ public static class AssemblyInfo
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     RoleClaimType = "role",
-                    NameClaimType = JwtRegisteredClaimNames.UniqueName
+                    NameClaimType = JwtRegisteredClaimNames.UniqueName,
                 };
             });
         return services;
     }
-    
+
     private static IServiceCollection AddJsonOptions(this IServiceCollection services)
     {
         services.Configure<JsonOptions>(op =>

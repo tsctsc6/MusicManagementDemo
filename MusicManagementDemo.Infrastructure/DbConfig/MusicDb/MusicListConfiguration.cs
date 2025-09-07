@@ -11,7 +11,7 @@ public class MusicListConfiguration : IEntityTypeConfiguration<MusicList>
         builder.HasKey(e => e.Id);
 
         builder.Property(e => e.Name).HasMaxLength(100);
-        
+
         builder.Property(e => e.UserId).HasMaxLength(36);
 
         builder.Property(e => e.CreatedAt).HasDefaultValueSql("now()");

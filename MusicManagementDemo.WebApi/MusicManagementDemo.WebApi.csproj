@@ -15,6 +15,6 @@
         <ProjectReference Include="..\MusicManagementDemo.Application\MusicManagementDemo.Application.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Endpoints\Music\" />
+        <Folder Include="Endpoints\Music\" />
     </ItemGroup>
 </Project>
