@@ -29,13 +29,12 @@ public static class AssemblyInfo
             .AddDbContextCheck<MusicAppDbContext>()
             .AddDbContextCheck<ManagementAppDbContext>();
         services.AddDatabase(configuration);
-        services.AddJwt(configuration);
-        services.AddAuthentication();
-        services.AddAuthorization();
         services
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<IdentityAppDbContext>()
             .AddDefaultTokenProviders();
+        services.AddJwt(configuration);
+        services.AddAuthorization();
         services.AddJsonOptions();
         return services;
     }
@@ -89,7 +88,7 @@ public static class AssemblyInfo
                         Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)
                     ),
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero,
+                    ClockSkew = TimeSpan.FromHours(1),
                     RoleClaimType = "role",
                     NameClaimType = JwtRegisteredClaimNames.UniqueName,
                 };
