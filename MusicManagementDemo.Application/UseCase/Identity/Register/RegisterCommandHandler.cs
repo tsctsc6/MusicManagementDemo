@@ -18,7 +18,7 @@ internal sealed class RegisterCommandHandler(UserManager<ApplicationUser> userMg
         var result = await userMgr.CreateAsync(user, request.Password);
         if (!result.Succeeded)
         {
-            return ServiceResult.Err(5003, [.. result.Errors.Select(e => e.Description)]);
+            return ServiceResult.Err(503, [.. result.Errors.Select(e => e.Description)]);
         }
         return ServiceResult<Guid>.Ok(Guid.Parse(user.Id));
     }
