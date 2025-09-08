@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Migrations.Music
 {
     [DbContext(typeof(MusicAppDbContext))]
-    [Migration("20250907130150_MusicInitial")]
+    [Migration("20250908044326_MusicInitial")]
     partial class MusicInitial
     {
         /// <inheritdoc />
@@ -90,14 +90,22 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
+                        .IsUnicode(true)
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasMaxLength(256)
+                        .IsUnicode(true)
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Path")
+                        .IsUnique();
 
                     b.ToTable("Storage", "music");
                 });

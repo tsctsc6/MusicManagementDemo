@@ -11,8 +11,10 @@ public class StorageConfiguration : IEntityTypeConfiguration<Storage>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-        builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
+        builder.HasIndex(x => x.Name).IsUnique();
+        builder.Property(x => x.Name).IsRequired().IsUnicode().HasMaxLength(50);
 
-        builder.Property(x => x.Path).IsRequired().HasMaxLength(256);
+        builder.HasIndex(x => x.Path).IsUnique();
+        builder.Property(x => x.Path).IsRequired().IsUnicode().HasMaxLength(256);
     }
 }
