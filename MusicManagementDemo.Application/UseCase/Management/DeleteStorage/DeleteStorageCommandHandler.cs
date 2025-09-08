@@ -11,7 +11,7 @@ internal sealed class DeleteStorageCommandHandler(ManagementAppDbContext dbConte
 {
     public async Task<IServiceResult> Handle(DeleteStorageCommand request, CancellationToken cancellationToken)
     {
-        var storageToDelete = await dbContext.Storage.SingleOrDefaultAsync(e => e.Id == request.Id);
+        var storageToDelete = await dbContext.Storage.SingleOrDefaultAsync(e => e.Id == request.Id, cancellationToken: cancellationToken);
         if (storageToDelete is null)
         {
             return ServiceResult.Err(4004, ["未找到对应的存储"]);
