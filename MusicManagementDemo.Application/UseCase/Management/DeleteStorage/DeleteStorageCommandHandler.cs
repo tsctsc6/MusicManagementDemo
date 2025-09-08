@@ -9,9 +9,15 @@ namespace MusicManagementDemo.Application.UseCase.Management.DeleteStorage;
 internal sealed class DeleteStorageCommandHandler(ManagementAppDbContext dbContext)
     : IRequestHandler<DeleteStorageCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(DeleteStorageCommand request, CancellationToken cancellationToken)
+    public async Task<IServiceResult> Handle(
+        DeleteStorageCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        var storageToDelete = await dbContext.Storage.SingleOrDefaultAsync(e => e.Id == request.Id, cancellationToken: cancellationToken);
+        var storageToDelete = await dbContext.Storage.SingleOrDefaultAsync(
+            e => e.Id == request.Id,
+            cancellationToken: cancellationToken
+        );
         if (storageToDelete is null)
         {
             return ServiceResult.Err(404, ["未找到对应的存储"]);
