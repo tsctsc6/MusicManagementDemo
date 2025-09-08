@@ -5,7 +5,7 @@ using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 
-public class CreateStorageCommandHandler(ManagementAppDbContext dbContext)
+internal sealed class CreateStorageCommandHandler(ManagementAppDbContext dbContext)
     : IRequestHandler<CreateStorageCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(

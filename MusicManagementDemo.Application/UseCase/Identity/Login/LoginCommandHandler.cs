@@ -11,7 +11,7 @@ using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Login;
 
-internal class LoginCommandHandler(
+internal sealed class LoginCommandHandler(
     UserManager<ApplicationUser> userMgr,
     SignInManager<ApplicationUser> signInMgr,
     IConfiguration config

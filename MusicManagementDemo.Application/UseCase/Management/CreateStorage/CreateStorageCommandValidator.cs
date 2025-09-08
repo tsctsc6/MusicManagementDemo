@@ -2,7 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 
-public class CreateStorageCommandValidator : AbstractValidator<CreateStorageCommand>
+internal sealed class CreateStorageCommandValidator : AbstractValidator<CreateStorageCommand>
 {
     public CreateStorageCommandValidator()
     {
