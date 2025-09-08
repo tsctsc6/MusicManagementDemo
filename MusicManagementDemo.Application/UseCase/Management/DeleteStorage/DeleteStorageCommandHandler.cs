@@ -1,0 +1,23 @@
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using MusicManagementDemo.Infrastructure.Database;
+using MusicManagementDemo.Infrastructure.Responses;
+using MusicManagementDemo.SharedKernel;
+
+namespace MusicManagementDemo.Application.UseCase.Management.DeleteStorage;
+
+internal sealed class DeleteStorageCommandHandler(ManagementAppDbContext dbContext)
+    : IRequestHandler<DeleteStorageCommand, IServiceResult>
+{
+    public async Task<IServiceResult> Handle(DeleteStorageCommand request, CancellationToken cancellationToken)
+    {
+        var storageToDelete = await dbContext.Storage.SingleOrDefaultAsync(e => e.Id == request.Id);
+        if (storageToDelete is null)
+        {
+            return ServiceResult.Err(4004, ["未找到对应的存储"]);
+        }
+        dbContext.Storage.Remove(storageToDelete);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return ServiceResult.Ok();
+    }
+}
