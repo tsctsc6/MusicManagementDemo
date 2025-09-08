@@ -17,7 +17,14 @@ internal sealed class CreateStorageCommandHandler(ManagementAppDbContext dbConte
             new() { Name = request.Name, Path = request.Path },
             cancellationToken
         );
-        await dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception)
+        {
+            return ServiceResult.Err(503, ["内部错误"]);
+        }
         return ServiceResult.Ok();
     }
 }

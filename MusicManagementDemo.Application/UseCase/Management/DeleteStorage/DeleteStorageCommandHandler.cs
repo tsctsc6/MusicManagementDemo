@@ -17,7 +17,14 @@ internal sealed class DeleteStorageCommandHandler(ManagementAppDbContext dbConte
             return ServiceResult.Err(404, ["未找到对应的存储"]);
         }
         dbContext.Storage.Remove(storageToDelete);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception)
+        {
+            return ServiceResult.Err(503, ["内部错误"]);
+        }
         return ServiceResult.Ok();
     }
 }
