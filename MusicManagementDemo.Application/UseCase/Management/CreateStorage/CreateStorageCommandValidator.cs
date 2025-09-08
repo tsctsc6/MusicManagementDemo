@@ -6,6 +6,8 @@ internal sealed class CreateStorageCommandValidator : AbstractValidator<CreateSt
 {
     public CreateStorageCommandValidator()
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+
         RuleFor(e => e.Name).NotEmpty().MaximumLength(50);
 
         RuleFor(e => e.Path).NotEmpty().MaximumLength(256);
