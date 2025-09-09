@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MusicManagementDemo.Application;
 
@@ -9,7 +10,9 @@ public static class AssemblyInfo
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblyContaining(typeof(AssemblyInfo));
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
+        services.AddValidatorsFromAssemblyContaining(typeof(AssemblyInfo));
         return services;
     }
 }
