@@ -2,5 +2,5 @@
 
 public interface IJobHandler
 {
-    public Task Handle(JobType requestType);
+    public Task Handle(long jobId, JobType jobType);
 }
