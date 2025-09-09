@@ -20,6 +20,7 @@ internal sealed class CreateJobCommandHandler(
         var jobToAdd = new Job
         {
             Type = request.Type,
+            JobArgs = request.JobArgs,
             Description = request.Description,
             Status = JobStatus.WaitingStart,
         };
