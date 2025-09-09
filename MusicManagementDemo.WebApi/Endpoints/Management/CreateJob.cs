@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.SharedKernel;
@@ -7,7 +9,7 @@ namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
 internal sealed class CreateJob : IEndpoint
 {
-    private sealed record Request(JobType Type, string Description);
+    private sealed record Request(JobType Type, string Description, JsonNode JobArgs);
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -16,7 +18,7 @@ internal sealed class CreateJob : IEndpoint
                 async (Request request, IMediator mediator, CancellationToken cancellationToken) =>
                 {
                     var result = await mediator.Send(
-                        new CreateJobCommand(request.Type, request.Description),
+                        new CreateJobCommand(request.Type, request.Description, request.JobArgs),
                         cancellationToken
                     );
                     return Results.Ok(result);

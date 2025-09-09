@@ -1,4 +1,5 @@
-﻿using MusicManagementDemo.SharedKernel;
+﻿using System.Text.Json.Nodes;
+using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Domain.Entity.Management;
 
@@ -11,7 +12,7 @@ public class Job : SharedKernel.Entity
     /// </summary>
     public JobType Type { get; set; }
 
-    public string JobArgs { get; set; } = "{}";
+    public JsonNode JobArgs { get; set; } = "{}";
 
     public JobStatus Status { get; set; }
 
