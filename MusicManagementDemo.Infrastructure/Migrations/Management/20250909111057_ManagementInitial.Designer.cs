@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MusicManagementDemo.Infrastructure.Migrations.Management
 {
     [DbContext(typeof(ManagementAppDbContext))]
-    [Migration("20250909095904_ManagementInitial")]
+    [Migration("20250909111057_ManagementInitial")]
     partial class ManagementInitial
     {
         /// <inheritdoc />
@@ -47,6 +47,10 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Management
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("character varying(500)");
+
+                    b.Property<string>("ErrorMesage")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("JobArgs")
                         .IsRequired()

@@ -45,6 +45,10 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Management
                         .IsUnicode(true)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<string>("ErrorMesage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("JobArgs")
                         .IsRequired()
                         .HasMaxLength(500)

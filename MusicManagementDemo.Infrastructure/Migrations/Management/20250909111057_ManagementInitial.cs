@@ -26,6 +26,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Management
                     JobArgs = table.Column<string>(type: "jsonb", maxLength: 500, nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    ErrorMesage = table.Column<string>(type: "text", nullable: false),
                     Success = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     CompletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
