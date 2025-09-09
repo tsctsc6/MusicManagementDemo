@@ -4,4 +4,4 @@ using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;
 
-public record CreateJobCommand(JobType Type, string Description) : IRequest<IServiceResult>;
+public sealed record CreateJobCommand(JobType Type, string Description) : IRequest<IServiceResult>;

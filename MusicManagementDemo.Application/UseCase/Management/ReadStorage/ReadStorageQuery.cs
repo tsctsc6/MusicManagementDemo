@@ -3,4 +3,4 @@ using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadStorage;
 
-public record ReadStorageQuery(int Id) : IRequest<IServiceResult>;
+public sealed record ReadStorageQuery(int Id) : IRequest<IServiceResult>;
