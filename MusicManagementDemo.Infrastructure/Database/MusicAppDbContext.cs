@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Domain.Entity.Music;
+using MusicManagementDemo.Infrastructure.DbConfig.Music;
 
 namespace MusicManagementDemo.Infrastructure.Database;
 
@@ -14,6 +15,8 @@ public sealed class MusicAppDbContext(DbContextOptions<MusicAppDbContext> option
     {
         modelBuilder.HasDefaultSchema(Schemas.Music);
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MusicAppDbContext).Assembly);
+        modelBuilder.ApplyConfiguration(new MusicInfoConfiguration());
+        modelBuilder.ApplyConfiguration(new MusicListConfiguration());
+        modelBuilder.ApplyConfiguration(new MusicInfoMusicListMapConfiguration());
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Domain.Entity.Management;
+using MusicManagementDemo.Infrastructure.DbConfig.Management;
 
 namespace MusicManagementDemo.Infrastructure.Database;
 
@@ -12,5 +13,6 @@ public sealed class ManagementAppDbContext(DbContextOptions<ManagementAppDbConte
     {
         modelBuilder.HasDefaultSchema(Schemas.Management);
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new StorageConfiguration());
     }
 }
