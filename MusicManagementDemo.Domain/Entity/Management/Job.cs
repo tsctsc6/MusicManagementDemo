@@ -7,11 +7,11 @@ public class Job : SharedKernel.Entity
 {
     public long Id { get; set; }
 
+    public JobType Type { get; set; }
+
     /// <summary>
     /// json
     /// </summary>
-    public JobType Type { get; set; }
-
     public JsonNode JobArgs { get; set; } = "{}";
 
     public JobStatus Status { get; set; }
