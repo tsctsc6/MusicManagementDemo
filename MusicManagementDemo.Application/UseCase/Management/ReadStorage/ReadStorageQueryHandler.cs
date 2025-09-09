@@ -14,9 +14,9 @@ internal sealed class ReadStorageQueryHandler(ManagementAppDbContext dbContext)
         CancellationToken cancellationToken
     )
     {
-        var storageToRead = await dbContext.Storage.SingleOrDefaultAsync(
-            cancellationToken: cancellationToken
-        );
+        var storageToRead = await dbContext
+            .Storage.AsNoTracking()
+            .SingleOrDefaultAsync(cancellationToken: cancellationToken);
         if (storageToRead is null)
         {
             return ServiceResult.Err(503, ["没有找到对应的存储"]);
