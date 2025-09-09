@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Migrations.Music
 {
     [DbContext(typeof(MusicAppDbContext))]
-    [Migration("20250909030521_MusicInitial")]
+    [Migration("20250909051629_MusicInitial")]
     partial class MusicInitial
     {
         /// <inheritdoc />
