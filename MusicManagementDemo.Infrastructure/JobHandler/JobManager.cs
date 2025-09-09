@@ -85,6 +85,35 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
         var managementDbContext =
             scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
         var musicDbContext = scope.ServiceProvider.GetRequiredService<MusicAppDbContext>();
-        return jobId;
+        var job = await managementDbContext.Job.AsNoTracking<Domain.Entity.Management.Job>().SingleOrDefaultAsync(
+            e => e.Id == jobId,
+            cancellationToken: token
+        );
+        if (job is null)
+            throw new InvalidOperationException("Job not found");
+        var storageId = job.JobArgs["storageId"]?.GetValue<int>();
+        if (storageId is null)
+        {
+            throw new InvalidOperationException($"StorageId not found in JobArgs");
+        }
+        var storage = await managementDbContext.Storage.AsNoTracking().SingleOrDefaultAsync(
+            e => e.Id == storageId,
+            cancellationToken: token
+        );
+        if (storage is null)
+        {
+            throw new InvalidOperationException($"Storage {storageId} not found");
+        }
+
+        if (!Directory.Exists(storage.Path))
+        {
+            throw new InvalidOperationException($"storage.Path {storage.Path} not found");
+        }
+
+        var rootDir = new DirectoryInfo(storage.Path);
+        foreach (var fileInfo in rootDir.EnumerateFiles("*.flac", SearchOption.AllDirectories))
+        {
+            
+        }
     }
 }
