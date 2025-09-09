@@ -111,6 +111,22 @@ public static class AssemblyInfo
             op.SerializerOptions.WriteIndented = false;
             op.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
         });
+
+        services.AddKeyedSingleton<JsonSerializerOptions>(
+            "default",
+            (_, o) =>
+            {
+                var op = (JsonSerializerOptions)o;
+                op.DefaultBufferSize = 1024;
+                op.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                op.MaxDepth = 12;
+                op.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                op.AllowTrailingCommas = false;
+                op.WriteIndented = false;
+                op.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+                return op;
+            }
+        );
         return services;
     }
 }
