@@ -28,6 +28,6 @@ internal sealed class CreateJobCommandHandler(
         );
         await dbContext.SaveChangesAsync(cancellationToken);
         jobManager.CreateJob(jobToAdd.Id, request.Type);
-        return ServiceResult.Ok();
+        return ServiceResult<object>.Ok(new { JobId = jobToAdd.Id });
     }
 }
