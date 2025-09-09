@@ -9,10 +9,13 @@ public sealed class ManagementAppDbContext(DbContextOptions<ManagementAppDbConte
 {
     public DbSet<Storage> Storage { get; set; }
 
+    public DbSet<Job> Job { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.Management);
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new StorageConfiguration());
+        modelBuilder.ApplyConfiguration(new JobConfiguration());
     }
 }
