@@ -25,6 +25,8 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
                 HandleScanIncremental(jobId, cts.Token)
                     .ContinueWith(task =>
                     {
+                        cancellationTokenSources.TryRemove(jobId, out cts);
+                        cts.Dispose();
                         using var scope = service.CreateScope();
                         using var dbContext =
                             scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
@@ -36,14 +38,9 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
                         {
                             jobToUpdate.Success = task.IsCompletedSuccessfully;
                         }
-                        else if (task.IsFaulted)
+                        if (task.IsFaulted)
                         {
                             jobToUpdate.ErrorMesage = task.Exception.Message;
-                            jobToUpdate.Success = false;
-                        }
-                        else if (task.IsCanceled)
-                        {
-                            jobToUpdate.Success = false;
                         }
 
                         jobToUpdate.Status = JobStatus.Completed;
@@ -51,7 +48,6 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
                         dbContext.Job.Update(jobToUpdate);
                         dbContext.SaveChanges();
                         task.Dispose();
-                        cts.Dispose();
                     });
                 break;
             case JobType.Undefined:
@@ -82,15 +78,14 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
 
     private async Task HandleScanIncremental(long jobId, CancellationToken token)
     {
-        await Task.Delay(TimeSpan.FromSeconds(30), token);
+        await Task.Delay(TimeSpan.FromSeconds(10), token);
         await using var scope = service.CreateAsyncScope();
         var managementDbContext =
             scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
         var musicDbContext = scope.ServiceProvider.GetRequiredService<MusicAppDbContext>();
-        var job = await managementDbContext.Job.AsNoTracking<Domain.Entity.Management.Job>().SingleOrDefaultAsync(
-            e => e.Id == jobId,
-            cancellationToken: token
-        );
+        var job = await managementDbContext
+            .Job.AsNoTracking<Domain.Entity.Management.Job>()
+            .SingleOrDefaultAsync(e => e.Id == jobId, cancellationToken: token);
         if (job is null)
             throw new InvalidOperationException("Job not found");
         var storageId = job.JobArgs["storageId"]?.GetValue<int>();
@@ -98,10 +93,9 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
         {
             throw new InvalidOperationException($"StorageId not found in JobArgs");
         }
-        var storage = await managementDbContext.Storage.AsNoTracking().SingleOrDefaultAsync(
-            e => e.Id == storageId,
-            cancellationToken: token
-        );
+        var storage = await managementDbContext
+            .Storage.AsNoTracking()
+            .SingleOrDefaultAsync(e => e.Id == storageId, cancellationToken: token);
         if (storage is null)
         {
             throw new InvalidOperationException($"Storage {storageId} not found");
@@ -113,7 +107,7 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
         }
 
         await using var transaction = await musicDbContext.Database.BeginTransactionAsync(token);
-        
+
         var rootDir = new DirectoryInfo(storage.Path);
         foreach (var fileInfo in rootDir.EnumerateFiles("*.flac", SearchOption.AllDirectories))
         {
@@ -122,7 +116,8 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
                 StartInfo = new ProcessStartInfo()
                 {
                     FileName = "ffprobe",
-                    Arguments = $"""-v error -i "{fileInfo.FullName}" -print_format json -show_format""",
+                    Arguments =
+                        $"""-v error -i "{fileInfo.FullName}" -print_format json -show_format""",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 },
@@ -132,20 +127,27 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
             var result = await ffprobeProcess.StandardOutput.ReadToEndAsync(token);
             ffprobeProcess.Close();
             ffprobeProcess.Dispose();
-            
+
             var resultJsonNode = JsonNode.Parse(result);
             if (resultJsonNode is null)
                 throw new InvalidOperationException("Can't parse ffprobe output to JsonNode");
-            var resultTagsJsonObject = resultJsonNode["tags"]?.AsObject();
-            if (resultTagsJsonObject is null)
-                throw new InvalidOperationException("Can't find \"tags\" in ffprobe output");
-            await musicDbContext.MusicInfo.AddAsync(new()
-            {
-                Title = resultTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty,
-                Artist = resultTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty,
-                Album = resultTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty,
-                FilePath = fileInfo.FullName,
-            }, cancellationToken: token);
+            var resultFormatJsonObject = resultJsonNode["format"]?.AsObject();
+            if (resultFormatJsonObject is null)
+                throw new InvalidOperationException("Can't find \"format\" in ffprobe output");
+            var resultFormatTagsJsonObject = resultFormatJsonObject["tags"]?.AsObject();
+            if (resultFormatTagsJsonObject is null)
+                throw new InvalidOperationException("Can't find \"format:tags\" in ffprobe output");
+            await musicDbContext.MusicInfo.AddAsync(
+                new()
+                {
+                    Title = resultFormatTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty,
+                    Artist =
+                        resultFormatTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty,
+                    Album = resultFormatTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty,
+                    FilePath = fileInfo.FullName,
+                },
+                cancellationToken: token
+            );
         }
         await musicDbContext.SaveChangesAsync(token);
         await transaction.CommitAsync(token);
