@@ -23,6 +23,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Management
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    JobArgs = table.Column<string>(type: "jsonb", maxLength: 500, nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Success = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
