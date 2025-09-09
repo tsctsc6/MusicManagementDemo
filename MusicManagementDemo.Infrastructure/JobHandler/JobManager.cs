@@ -84,7 +84,7 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
             scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
         var musicDbContext = scope.ServiceProvider.GetRequiredService<MusicAppDbContext>();
         var job = await managementDbContext
-            .Job.AsNoTracking<Domain.Entity.Management.Job>()
+            .Job.AsNoTracking()
             .SingleOrDefaultAsync(e => e.Id == jobId, cancellationToken: token);
         if (job is null)
             throw new InvalidOperationException("Job not found");
@@ -137,17 +137,30 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
             var resultFormatTagsJsonObject = resultFormatJsonObject["tags"]?.AsObject();
             if (resultFormatTagsJsonObject is null)
                 throw new InvalidOperationException("Can't find \"format:tags\" in ffprobe output");
-            await musicDbContext.MusicInfo.AddAsync(
-                new()
-                {
-                    Title = resultFormatTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty,
-                    Artist =
-                        resultFormatTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty,
-                    Album = resultFormatTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty,
-                    FilePath = fileInfo.FullName,
-                },
-                cancellationToken: token
-            );
+            var title = resultFormatTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty;
+            var artist = resultFormatTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty;
+            var album = resultFormatTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty;
+            var filePath = fileInfo.FullName;
+            var oldMusicInfo = await musicDbContext
+                .MusicInfo.Where(e => e.Title == title && e.Artist == artist && e.Album == album)
+                .SingleOrDefaultAsync(cancellationToken: token);
+            if (oldMusicInfo is null)
+            {
+                await musicDbContext.MusicInfo.AddAsync(
+                    new()
+                    {
+                        Title = title,
+                        Artist = artist,
+                        Album = album,
+                        FilePath = filePath,
+                    },
+                    cancellationToken: token
+                );
+            }
+            else
+            {
+                oldMusicInfo.FilePath = filePath;
+            }
         }
         await musicDbContext.SaveChangesAsync(token);
         await transaction.CommitAsync(token);
