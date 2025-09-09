@@ -7,7 +7,8 @@ using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Infrastructure.DbConfig.Management;
 
-public class JobConfiguration(JsonSerializerOptions jsonSerializerOptions) : IEntityTypeConfiguration<Job>
+public class JobConfiguration(JsonSerializerOptions jsonSerializerOptions)
+    : IEntityTypeConfiguration<Job>
 {
     public void Configure(EntityTypeBuilder<Job> builder)
     {
@@ -27,6 +28,8 @@ public class JobConfiguration(JsonSerializerOptions jsonSerializerOptions) : IEn
             .HasMaxLength(500);
 
         builder.Property(j => j.Status).IsRequired().HasDefaultValue(JobStatus.Undefined);
+
+        builder.Property(j => j.Description).IsRequired().IsUnicode().HasMaxLength(500);
 
         builder.Property(j => j.Description).IsRequired().IsUnicode().HasMaxLength(500);
 

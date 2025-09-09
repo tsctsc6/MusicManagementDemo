@@ -18,6 +18,8 @@ public class Job : SharedKernel.Entity
 
     public string Description { get; set; } = string.Empty;
 
+    public string ErrorMesage { get; set; } = string.Empty;
+
     public bool Success { get; set; }
 
     public DateTime CreatedAt { get; set; }
