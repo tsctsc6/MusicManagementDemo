@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.SharedKernel;
+using RustSharp;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CancelJob;
 
@@ -12,7 +13,16 @@ public class CancelJobCommandHandler(IJobManager jobManager)
         CancellationToken cancellationToken
     )
     {
-        jobManager.CancelJob(request.JobId);
-        return Task.FromResult<IServiceResult>(ServiceResult.Ok());
+        var result = jobManager.CancelJob(request.JobId);
+        return result switch
+        {
+            ErrResult<long, string> errResult => Task.FromResult<IServiceResult>(
+                ServiceResult.Err(503, [errResult.Value])
+            ),
+            OkResult<long, string> okResult => Task.FromResult<IServiceResult>(
+                ServiceResult<object>.Ok(new { JobId = okResult.Value })
+            ),
+            _ => Task.FromResult<IServiceResult>(ServiceResult.Err(503, ["内部错误"])),
+        };
     }
 }

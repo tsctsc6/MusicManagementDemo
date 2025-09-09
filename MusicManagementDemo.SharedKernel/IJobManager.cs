@@ -1,8 +1,21 @@
-﻿namespace MusicManagementDemo.SharedKernel;
+﻿using RustSharp;
+
+namespace MusicManagementDemo.SharedKernel;
 
 public interface IJobManager
 {
-    public void CreateJob(long jobId, JobType jobType);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="jobId"></param>
+    /// <param name="jobType"></param>
+    /// <returns>(jobId, errorMessage)</returns>
+    public Result<long, string> CreateJob(long jobId, JobType jobType);
 
-    public void CancelJob(long jobId);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="jobId"></param>
+    /// <returns>(jobId, errorMessage)</returns>
+    public Result<long, string> CancelJob(long jobId);
 }

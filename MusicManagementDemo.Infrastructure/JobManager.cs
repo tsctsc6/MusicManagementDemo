@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MusicManagementDemo.Infrastructure.Database;
 using MusicManagementDemo.SharedKernel;
+using RustSharp;
 
 namespace MusicManagementDemo.Infrastructure;
 
@@ -10,7 +11,7 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
     private readonly ConcurrentDictionary<long, CancellationTokenSource> cancellationTokenSources =
     [];
 
-    public void CreateJob(long jobId, JobType jobType)
+    public Result<long, string> CreateJob(long jobId, JobType jobType)
     {
         var cts = new CancellationTokenSource();
         switch (jobType)
@@ -46,22 +47,28 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
                 break;
             case JobType.Undefined:
             default:
-                return;
+                return Result.Err("Unknown job type");
         }
         using var scope = service.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
         var jobToUpdate = dbContext.Job.SingleOrDefault(e => e.Id == jobId);
         if (jobToUpdate is null)
-            return;
+            return Result.Err("Job not found");
         jobToUpdate.Status = JobStatus.Running;
         dbContext.Job.Update(jobToUpdate);
         dbContext.SaveChanges();
+        return Result.Ok(jobToUpdate.Id);
     }
 
-    public void CancelJob(long jobId)
+    public Result<long, string> CancelJob(long jobId)
     {
         cancellationTokenSources.TryGetValue(jobId, out var cts);
-        cts?.Cancel();
+        if (cts is null)
+        {
+            return Result.Err("Can't cancel job");
+        }
+        cts.Cancel();
+        return Result.Ok(jobId);
     }
 
     private async Task<long> HandleScanIncremental(long jobId, CancellationToken token)
