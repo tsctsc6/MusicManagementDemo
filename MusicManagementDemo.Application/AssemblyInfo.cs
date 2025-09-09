@@ -12,7 +12,7 @@ public static class AssemblyInfo
             cfg.RegisterServicesFromAssemblyContaining(typeof(AssemblyInfo));
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
-        services.AddValidatorsFromAssemblyContaining(typeof(AssemblyInfo));
+        services.AddValidatorsFromAssemblyContaining(typeof(AssemblyInfo), includeInternalTypes: true);
         return services;
     }
 }
