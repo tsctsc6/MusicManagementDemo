@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MusicManagementDemo.Domain.Entity.Management;
 using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Infrastructure.DbConfig.Management;
 
-public class JobConfiguration : IEntityTypeConfiguration<Job>
+public class JobConfiguration(JsonSerializerOptions jsonSerializerOptions) : IEntityTypeConfiguration<Job>
 {
     public void Configure(EntityTypeBuilder<Job> builder)
     {
@@ -17,7 +19,10 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
         builder
             .Property(j => j.JobArgs)
             .HasColumnType("jsonb")
-            .HasConversion(v => v, v => v)
+            .HasConversion(
+                v => v.ToJsonString(jsonSerializerOptions),
+                v => JsonNode.Parse(v, null, default) ?? "{}"
+            )
             .IsRequired()
             .HasMaxLength(500);
 
