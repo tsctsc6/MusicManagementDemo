@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Migrations.Music
 {
     [DbContext(typeof(MusicAppDbContext))]
-    [Migration("20250909023010_MusicInitial")]
+    [Migration("20250909030521_MusicInitial")]
     partial class MusicInitial
     {
         /// <inheritdoc />
@@ -66,9 +66,15 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FilePath")
+                        .IsUnique();
+
                     b.HasIndex("TitleTSV");
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("TitleTSV"), "GIN");
+
+                    b.HasIndex("Title", "Artist", "Album")
+                        .IsUnique();
 
                     b.ToTable("MusicInfo", "music");
                 });

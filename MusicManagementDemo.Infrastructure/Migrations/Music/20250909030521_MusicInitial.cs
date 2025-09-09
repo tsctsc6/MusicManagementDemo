@@ -62,6 +62,20 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_MusicInfo_FilePath",
+                schema: "music",
+                table: "MusicInfo",
+                column: "FilePath",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MusicInfo_Title_Artist_Album",
+                schema: "music",
+                table: "MusicInfo",
+                columns: new[] { "Title", "Artist", "Album" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MusicInfo_TitleTSV",
                 schema: "music",
                 table: "MusicInfo",

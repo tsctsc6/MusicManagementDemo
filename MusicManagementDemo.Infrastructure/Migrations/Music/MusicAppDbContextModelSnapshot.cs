@@ -63,9 +63,15 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FilePath")
+                        .IsUnique();
+
                     b.HasIndex("TitleTSV");
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("TitleTSV"), "GIN");
+
+                    b.HasIndex("Title", "Artist", "Album")
+                        .IsUnique();
 
                     b.ToTable("MusicInfo", "music");
                 });
