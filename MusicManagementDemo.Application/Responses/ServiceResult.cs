@@ -1,6 +1,6 @@
 ﻿using MusicManagementDemo.SharedKernel;
 
-namespace MusicManagementDemo.Infrastructure.Responses;
+namespace MusicManagementDemo.Application.Responses;
 
 public sealed record ServiceResult(bool IsFinish, int? Code, IReadOnlyList<string>? Errors)
     : IServiceResult
