@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Infrastructure.Database;
+using MusicManagementDemo.Infrastructure.JobHandler;
 using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Infrastructure;

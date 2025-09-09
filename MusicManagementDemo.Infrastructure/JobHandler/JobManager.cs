@@ -1,10 +1,11 @@
 ﻿using System.Collections.Concurrent;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MusicManagementDemo.Infrastructure.Database;
 using MusicManagementDemo.SharedKernel;
 using RustSharp;
 
-namespace MusicManagementDemo.Infrastructure;
+namespace MusicManagementDemo.Infrastructure.JobHandler;
 
 internal sealed class JobManager(IServiceProvider service) : IJobManager
 {
@@ -27,12 +28,18 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
                             scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
                         var jobToUpdate = dbContext.Job.SingleOrDefault(e => e.Id == jobId);
                         if (jobToUpdate is null)
+                            // log
                             return;
                         if (task.IsCompleted)
                         {
                             jobToUpdate.Success = task.IsCompletedSuccessfully;
                         }
-                        else if (task.IsFaulted || task.IsCanceled)
+                        else if (task.IsFaulted)
+                        {
+                            jobToUpdate.ErrorMesage = task.Exception.Message;
+                            jobToUpdate.Success = false;
+                        }
+                        else if (task.IsCanceled)
                         {
                             jobToUpdate.Success = false;
                         }
@@ -57,7 +64,7 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
         jobToUpdate.Status = JobStatus.Running;
         dbContext.Job.Update(jobToUpdate);
         dbContext.SaveChanges();
-        return Result.Ok(jobToUpdate.Id);
+        return Result.Ok<long>(jobToUpdate.Id);
     }
 
     public Result<long, string> CancelJob(long jobId)
@@ -71,7 +78,7 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
         return Result.Ok(jobId);
     }
 
-    private async Task<long> HandleScanIncremental(long jobId, CancellationToken token)
+    private async Task HandleScanIncremental(long jobId, CancellationToken token)
     {
         await Task.Delay(TimeSpan.FromSeconds(30), token);
         await using var scope = service.CreateAsyncScope();
