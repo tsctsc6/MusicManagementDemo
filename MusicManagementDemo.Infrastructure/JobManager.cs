@@ -40,6 +40,11 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
         dbContext.SaveChanges();
     }
 
+    public void CancelJob(long jobId)
+    {
+        cancellationTokenSources[jobId].Cancel();
+    }
+
     private void TaskContinueWith(Task<long> task)
     {
         var jobId= task.Result;
