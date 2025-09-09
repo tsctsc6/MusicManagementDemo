@@ -1,6 +1,6 @@
 在解决方案目录中：
 
-dotnet ef migrations add ManagementInitial -c ManagementAppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/Music --verbose
+dotnet ef migrations add ManagementInitial -c ManagementAppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/Management --verbose
 dotnet ef migrations add MusicInitial -c MusicAppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/Music --verbose
 dotnet ef migrations add IdentityInitial -c IdentityAppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/Identity --verbose
 
