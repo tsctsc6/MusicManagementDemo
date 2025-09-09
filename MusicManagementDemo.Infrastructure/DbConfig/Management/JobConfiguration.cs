@@ -14,6 +14,13 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
 
         builder.Property(j => j.Type).IsRequired().HasDefaultValue(JobType.Undefined);
 
+        builder
+            .Property(j => j.JobArgs)
+            .HasColumnType("jsonb")
+            .HasConversion(v => v, v => v)
+            .IsRequired()
+            .HasMaxLength(500);
+
         builder.Property(j => j.Status).IsRequired().HasDefaultValue(JobStatus.Undefined);
 
         builder.Property(j => j.Description).IsRequired().IsUnicode().HasMaxLength(500);
