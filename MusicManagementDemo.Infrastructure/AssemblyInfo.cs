@@ -114,18 +114,17 @@ public static class AssemblyInfo
 
         services.AddKeyedSingleton<JsonSerializerOptions>(
             "default",
-            (_, o) =>
-            {
-                var op = (JsonSerializerOptions)o;
-                op.DefaultBufferSize = 1024;
-                op.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-                op.MaxDepth = 12;
-                op.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                op.AllowTrailingCommas = false;
-                op.WriteIndented = false;
-                op.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-                return op;
-            }
+            (_, _) =>
+                new JsonSerializerOptions
+                {
+                    DefaultBufferSize = 1024,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    MaxDepth = 12,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    AllowTrailingCommas = false,
+                    WriteIndented = false,
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                }
         );
         return services;
     }
