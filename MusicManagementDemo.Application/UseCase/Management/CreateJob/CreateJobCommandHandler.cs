@@ -27,7 +27,7 @@ internal sealed class CreateJobCommandHandler(
             cancellationToken
         );
         await dbContext.SaveChangesAsync(cancellationToken);
-        jobManager.AddJob(jobToAdd.Id, request.Type);
+        jobManager.CreateJob(jobToAdd.Id, request.Type);
         return ServiceResult.Ok();
     }
 }

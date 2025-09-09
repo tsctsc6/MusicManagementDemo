@@ -2,5 +2,5 @@
 
 public interface IJobManager
 {
-    public void AddJob(long jobId, JobType jobType);
+    public void CreateJob(long jobId, JobType jobType);
 }
