@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
+using MusicManagementDemo.Application.Responses;
+using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application;
 
@@ -7,6 +9,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse>(
     IEnumerable<IValidator<TRequest>> validators
 ) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
+    where TResponse : IServiceResult
 {
     public async Task<TResponse> Handle(
         TRequest request,
@@ -23,7 +26,10 @@ internal sealed class ValidationBehavior<TRequest, TResponse>(
             .ToList();
 
         if (failures.Count != 0)
-            throw new ValidationException(failures);
+        {
+            return (TResponse)
+                (object)ServiceResult.Err(406, failures.Select(f => f.ErrorMessage).ToArray());
+        }
 
         return await next(cancellationToken);
     }
