@@ -37,6 +37,7 @@ public static class AssemblyInfo
         services.AddAuthorization();
         services.AddJsonOptions();
         services.AddSingleton<IJobManager, JobManager>();
+        services.AddSingleton<IJwtManager, JwtManager>();
         return services;
     }
 
