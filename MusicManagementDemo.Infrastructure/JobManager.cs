@@ -42,7 +42,8 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
 
     public void CancelJob(long jobId)
     {
-        cancellationTokenSources[jobId].Cancel();
+        cancellationTokenSources.TryGetValue(jobId, out var cts);
+        cts?.Cancel();
     }
 
     private void TaskContinueWith(Task<long> task)
