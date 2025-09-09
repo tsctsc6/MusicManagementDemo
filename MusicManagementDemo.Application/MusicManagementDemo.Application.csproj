@@ -13,7 +13,6 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\MusicManagementDemo.Domain\MusicManagementDemo.Domain.csproj" />
-        <ProjectReference Include="..\MusicManagementDemo.Infrastructure\MusicManagementDemo.Infrastructure.csproj" />
         <ProjectReference Include="..\MusicManagementDemo.SharedKernel\MusicManagementDemo.SharedKernel.csproj" />
     </ItemGroup>
 </Project>
