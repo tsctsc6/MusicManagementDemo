@@ -74,6 +74,10 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
     private async Task<long> HandleScanIncremental(long jobId, CancellationToken token)
     {
         await Task.Delay(TimeSpan.FromSeconds(30), token);
+        await using var scope = service.CreateAsyncScope();
+        var managementDbContext =
+            scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
+        var musicDbContext = scope.ServiceProvider.GetRequiredService<MusicAppDbContext>();
         return jobId;
     }
 }
