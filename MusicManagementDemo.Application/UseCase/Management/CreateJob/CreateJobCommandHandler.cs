@@ -8,7 +8,7 @@ namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;
 
 internal sealed class CreateJobCommandHandler(
     ManagementAppDbContext dbContext,
-    IJobHandler jobHandler
+    IJobManager jobManager
 ) : IRequestHandler<CreateJobCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
@@ -27,7 +27,7 @@ internal sealed class CreateJobCommandHandler(
             cancellationToken
         );
         await dbContext.SaveChangesAsync(cancellationToken);
-        _ = jobHandler.Handle(jobToAdd.Id, request.Type);
+        jobManager.AddJob(jobToAdd.Id, request.Type);
         return ServiceResult.Ok();
     }
 }
