@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MusicManagementDemo.Domain.Entity.Management;
+using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Infrastructure.DbConfig.Management;
 

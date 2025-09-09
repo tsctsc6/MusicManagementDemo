@@ -1,4 +1,6 @@
-﻿namespace MusicManagementDemo.Domain.Entity.Management;
+﻿using MusicManagementDemo.SharedKernel;
+
+namespace MusicManagementDemo.Domain.Entity.Management;
 
 public class Job : SharedKernel.Entity
 {
@@ -15,18 +17,4 @@ public class Job : SharedKernel.Entity
     public DateTime CreatedAt { get; set; }
 
     public DateTime? CompletedAt { get; set; }
-}
-
-public enum JobType
-{
-    Undefined,
-    ScanIncremental,
-}
-
-public enum JobStatus
-{
-    Undefined,
-    WaitingStart,
-    Running,
-    Completed,
 }
