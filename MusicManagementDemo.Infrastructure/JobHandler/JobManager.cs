@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Text.Json.Nodes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MusicManagementDemo.Infrastructure.Database;
@@ -110,10 +112,42 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
             throw new InvalidOperationException($"storage.Path {storage.Path} not found");
         }
 
+        await using var transaction = await musicDbContext.Database.BeginTransactionAsync(token);
+        
         var rootDir = new DirectoryInfo(storage.Path);
         foreach (var fileInfo in rootDir.EnumerateFiles("*.flac", SearchOption.AllDirectories))
         {
+            var ffprobeProcess = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "ffprobe",
+                    Arguments = $"""-v error -i "{fileInfo.FullName}" -print_format json -show_format""",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                },
+            };
+            ffprobeProcess.Start();
+            await ffprobeProcess.WaitForExitAsync(token);
+            var result = await ffprobeProcess.StandardOutput.ReadToEndAsync(token);
+            ffprobeProcess.Close();
+            ffprobeProcess.Dispose();
             
+            var resultJsonNode = JsonNode.Parse(result);
+            if (resultJsonNode is null)
+                throw new InvalidOperationException("Can't parse ffprobe output to JsonNode");
+            var resultTagsJsonObject = resultJsonNode["tags"]?.AsObject();
+            if (resultTagsJsonObject is null)
+                throw new InvalidOperationException("Can't find \"tags\" in ffprobe output");
+            await musicDbContext.MusicInfo.AddAsync(new()
+            {
+                Title = resultTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty,
+                Artist = resultTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty,
+                Album = resultTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty,
+                FilePath = fileInfo.FullName,
+            }, cancellationToken: token);
         }
+        await musicDbContext.SaveChangesAsync(token);
+        await transaction.CommitAsync(token);
     }
 }
