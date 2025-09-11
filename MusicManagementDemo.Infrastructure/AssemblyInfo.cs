@@ -102,6 +102,55 @@ public static class AssemblyInfo
                     RoleClaimType = AppJwtRegisteredClaimNames.Roles,
                     NameClaimType = JwtRegisteredClaimNames.UniqueName,
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        if (context.Principal is null)
+                        {
+                            context.Fail("Unauthorized");
+                            return;
+                        }
+
+                        var userId = context
+                            .Principal.Claims.SingleOrDefault(c =>
+                                c.Type == JwtRegisteredClaimNames.Sub
+                            )
+                            ?.Value;
+                        if (string.IsNullOrEmpty(userId))
+                        {
+                            context.Fail("Unauthorized");
+                            return;
+                        }
+
+                        var concurrencyStamp = context
+                            .Principal.Claims.SingleOrDefault(c =>
+                                c.Type == AppJwtRegisteredClaimNames.ConcurrencyStamp
+                            )
+                            ?.Value;
+                        if (string.IsNullOrEmpty(concurrencyStamp))
+                        {
+                            context.Fail("Unauthorized");
+                            return;
+                        }
+
+                        var dbContext = context.HttpContext.RequestServices.GetRequiredService<
+                            IdentityDbContext<ApplicationUser>
+                        >();
+                        var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
+                        if (user is null)
+                        {
+                            context.Fail("Unauthorized");
+                            return;
+                        }
+
+                        if (user.ConcurrencyStamp != concurrencyStamp)
+                        {
+                            context.Fail("Unauthorized");
+                        }
+                    },
+                };
             });
         return services;
     }
