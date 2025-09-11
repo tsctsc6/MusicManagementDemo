@@ -13,7 +13,7 @@ public class CreateMusicList : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-                "api/management/create-music-list",
+                "api/music/create-music-list",
                 async (
                     Request request,
                     ClaimsPrincipal claimsPrincipal,
