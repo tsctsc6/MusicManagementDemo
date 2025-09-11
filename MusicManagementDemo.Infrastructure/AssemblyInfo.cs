@@ -17,6 +17,7 @@ using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Infrastructure.Database;
 using MusicManagementDemo.Infrastructure.JobHandler;
 using MusicManagementDemo.Infrastructure.Jwt;
+using Serilog;
 
 namespace MusicManagementDemo.Infrastructure;
 
@@ -32,14 +33,34 @@ public static class AssemblyInfo
             .AddDbContextCheck<IdentityAppDbContext>()
             .AddDbContextCheck<MusicAppDbContext>()
             .AddDbContextCheck<ManagementAppDbContext>();
+
         services.AddDatabase(configuration);
+
         services
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<IdentityAppDbContext>()
             .AddDefaultTokenProviders();
         services.AddScoped<IdentityDbContext<ApplicationUser>, IdentityAppDbContext>();
+
         services.AddJwt(configuration);
         services.AddAuthorization();
+
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.File(
+                path: Path.Combine(
+                    Path.GetDirectoryName(Environment.ProcessPath)!,
+                    "logs",
+                    "log-.txt"
+                ),
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 7,
+                rollOnFileSizeLimit: true,
+                fileSizeLimitBytes: 10000000
+            )
+            .CreateLogger();
+        services.AddSerilog();
+
         services.AddJsonOptions();
         services.AddSingleton<IJobManager, JobManager>();
         services.AddSingleton<IJwtManager, JwtManager>();
