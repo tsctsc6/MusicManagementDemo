@@ -21,13 +21,11 @@ public class CreateMusicList : IEndpoint
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    var userId = claimsPrincipal
-                        .Claims.SingleOrDefault(e => e.Type == JwtRegisteredClaimNames.Sub)
-                        ?.Value;
-                    if (string.IsNullOrEmpty(userId))
-                    {
-                        return Results.Unauthorized();
-                    }
+                    var userId =
+                        claimsPrincipal
+                            .Claims.SingleOrDefault(e => e.Type == JwtRegisteredClaimNames.Sub)
+                            ?.Value
+                        ?? string.Empty;
                     var result = await mediator.Send(
                         new CreateMusicListCommand(userId, request.Name),
                         cancellationToken
