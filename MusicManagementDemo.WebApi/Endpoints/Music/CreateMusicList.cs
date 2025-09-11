@@ -11,7 +11,7 @@ public class CreateMusicList : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-                "api/management/Cancel-job",
+                "api/management/create-music-list",
                 async (Request request, IMediator mediator, CancellationToken cancellationToken) =>
                 {
                     var result = await mediator.Send(
