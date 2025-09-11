@@ -27,7 +27,7 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
                     .ContinueWith(task =>
                     {
                         cancellationTokenSources.TryRemove(jobId, out cts);
-                        cts.Dispose();
+                        cts?.Dispose();
                         using var scope = service.CreateScope();
                         using var dbContext =
                             scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
