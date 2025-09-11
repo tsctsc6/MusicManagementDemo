@@ -26,8 +26,15 @@ public class MusicInfoConfiguration : IEntityTypeConfiguration<MusicInfo>
             .HasComputedColumnSql("""to_tsvector('english', "Title")""", true);
         // 创建 GIN 索引
         builder.HasIndex(e => e.TitleTSV).HasMethod("GIN");
-        
-        builder.HasIndex(e => new {e.Title, e.Artist, e.Album}).IsUnique();
+
+        builder
+            .HasIndex(e => new
+            {
+                e.Title,
+                e.Artist,
+                e.Album,
+            })
+            .IsUnique();
         builder.HasIndex(e => e.FilePath).IsUnique();
     }
 }

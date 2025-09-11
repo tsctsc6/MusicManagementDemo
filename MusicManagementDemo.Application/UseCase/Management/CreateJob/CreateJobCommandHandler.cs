@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.Domain.Entity.Management;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
+using MusicManagementDemo.Application.Responses;
+using MusicManagementDemo.Domain.Entity.Management;
 using RustSharp;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;
@@ -31,7 +31,7 @@ internal sealed class CreateJobCommandHandler(
         {
             ErrResult<long, string> errResult => ServiceResult.Err(503, [errResult.Value]),
             OkResult<long, string> okResult => ServiceResult.Ok(new { JobId = okResult.Value }),
-            _ => ServiceResult.Err(503, ["内部错误"])
+            _ => ServiceResult.Err(503, ["内部错误"]),
         };
     }
 }

@@ -9,7 +9,12 @@ namespace MusicManagementDemo.Infrastructure;
 
 public class JwtManager : IJwtManager
 {
-    public string GenerateJwtToken(string userId, string userName, IList<string> roles, IConfiguration config)
+    public string GenerateJwtToken(
+        string userId,
+        string userName,
+        IList<string> roles,
+        IConfiguration config
+    )
     {
         // 生成 JWT
         var claims = new List<Claim>

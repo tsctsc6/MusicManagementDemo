@@ -12,10 +12,7 @@ public class ReadJob : IEndpoint
                 "api/management/read-job",
                 async (long id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    var result = await mediator.Send(
-                        new ReadJobQuery(Id: id),
-                        cancellationToken
-                    );
+                    var result = await mediator.Send(new ReadJobQuery(Id: id), cancellationToken);
                     return Results.Ok(result);
                 }
             )

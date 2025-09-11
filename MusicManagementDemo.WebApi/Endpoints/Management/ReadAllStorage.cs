@@ -10,7 +10,12 @@ internal sealed class ReadAllStorage : IEndpoint
     {
         app.MapGet(
                 "api/management/read-all-storage",
-                async (int page, int pageSize, IMediator mediator, CancellationToken cancellationToken) =>
+                async (
+                    int page,
+                    int pageSize,
+                    IMediator mediator,
+                    CancellationToken cancellationToken
+                ) =>
                 {
                     var result = await mediator.Send(
                         new ReadAllStorageQuery(Page: page, PageSize: pageSize),

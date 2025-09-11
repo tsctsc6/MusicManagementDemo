@@ -6,7 +6,7 @@ namespace MusicManagementDemo.Abstractions;
 public interface IJobManager
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="jobId"></param>
     /// <param name="jobType"></param>
@@ -14,7 +14,7 @@ public interface IJobManager
     public Result<long, string> CreateJob(long jobId, JobType jobType);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="jobId"></param>
     /// <returns>(jobId, errorMessage)</returns>

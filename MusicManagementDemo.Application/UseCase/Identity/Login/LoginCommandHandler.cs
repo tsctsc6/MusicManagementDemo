@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
-using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Login;
 

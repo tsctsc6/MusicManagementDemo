@@ -11,7 +11,7 @@ internal sealed class CreateJobCommandValidator : AbstractValidator<CreateJobCom
         RuleFor(e => e.Type).NotNull();
 
         RuleFor(e => e.Description).NotEmpty().MaximumLength(500);
-        
+
         RuleFor(e => e.JobArgs).NotNull();
     }
 }
