@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 
-internal sealed class CreateStorageCommandHandler(ManagementAppDbContext dbContext)
+internal sealed class CreateStorageCommandHandler(IManagementAppDbContext dbContext)
     : IRequestHandler<CreateStorageCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(

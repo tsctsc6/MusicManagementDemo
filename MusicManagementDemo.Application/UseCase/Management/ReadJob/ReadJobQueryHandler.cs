@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadJob;
 
-public class ReadJobQueryHandler(ManagementAppDbContext dbContext)
+public class ReadJobQueryHandler(IManagementAppDbContext dbContext)
     : IRequestHandler<ReadJobQuery, IServiceResult>
 {
     public async Task<IServiceResult> Handle(

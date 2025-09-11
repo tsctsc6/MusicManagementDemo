@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Application;
 

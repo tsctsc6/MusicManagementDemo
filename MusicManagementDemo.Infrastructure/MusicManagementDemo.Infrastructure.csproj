@@ -28,6 +28,6 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\MusicManagementDemo.Domain\MusicManagementDemo.Domain.csproj" />
-        <ProjectReference Include="..\MusicManagementDemo.SharedKernel\MusicManagementDemo.SharedKernel.csproj" />
+        <ProjectReference Include="..\MusicManagementDemo.Abstractions\MusicManagementDemo.Abstractions.csproj" />
     </ItemGroup>
 </Project>

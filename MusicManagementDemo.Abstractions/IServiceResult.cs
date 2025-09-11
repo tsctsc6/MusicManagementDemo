@@ -1,4 +1,4 @@
-﻿namespace MusicManagementDemo.SharedKernel;
+﻿namespace MusicManagementDemo.Abstractions;
 
 public interface IServiceResult
 {

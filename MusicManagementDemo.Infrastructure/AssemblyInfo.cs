@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Infrastructure.Database;
 using MusicManagementDemo.Infrastructure.JobHandler;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 
 namespace MusicManagementDemo.Infrastructure;
 
@@ -34,6 +36,7 @@ public static class AssemblyInfo
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<IdentityAppDbContext>()
             .AddDefaultTokenProviders();
+        services.AddScoped<IdentityDbContext<ApplicationUser>, IdentityAppDbContext>();
         services.AddJwt(configuration);
         services.AddAuthorization();
         services.AddJsonOptions();
@@ -64,6 +67,8 @@ public static class AssemblyInfo
                     }
                 )
         );
+        services.AddScoped<IManagementAppDbContext, ManagementAppDbContext>();
+        services.AddScoped<IMusicAppDbContext, MusicAppDbContext>();
         return services;
     }
 

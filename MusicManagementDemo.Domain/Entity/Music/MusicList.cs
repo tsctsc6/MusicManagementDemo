@@ -1,6 +1,6 @@
 ﻿namespace MusicManagementDemo.Domain.Entity.Music;
 
-public class MusicList : SharedKernel.Entity
+public class MusicList
 {
     public Guid Id { get; set; }
 

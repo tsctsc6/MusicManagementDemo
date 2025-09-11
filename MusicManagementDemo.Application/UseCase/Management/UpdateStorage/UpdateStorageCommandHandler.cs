@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application.UseCase.Management.UpdateStorage;
 
-internal sealed class UpdateStorageCommandHandler(ManagementAppDbContext dbContext)
+internal sealed class UpdateStorageCommandHandler(IManagementAppDbContext dbContext)
     : IRequestHandler<UpdateStorageCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(

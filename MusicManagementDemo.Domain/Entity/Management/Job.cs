@@ -1,9 +1,8 @@
 ﻿using System.Text.Json.Nodes;
-using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Domain.Entity.Management;
 
-public class Job : SharedKernel.Entity
+public class Job
 {
     public long Id { get; set; }
 
@@ -25,4 +24,18 @@ public class Job : SharedKernel.Entity
     public DateTime CreatedAt { get; set; }
 
     public DateTime? CompletedAt { get; set; }
+}
+
+public enum JobType
+{
+    Undefined,
+    ScanIncremental,
+}
+
+public enum JobStatus
+{
+    Undefined,
+    WaitingStart,
+    Running,
+    Completed,
 }

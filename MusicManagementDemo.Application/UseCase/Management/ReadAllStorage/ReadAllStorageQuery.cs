@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadAllStorage;
 

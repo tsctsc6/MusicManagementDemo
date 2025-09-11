@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.Domain.Entity.Management;
-using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadAllStorage;
 
-internal sealed class ReadAllStorageQueryHandler(ManagementAppDbContext dbContext)
+internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbContext)
     : IRequestHandler<ReadAllStorageQuery, IServiceResult>
 {
     public async Task<IServiceResult> Handle(

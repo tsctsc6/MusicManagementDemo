@@ -3,8 +3,9 @@ using System.Diagnostics;
 using System.Text.Json.Nodes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Domain.Entity.Management;
 using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.SharedKernel;
 using RustSharp;
 
 namespace MusicManagementDemo.Infrastructure.JobHandler;

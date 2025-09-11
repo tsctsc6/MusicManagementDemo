@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Login;
 

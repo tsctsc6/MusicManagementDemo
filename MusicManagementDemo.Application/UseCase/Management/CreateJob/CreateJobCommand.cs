@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Nodes;
 using MediatR;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Domain.Entity.Management;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;
 

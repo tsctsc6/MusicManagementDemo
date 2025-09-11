@@ -1,6 +1,7 @@
-﻿using RustSharp;
+﻿using MusicManagementDemo.Domain.Entity.Management;
+using RustSharp;
 
-namespace MusicManagementDemo.SharedKernel;
+namespace MusicManagementDemo.Abstractions;
 
 public interface IJobManager
 {

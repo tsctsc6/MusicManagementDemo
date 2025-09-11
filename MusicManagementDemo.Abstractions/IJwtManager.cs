@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace MusicManagementDemo.SharedKernel;
+namespace MusicManagementDemo.Abstractions;
 
 public interface IJwtManager
 {

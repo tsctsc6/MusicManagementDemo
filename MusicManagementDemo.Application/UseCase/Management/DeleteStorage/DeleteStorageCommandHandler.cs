@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 
 namespace MusicManagementDemo.Application.UseCase.Management.DeleteStorage;
 
-internal sealed class DeleteStorageCommandHandler(ManagementAppDbContext dbContext)
+internal sealed class DeleteStorageCommandHandler(IManagementAppDbContext dbContext)
     : IRequestHandler<DeleteStorageCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(

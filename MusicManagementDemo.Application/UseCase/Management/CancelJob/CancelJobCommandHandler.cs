@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
 using RustSharp;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CancelJob;

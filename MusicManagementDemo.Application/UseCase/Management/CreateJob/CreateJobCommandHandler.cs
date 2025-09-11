@@ -1,14 +1,14 @@
 ﻿using MediatR;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Management;
-using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 using RustSharp;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;
 
 internal sealed class CreateJobCommandHandler(
-    ManagementAppDbContext dbContext,
+    IManagementAppDbContext dbContext,
     IJobManager jobManager
 ) : IRequestHandler<CreateJobCommand, IServiceResult>
 {

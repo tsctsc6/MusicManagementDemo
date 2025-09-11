@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Domain.Entity.Music;
 using MusicManagementDemo.Infrastructure.DbConfig.Music;
 
 namespace MusicManagementDemo.Infrastructure.Database;
 
 public sealed class MusicAppDbContext(DbContextOptions<MusicAppDbContext> options)
-    : DbContext(options)
+    : DbContext(options),
+        IMusicAppDbContext
 {
     public DbSet<MusicInfo> MusicInfo { get; set; }
     public DbSet<MusicList> MusicList { get; set; }

@@ -2,7 +2,7 @@
 
 namespace MusicManagementDemo.Domain.Entity.Music;
 
-public sealed class MusicInfo : SharedKernel.Entity
+public sealed class MusicInfo
 {
     public Guid Id { get; set; }
 

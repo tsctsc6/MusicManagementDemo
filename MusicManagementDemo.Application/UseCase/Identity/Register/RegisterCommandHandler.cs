@@ -1,15 +1,17 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
-using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.SharedKernel;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Register;
 
-internal sealed class RegisterCommandHandler(UserManager<ApplicationUser> userMgr, IdentityAppDbContext dbContext)
-    : IRequestHandler<RegisterCommand, IServiceResult>
+internal sealed class RegisterCommandHandler(
+    UserManager<ApplicationUser> userMgr,
+    IdentityDbContext<ApplicationUser> dbContext
+) : IRequestHandler<RegisterCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
         RegisterCommand request,
@@ -26,7 +28,10 @@ internal sealed class RegisterCommandHandler(UserManager<ApplicationUser> userMg
 
         if (isFirstUser)
         {
-            var adminRole = await dbContext.Roles.SingleOrDefaultAsync(e => e.NormalizedName == "ADMIN");
+            var adminRole = await dbContext.Roles.SingleOrDefaultAsync(
+                e => e.NormalizedName == "ADMIN",
+                cancellationToken: cancellationToken
+            );
             if (adminRole is null)
             {
                 return ServiceResult.Err(503, ["内部错误"]);

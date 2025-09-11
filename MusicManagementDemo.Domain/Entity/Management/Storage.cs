@@ -1,6 +1,6 @@
 ﻿namespace MusicManagementDemo.Domain.Entity.Management;
 
-public class Storage : SharedKernel.Entity
+public class Storage
 {
     public int Id { get; set; }
 

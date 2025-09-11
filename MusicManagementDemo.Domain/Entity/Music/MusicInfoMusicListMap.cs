@@ -1,6 +1,6 @@
 ﻿namespace MusicManagementDemo.Domain.Entity.Music;
 
-public class MusicInfoMusicListMap : SharedKernel.Entity
+public class MusicInfoMusicListMap
 {
     public Guid MusicInfoId { get; set; }
 

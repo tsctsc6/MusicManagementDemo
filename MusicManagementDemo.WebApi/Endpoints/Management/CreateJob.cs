@@ -1,9 +1,8 @@
-﻿using System.Text.Json;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
-using MusicManagementDemo.SharedKernel;
+using MusicManagementDemo.Domain.Entity.Management;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
