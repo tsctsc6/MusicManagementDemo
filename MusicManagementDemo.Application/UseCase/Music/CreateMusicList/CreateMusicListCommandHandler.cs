@@ -6,7 +6,7 @@ using MusicManagementDemo.Domain.Entity.Music;
 
 namespace MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 
-public class CreateMusicListCommandHandler(IMusicAppDbContext dbContext)
+internal sealed class CreateMusicListCommandHandler(IMusicAppDbContext dbContext)
     : IRequestHandler<CreateMusicListCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(

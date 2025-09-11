@@ -2,7 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 
-public class CreateMusicListCommandValidator : AbstractValidator<CreateMusicListCommand>
+internal sealed class CreateMusicListCommandValidator : AbstractValidator<CreateMusicListCommand>
 {
     public CreateMusicListCommandValidator()
     {
