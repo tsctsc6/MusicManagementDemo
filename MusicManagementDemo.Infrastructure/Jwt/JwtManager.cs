@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MusicManagementDemo.Abstractions;
 
-namespace MusicManagementDemo.Infrastructure;
+namespace MusicManagementDemo.Infrastructure.Jwt;
 
 public class JwtManager : IJwtManager
 {
@@ -21,9 +21,10 @@ public class JwtManager : IJwtManager
         {
             new(JwtRegisteredClaimNames.Sub, userId),
             new(JwtRegisteredClaimNames.UniqueName, userName),
+            new(AppJwtRegisteredClaimNames.ConcurrencyStamp, "concurrency_stamp"),
         };
         // 加入角色声明
-        claims.AddRange(roles.Select(r => new Claim("role", r)));
+        claims.AddRange(roles.Select(r => new Claim(AppJwtRegisteredClaimNames.Roles, r)));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
