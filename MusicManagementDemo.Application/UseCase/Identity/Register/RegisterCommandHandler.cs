@@ -33,6 +33,6 @@ internal sealed class RegisterCommandHandler(UserManager<ApplicationUser> userMg
             }
             await userMgr.AddToRoleAsync(user, adminRole.NormalizedName!);
         }
-        return ServiceResult<Guid>.Ok(Guid.Parse(user.Id));
+        return ServiceResult.Ok(Guid.Parse(user.Id));
     }
 }

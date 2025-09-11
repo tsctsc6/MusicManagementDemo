@@ -6,5 +6,7 @@ public interface IServiceResult
 
     int? Code { get; }
 
+    object? Data { get; }
+
     IReadOnlyList<string>? Errors { get; }
 }

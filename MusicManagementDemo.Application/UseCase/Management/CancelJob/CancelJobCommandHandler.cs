@@ -20,7 +20,7 @@ public class CancelJobCommandHandler(IJobManager jobManager)
                 ServiceResult.Err(503, [errResult.Value])
             ),
             OkResult<long, string> okResult => Task.FromResult<IServiceResult>(
-                ServiceResult<object>.Ok(new { JobId = okResult.Value })
+                ServiceResult.Ok(new { JobId = okResult.Value })
             ),
             _ => Task.FromResult<IServiceResult>(ServiceResult.Err(503, ["内部错误"])),
         };

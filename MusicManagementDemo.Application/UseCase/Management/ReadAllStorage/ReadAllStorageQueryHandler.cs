@@ -21,6 +21,6 @@ internal sealed class ReadAllStorageQueryHandler(ManagementAppDbContext dbContex
             .Take(request.PageSize)
             .ToArrayAsync(cancellationToken: cancellationToken);
 
-        return ServiceResult<Storage[]>.Ok(storagesToRead);
+        return ServiceResult.Ok(storagesToRead);
     }
 }

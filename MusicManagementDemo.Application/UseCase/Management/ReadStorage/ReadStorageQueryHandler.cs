@@ -21,7 +21,7 @@ internal sealed class ReadStorageQueryHandler(ManagementAppDbContext dbContext)
         {
             return ServiceResult.Err(503, ["没有找到对应的存储"]);
         }
-        return ServiceResult<object>.Ok(
+        return ServiceResult.Ok(
             new
             {
                 storageToRead.Id,

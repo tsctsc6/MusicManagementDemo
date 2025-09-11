@@ -21,7 +21,7 @@ public class ReadJobQueryHandler(ManagementAppDbContext dbContext)
         {
             return ServiceResult.Err(406, ["Job not found"]);
         }
-        return ServiceResult<object>.Ok(
+        return ServiceResult.Ok(
             new
             {
                 jobToRead.Id,

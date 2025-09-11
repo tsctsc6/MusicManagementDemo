@@ -2,44 +2,29 @@
 
 namespace MusicManagementDemo.Application.Responses;
 
-public sealed record ServiceResult(bool IsFinish, int? Code, IReadOnlyList<string>? Errors)
-    : IServiceResult
+public sealed record ServiceResult(
+    bool IsFinish,
+    int? Code,
+    object? Data,
+    IReadOnlyList<string>? Errors
+) : IServiceResult
 {
-    public static ServiceResult Ok()
+    public static ServiceResult Ok(object? data = null)
     {
-        return new ServiceResult(IsFinish: true, Code: 200, Errors: null);
+        return new ServiceResult(IsFinish: true, Code: 200, Data: data, Errors: null);
     }
 
     public static ServiceResult Err(int code, IReadOnlyList<string>? errors = null)
     {
-        return new ServiceResult(IsFinish: true, Code: code, Errors: errors);
+        return new ServiceResult(IsFinish: true, Code: code, Data: null, Errors: errors);
     }
 
+    /// <summary>
+    /// 表示业务仍未完成，还有后续步骤
+    /// </summary>
+    /// <returns></returns>
     public static ServiceResult Suspend()
     {
-        return new ServiceResult(IsFinish: false, Code: 200, Errors: null);
-    }
-}
-
-public sealed record ServiceResult<T>(
-    bool IsFinish,
-    int? Code,
-    IReadOnlyList<string>? Errors,
-    T? Data
-) : IServiceResult
-{
-    public static ServiceResult<T> Ok(T data)
-    {
-        return new ServiceResult<T>(IsFinish: true, Code: 200, Errors: null, Data: data);
-    }
-
-    public static ServiceResult<T> Err(int code, IReadOnlyList<string>? errors = null)
-    {
-        return new ServiceResult<T>(IsFinish: true, Code: code, Errors: errors, Data: default);
-    }
-
-    public static ServiceResult<T> Suspend(T? data)
-    {
-        return new ServiceResult<T>(IsFinish: false, Code: 200, Errors: null, Data: data);
+        return new ServiceResult(IsFinish: false, Code: 200, Data: null, Errors: null);
     }
 }

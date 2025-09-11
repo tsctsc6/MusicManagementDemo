@@ -30,7 +30,7 @@ internal sealed class CreateJobCommandHandler(
         return result switch
         {
             ErrResult<long, string> errResult => ServiceResult.Err(503, [errResult.Value]),
-            OkResult<long, string> okResult => ServiceResult<object>.Ok(new { JobId = okResult.Value }),
+            OkResult<long, string> okResult => ServiceResult.Ok(new { JobId = okResult.Value }),
             _ => ServiceResult.Err(503, ["内部错误"])
         };
     }

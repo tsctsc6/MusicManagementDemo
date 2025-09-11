@@ -30,6 +30,6 @@ internal sealed class LoginCommandHandler(
         var roles = await userMgr.GetRolesAsync(user);
         var tokenStr = jwtManager.GenerateJwtToken(user.Id, user.UserName!, roles, config);
 
-        return ServiceResult<object>.Ok(new { token = tokenStr });
+        return ServiceResult.Ok(new { token = tokenStr });
     }
 }
