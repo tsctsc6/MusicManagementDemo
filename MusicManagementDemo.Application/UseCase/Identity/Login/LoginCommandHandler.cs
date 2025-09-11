@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
@@ -28,7 +30,14 @@ internal sealed class LoginCommandHandler(
             return ServiceResult.Err(5004, ["邮箱或密码错误"]);
 
         var roles = await userMgr.GetRolesAsync(user);
-        var tokenStr = jwtManager.GenerateJwtToken(user.Id, user.UserName!, roles, config);
+
+        var tokenStr = jwtManager.GenerateJwtToken(
+            user.Id,
+            user.UserName!,
+            roles,
+            user.ConcurrencyStamp ?? string.Empty,
+            config
+        );
 
         return ServiceResult.Ok(new { token = tokenStr });
     }

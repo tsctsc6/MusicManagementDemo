@@ -16,6 +16,7 @@ using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Infrastructure.Database;
 using MusicManagementDemo.Infrastructure.JobHandler;
+using MusicManagementDemo.Infrastructure.Jwt;
 
 namespace MusicManagementDemo.Infrastructure;
 
@@ -98,7 +99,7 @@ public static class AssemblyInfo
                     ),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromHours(1),
-                    RoleClaimType = "role",
+                    RoleClaimType = AppJwtRegisteredClaimNames.Roles,
                     NameClaimType = JwtRegisteredClaimNames.UniqueName,
                 };
             });

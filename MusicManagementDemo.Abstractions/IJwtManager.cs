@@ -8,6 +8,7 @@ public interface IJwtManager
         string userId,
         string userName,
         IList<string> roles,
+        string concurrencyStamp,
         IConfiguration config
     );
 }
