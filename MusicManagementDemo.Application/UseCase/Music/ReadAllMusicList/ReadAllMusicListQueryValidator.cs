@@ -13,5 +13,7 @@ internal sealed class ReadAllMusicListQueryValidator : AbstractValidator<ReadAll
         RuleFor(x => x.ReferenceId);
 
         RuleFor(x => x.PageSize).NotNull().GreaterThan(0).LessThan(30);
+
+        RuleFor(x => x.Asc).NotNull();
     }
 }
