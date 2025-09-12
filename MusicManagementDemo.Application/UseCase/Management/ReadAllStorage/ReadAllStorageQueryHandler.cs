@@ -15,9 +15,9 @@ internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbConte
     )
     {
         var storagesToRead = await dbContext
-            .Storage.AsNoTracking()
-            .Skip(request.Page * request.PageSize)
+            .Storage.Skip(request.Page * request.PageSize)
             .Take(request.PageSize)
+            .AsNoTracking()
             .ToArrayAsync(cancellationToken: cancellationToken);
 
         return ServiceResult.Ok(storagesToRead);
