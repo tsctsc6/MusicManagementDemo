@@ -10,7 +10,7 @@ internal sealed class ReadAllMusicListQueryValidator : AbstractValidator<ReadAll
 
         RuleFor(x => x.UserId).NotEmpty().MaximumLength(36);
 
-        RuleFor(x => x.ReferenceId).NotNull();
+        RuleFor(x => x.ReferenceId);
 
         RuleFor(x => x.PageSize).NotNull().GreaterThan(0).LessThan(30);
     }

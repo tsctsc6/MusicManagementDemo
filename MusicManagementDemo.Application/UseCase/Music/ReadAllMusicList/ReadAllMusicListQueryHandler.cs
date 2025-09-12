@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
-using MusicManagementDemo.Domain.Entity.Music;
 
 namespace MusicManagementDemo.Application.UseCase.Music.ReadAllMusicList;
 
@@ -15,25 +14,32 @@ internal sealed class ReadAllMusicListQueryHandler(IMusicAppDbContext dbContext)
         CancellationToken cancellationToken
     )
     {
-        MusicList[] musicListsToRead = [];
+        var musicListsToReadQuery = dbContext.MusicList.AsQueryable();
         if (request.Asc)
         {
-            musicListsToRead = await dbContext
-            .MusicList.OrderBy(e => e.Id)
-            .Where(e => e.UserId == request.UserId && e.Id > request.ReferenceId)
-            .Take(request.PageSize)
-            .AsNoTracking()
-            .ToArrayAsync(cancellationToken: cancellationToken);
+            musicListsToReadQuery = musicListsToReadQuery.OrderBy(e => e.Id);
+            if (request.ReferenceId is not null)
+            {
+                musicListsToReadQuery = musicListsToReadQuery.Where(e =>
+                    e.Id > request.ReferenceId
+                );
+            }
         }
         else
         {
-            musicListsToRead = await dbContext
-            .MusicList.OrderByDescending(e => e.Id)
-            .Where(e => e.UserId == request.UserId && e.Id < request.ReferenceId)
+            musicListsToReadQuery = musicListsToReadQuery.OrderByDescending(e => e.Id);
+            if (request.ReferenceId is not null)
+            {
+                musicListsToReadQuery = musicListsToReadQuery.Where(e =>
+                    e.Id < request.ReferenceId
+                );
+            }
+        }
+        var musicListsToRead = await musicListsToReadQuery
+            .Where(e => e.UserId == request.UserId)
             .Take(request.PageSize)
             .AsNoTracking()
             .ToArrayAsync(cancellationToken: cancellationToken);
-        }
         return ServiceResult.Ok(musicListsToRead);
     }
 }

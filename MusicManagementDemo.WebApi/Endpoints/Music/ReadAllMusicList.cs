@@ -29,7 +29,7 @@ public class ReadAllMusicList : IEndpoint
                     var result = await mediator.Send(
                         new ReadAllMusicListQuery(
                             UserId: userId,
-                            ReferenceId: referenceId ?? EndpointExtensions.GuidFull,
+                            ReferenceId: referenceId,
                             PageSize: pageSize ?? 10,
                             Asc: asc ?? false
                         ),

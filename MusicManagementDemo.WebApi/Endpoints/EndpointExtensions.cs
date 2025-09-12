@@ -5,7 +5,6 @@ namespace MusicManagementDemo.WebApi.Endpoints;
 
 public static class EndpointExtensions
 {
-    public static Guid GuidFull = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffffffff");
     public static IServiceCollection AddEndpoints(
         this IServiceCollection services,
         Assembly assembly
