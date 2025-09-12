@@ -8,8 +8,10 @@ internal sealed class ReadAllStorageQueryValidator : AbstractValidator<ReadAllSt
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
 
-        RuleFor(e => e.PageSize).NotNull().GreaterThanOrEqualTo(0);
+        RuleFor(x => x.ReferenceId);
 
-        RuleFor(e => e.PageSize).NotNull().GreaterThanOrEqualTo(5);
+        RuleFor(x => x.PageSize).NotNull().GreaterThan(0).LessThan(30);
+
+        RuleFor(x => x.Asc).NotNull();
     }
 }
