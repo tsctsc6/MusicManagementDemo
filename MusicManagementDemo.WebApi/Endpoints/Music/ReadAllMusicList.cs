@@ -13,7 +13,7 @@ public class ReadAllMusicList : IEndpoint
         app.MapGet(
                 "api/music/read-all-music-list",
                 async (
-                    int pageSize,
+                    int? pageSize,
                     Guid? referenceId,
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
@@ -29,7 +29,7 @@ public class ReadAllMusicList : IEndpoint
                         new ReadAllMusicListQuery(
                             UserId: userId,
                             ReferenceId: referenceId ?? EndpointExtensions.GuidFull,
-                            PageSize: pageSize
+                            PageSize: pageSize ?? 10
                         ),
                         cancellationToken
                     );
