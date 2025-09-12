@@ -15,8 +15,8 @@ internal sealed class ReadAllMusicListQueryHandler(IMusicAppDbContext dbContext)
     )
     {
         var musicListsToRead = await dbContext
-            .MusicList.OrderBy(e => e.Id)
-            .Where(e => e.UserId == request.UserId && e.Id > request.ReferenceId)
+            .MusicList.OrderByDescending(e => e.Id)
+            .Where(e => e.UserId == request.UserId && e.Id < request.ReferenceId)
             .Take(request.PageSize)
             .ToArrayAsync(cancellationToken: cancellationToken);
         return ServiceResult.Ok(musicListsToRead);
