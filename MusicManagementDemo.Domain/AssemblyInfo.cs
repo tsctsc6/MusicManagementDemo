@@ -1,5 +1,3 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace MusicManagementDemo.Domain;
+﻿namespace MusicManagementDemo.Domain;
 
 public static class AssemblyInfo { }

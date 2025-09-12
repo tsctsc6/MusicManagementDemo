@@ -9,10 +9,6 @@
             Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
             Version="9.0.8"
         />
-        <PackageReference
-            Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-            Version="9.0.8"
-        />
         <PackageReference Include="Npgsql" Version="9.0.3" />
     </ItemGroup>
 </Project>
