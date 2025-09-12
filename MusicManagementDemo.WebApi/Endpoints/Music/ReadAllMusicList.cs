@@ -15,6 +15,7 @@ public class ReadAllMusicList : IEndpoint
                 async (
                     int? pageSize,
                     Guid? referenceId,
+                    bool? asc,
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
                     CancellationToken cancellationToken
@@ -29,7 +30,8 @@ public class ReadAllMusicList : IEndpoint
                         new ReadAllMusicListQuery(
                             UserId: userId,
                             ReferenceId: referenceId ?? EndpointExtensions.GuidFull,
-                            PageSize: pageSize ?? 10
+                            PageSize: pageSize ?? 10,
+                            Asc: asc ?? false
                         ),
                         cancellationToken
                     );
