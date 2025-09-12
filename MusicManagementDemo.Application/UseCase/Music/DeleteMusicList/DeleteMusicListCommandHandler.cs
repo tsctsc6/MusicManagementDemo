@@ -14,6 +14,13 @@ internal sealed class DeleteMusicListCommandHandler(IMusicAppDbContext dbContext
         CancellationToken cancellationToken
     )
     {
+        var musicToDelete = await dbContext
+            .MusicList.Where(e => e.Id == request.MusicListId && e.UserId == request.UserId)
+            .SingleOrDefaultAsync(cancellationToken: cancellationToken);
+        if (musicToDelete is null)
+        {
+            return ServiceResult.Err(404, ["没有找到对应的歌单"]);
+        }
         using var transaction = dbContext.Database.BeginTransaction();
         var deleteCount = await dbContext
             .MusicInfoMusicListMap.Where(e => e.MusicListId == request.MusicListId)
