@@ -17,6 +17,19 @@
 ### 领域事件
 用户注册时，创建默认歌单，里面包含随机的歌曲。
 
+## 项目结构图
+```mermaid
+---
+title: 项目结构图
+---
+flowchart TD
+    WebApi --> Application
+    WebApi --> Infrastructure
+    Application --> Abstractions
+    Infrastructure --> Abstractions
+    Abstractions --> Domain
+```
+
 ## WebApi
 ### 管理员
 #### 音乐管理
@@ -28,9 +41,11 @@
 
 ##### 查看所有存储
 
-##### 扫描存储
+##### 创建任务
 
-#### 用户管理
+##### 查看所有任务
+
+##### 取消任务
 
 ### 用户认证
 #### 用户注册
@@ -46,7 +61,7 @@
 
 #### 修改歌单
 
-#### 查询歌单
+#### 查询所有歌单
 
 #### 为歌单添加歌曲
 
