@@ -15,7 +15,7 @@ internal sealed class UpdateMusicListCommandHandler(IMusicAppDbContext dbContext
     )
     {
         var musicListToUpdate = await dbContext.MusicList.SingleOrDefaultAsync(
-            e => e.Id == request.MusicListId,
+            e => e.Id == request.MusicListId && e.UserId == request.UserId,
             cancellationToken: cancellationToken
         );
         if (musicListToUpdate is null)

@@ -28,7 +28,7 @@ internal sealed class DeleteMusicListCommandHandler(IMusicAppDbContext dbContext
         }
         if (
             await dbContext
-                .MusicList.Where(e => e.Id == request.MusicListId)
+                .MusicList.Where(e => e.Id == request.MusicListId && e.UserId == request.UserId)
                 .ExecuteDeleteAsync(cancellationToken) != 1
         )
         {
