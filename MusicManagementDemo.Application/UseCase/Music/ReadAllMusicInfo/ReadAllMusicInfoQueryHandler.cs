@@ -18,7 +18,7 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(IMusicAppDbContext db
         var musicInfosToReadQuery = dbContext.MusicInfo.AsQueryable();
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
-            var searchTerm = WhiteSpaceRegex().Replace(request.SearchTerm, "|");
+            var searchTerm = WhiteSpaceRegex().Replace(request.SearchTerm.Trim(), "|");
             musicInfosToReadQuery = musicInfosToReadQuery
                 .Where(m =>
                     m.TitleTSV.Matches(
@@ -66,6 +66,6 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(IMusicAppDbContext db
         return ServiceResult.Ok(musicListsToRead);
     }
 
-    [GeneratedRegex(@"\s")]
+    [GeneratedRegex(@"\s+")]
     private static partial Regex WhiteSpaceRegex();
 }
