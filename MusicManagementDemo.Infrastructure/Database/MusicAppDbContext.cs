@@ -13,13 +13,11 @@ public sealed class MusicAppDbContext(DbContextOptions<MusicAppDbContext> option
     public DbSet<MusicList> MusicList { get; set; }
     public DbSet<MusicInfoMusicListMap> MusicInfoMusicListMap { get; set; }
 
-    public string MusicInfoTitleTsConfig => "simple";
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.Music);
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfiguration(new MusicInfoConfiguration(MusicInfoTitleTsConfig));
+        modelBuilder.ApplyConfiguration(new MusicInfoConfiguration());
         modelBuilder.ApplyConfiguration(new MusicListConfiguration());
         modelBuilder.ApplyConfiguration(new MusicInfoMusicListMapConfiguration());
     }

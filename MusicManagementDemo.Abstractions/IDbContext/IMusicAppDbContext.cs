@@ -13,6 +13,4 @@ public interface IMusicAppDbContext
     public DatabaseFacade Database { get; }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-
-    public string MusicInfoTitleTsConfig { get; }
 }

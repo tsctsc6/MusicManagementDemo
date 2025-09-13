@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Domain.Entity.Music;
 
 namespace MusicManagementDemo.Infrastructure.DbConfig.Music;
 
-public class MusicInfoConfiguration(string musicInfoTitleTsConfig)
-    : IEntityTypeConfiguration<MusicInfo>
+public class MusicInfoConfiguration : IEntityTypeConfiguration<MusicInfo>
 {
     public void Configure(EntityTypeBuilder<MusicInfo> builder)
     {
@@ -23,8 +23,11 @@ public class MusicInfoConfiguration(string musicInfoTitleTsConfig)
             .Property(e => e.TitleTSV)
             .HasColumnType("TSVECTOR")
             // 指定文本搜索配置
-            .HasAnnotation("TsVectorConfig", musicInfoTitleTsConfig)
-            .HasComputedColumnSql($"""to_tsvector('{musicInfoTitleTsConfig}', "Title")""", true);
+            .HasAnnotation("TsVectorConfig", NpgsqlValues.TsConfigSimple)
+            .HasComputedColumnSql(
+                $"""to_tsvector('{NpgsqlValues.TsConfigSimple}', "Title")""",
+                true
+            );
         // 创建 GIN 索引
         builder.HasIndex(e => e.TitleTSV).HasMethod("GIN");
 
