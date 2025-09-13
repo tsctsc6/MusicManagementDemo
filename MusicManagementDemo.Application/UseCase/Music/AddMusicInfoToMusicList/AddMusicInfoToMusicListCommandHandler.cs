@@ -15,7 +15,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(IMusicAppDbContext d
     )
     {
         var musicListWhichAddMusicInfo = await dbContext.MusicList.SingleOrDefaultAsync(
-            e => e.Id == request.MusicInfoId && e.UserId == request.UserId,
+            e => e.Id == request.MusicListId && e.UserId == request.UserId,
             cancellationToken: cancellationToken
         );
         if (musicListWhichAddMusicInfo is null)
