@@ -14,6 +14,7 @@ public class ReadAllMusicInfo : IEndpoint
                     int? pageSize,
                     Guid? referenceId,
                     bool? asc,
+                    string? searchTerm,
                     IMediator mediator,
                     CancellationToken cancellationToken
                 ) =>
@@ -22,7 +23,8 @@ public class ReadAllMusicInfo : IEndpoint
                         new ReadAllMusicInfoQuery(
                             ReferenceId: referenceId,
                             PageSize: pageSize ?? 10,
-                            Asc: asc ?? false
+                            Asc: asc ?? false,
+                            SearchTerm: searchTerm ?? string.Empty
                         ),
                         cancellationToken
                     );

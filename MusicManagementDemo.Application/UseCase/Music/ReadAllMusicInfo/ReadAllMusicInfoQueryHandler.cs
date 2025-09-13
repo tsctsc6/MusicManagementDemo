@@ -15,6 +15,13 @@ internal sealed class ReadAllMusicInfoQueryHandler(IMusicAppDbContext dbContext)
     )
     {
         var musicInfosToReadQuery = dbContext.MusicInfo.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            musicInfosToReadQuery = musicInfosToReadQuery.Where(m =>
+                m.TitleTSV.Matches(request.SearchTerm)
+            );
+        }
+
         if (request.Asc)
         {
             musicInfosToReadQuery = musicInfosToReadQuery.OrderBy(e => e.Id);
