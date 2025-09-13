@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Text.RegularExpressions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
@@ -6,7 +7,7 @@ using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;
 
-internal sealed class ReadAllMusicInfoQueryHandler(IMusicAppDbContext dbContext)
+internal sealed partial class ReadAllMusicInfoQueryHandler(IMusicAppDbContext dbContext)
     : IRequestHandler<ReadAllMusicInfoQuery, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
@@ -17,22 +18,15 @@ internal sealed class ReadAllMusicInfoQueryHandler(IMusicAppDbContext dbContext)
         var musicInfosToReadQuery = dbContext.MusicInfo.AsQueryable();
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
+            var searchTerm = WhiteSpaceRegex().Replace(request.SearchTerm, "|");
             musicInfosToReadQuery = musicInfosToReadQuery
                 .Where(m =>
                     m.TitleTSV.Matches(
-                        EF.Functions.ToTsQuery(
-                            NpgsqlValues.TsConfigSimple,
-                            request.SearchTerm.Replace(" ", "|")
-                        )
+                        EF.Functions.ToTsQuery(NpgsqlValues.TsConfigSimple, searchTerm)
                     )
                 )
                 .OrderByDescending(m =>
-                    m.TitleTSV.Rank(
-                        EF.Functions.ToTsQuery(
-                            NpgsqlValues.TsConfigSimple,
-                            request.SearchTerm.Replace(" ", "|")
-                        )
-                    )
+                    m.TitleTSV.Rank(EF.Functions.ToTsQuery(NpgsqlValues.TsConfigSimple, searchTerm))
                 );
         }
         else
@@ -71,4 +65,7 @@ internal sealed class ReadAllMusicInfoQueryHandler(IMusicAppDbContext dbContext)
             .ToArrayAsync(cancellationToken: cancellationToken);
         return ServiceResult.Ok(musicListsToRead);
     }
+
+    [GeneratedRegex(@"\s")]
+    private static partial Regex WhiteSpaceRegex();
 }
