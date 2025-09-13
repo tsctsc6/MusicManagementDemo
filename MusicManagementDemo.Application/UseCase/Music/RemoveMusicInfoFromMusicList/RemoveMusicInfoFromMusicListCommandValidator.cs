@@ -2,10 +2,10 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.RemoveMusicInfoFromMusicList;
 
-internal sealed class RemoveMusicInfoFromMusicListValidator
+internal sealed class RemoveMusicInfoFromMusicListCommandValidator
     : AbstractValidator<RemoveMusicInfoFromMusicListCommand>
 {
-    public RemoveMusicInfoFromMusicListValidator()
+    public RemoveMusicInfoFromMusicListCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
 

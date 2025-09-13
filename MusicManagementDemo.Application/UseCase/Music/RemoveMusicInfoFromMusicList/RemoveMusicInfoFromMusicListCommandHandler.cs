@@ -6,7 +6,7 @@ using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.UseCase.Music.RemoveMusicInfoFromMusicList;
 
-internal sealed class RemoveMusicInfoFromMusicListHandler(IMusicAppDbContext dbContext)
+internal sealed class RemoveMusicInfoFromMusicListCommandHandler(IMusicAppDbContext dbContext)
     : IRequestHandler<RemoveMusicInfoFromMusicListCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
