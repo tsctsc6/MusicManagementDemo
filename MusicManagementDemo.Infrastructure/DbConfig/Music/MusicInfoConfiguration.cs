@@ -4,7 +4,8 @@ using MusicManagementDemo.Domain.Entity.Music;
 
 namespace MusicManagementDemo.Infrastructure.DbConfig.Music;
 
-public class MusicInfoConfiguration : IEntityTypeConfiguration<MusicInfo>
+public class MusicInfoConfiguration(string musicInfoTitleTsConfig)
+    : IEntityTypeConfiguration<MusicInfo>
 {
     public void Configure(EntityTypeBuilder<MusicInfo> builder)
     {
@@ -22,8 +23,8 @@ public class MusicInfoConfiguration : IEntityTypeConfiguration<MusicInfo>
             .Property(e => e.TitleTSV)
             .HasColumnType("TSVECTOR")
             // 指定文本搜索配置
-            .HasAnnotation("TsVectorConfig", "english")
-            .HasComputedColumnSql("""to_tsvector('english', "Title")""", true);
+            .HasAnnotation("TsVectorConfig", musicInfoTitleTsConfig)
+            .HasComputedColumnSql($"""to_tsvector('{musicInfoTitleTsConfig}', "Title")""", true);
         // 创建 GIN 索引
         builder.HasIndex(e => e.TitleTSV).HasMethod("GIN");
 

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
@@ -18,7 +19,7 @@ internal sealed class ReadAllMusicInfoQueryHandler(IMusicAppDbContext dbContext)
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
             musicInfosToReadQuery = musicInfosToReadQuery.Where(m =>
-                m.TitleTSV.Matches(request.SearchTerm)
+                m.TitleTSV.Matches(EF.Functions.PlainToTsQuery(dbContext.MusicInfoTitleTsConfig, request.SearchTerm))
             );
         }
 
