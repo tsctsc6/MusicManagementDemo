@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Migrations.Music
 {
     [DbContext(typeof(MusicAppDbContext))]
-    [Migration("20250909111102_MusicInitial")]
+    [Migration("20250913075715_MusicInitial")]
     partial class MusicInitial
     {
         /// <inheritdoc />
@@ -61,8 +61,8 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TSVECTOR")
-                        .HasComputedColumnSql("to_tsvector('english', \"Title\")", true)
-                        .HasAnnotation("TsVectorConfig", "english");
+                        .HasComputedColumnSql("to_tsvector('simple', \"Title\")", true)
+                        .HasAnnotation("TsVectorConfig", "simple");
 
                     b.HasKey("Id");
 
