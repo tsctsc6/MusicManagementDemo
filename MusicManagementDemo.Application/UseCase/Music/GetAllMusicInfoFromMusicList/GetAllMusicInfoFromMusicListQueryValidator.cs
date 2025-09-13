@@ -12,5 +12,11 @@ internal sealed class GetAllMusicInfoFromMusicListQueryValidator
         RuleFor(e => e.UserId).NotEmpty().MaximumLength(36);
 
         RuleFor(e => e.MusicListId).NotNull();
+
+        RuleFor(x => x.ReferenceId);
+
+        RuleFor(x => x.PageSize).NotNull().GreaterThan(0).LessThan(30);
+
+        RuleFor(x => x.Asc).NotNull();
     }
 }
