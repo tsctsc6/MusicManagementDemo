@@ -4,7 +4,7 @@ using MusicManagementDemo.Application.UseCase.Management.ReadJob;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
-public class ReadJob : IEndpoint
+internal sealed class ReadJob : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

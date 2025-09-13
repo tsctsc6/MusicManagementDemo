@@ -6,7 +6,7 @@ using MusicManagementDemo.Application.UseCase.Music.RemoveMusicInfoFromMusicList
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
-public class RemoveMusicInfoFromMusicList : IEndpoint
+internal sealed class RemoveMusicInfoFromMusicList : IEndpoint
 {
     private sealed record Request(Guid MusicListId, Guid MusicInfoId);
 

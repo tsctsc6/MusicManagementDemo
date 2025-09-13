@@ -6,7 +6,7 @@ using MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
-public class AddMusicInfoToMusicList : IEndpoint
+internal sealed class AddMusicInfoToMusicList : IEndpoint
 {
     private sealed record Request(Guid MusicListId, Guid MusicInfoId);
 

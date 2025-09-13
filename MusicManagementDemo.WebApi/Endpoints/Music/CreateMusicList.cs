@@ -6,7 +6,7 @@ using MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
-public sealed class CreateMusicList : IEndpoint
+internal sealed class CreateMusicList : IEndpoint
 {
     private sealed record Request(string Name);
 

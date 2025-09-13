@@ -6,7 +6,7 @@ using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicList;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
-public class ReadAllMusicList : IEndpoint
+internal sealed class ReadAllMusicList : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

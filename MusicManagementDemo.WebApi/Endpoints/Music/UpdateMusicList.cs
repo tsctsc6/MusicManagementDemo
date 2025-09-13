@@ -6,7 +6,7 @@ using MusicManagementDemo.Application.UseCase.Music.UpdateMusicList;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
-public class UpdateMusicList : IEndpoint
+internal sealed class UpdateMusicList : IEndpoint
 {
     private sealed record Request(Guid MusicListId, string Name);
 
