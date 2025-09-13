@@ -14,10 +14,12 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(IMusicAppDbContex
         CancellationToken cancellationToken
     )
     {
-        var musicListToRead = await dbContext.MusicList.SingleOrDefaultAsync(
-            e => e.Id == request.MusicListId,
-            cancellationToken: cancellationToken
-        );
+        var musicListToRead = await dbContext
+            .MusicList.AsNoTracking()
+            .SingleOrDefaultAsync(
+                e => e.Id == request.MusicListId,
+                cancellationToken: cancellationToken
+            );
         if (musicListToRead is null)
         {
             return ServiceResult.Err(404, ["MusicList not found"]);

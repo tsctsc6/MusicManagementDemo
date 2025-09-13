@@ -16,7 +16,7 @@ public class GetMusicStreamQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var musicInfoToGetStream = await dbContext.MusicInfo.SingleOrDefaultAsync(
+        var musicInfoToGetStream = await dbContext.MusicInfo.AsNoTracking().SingleOrDefaultAsync(
             e => e.Id == request.MusicInfoId,
             cancellationToken: cancellationToken
         );
