@@ -73,7 +73,103 @@ public static class AssemblyInfo
     )
     {
         var connectionString = configuration.GetConnectionString("Default");
-        services.AddDbContext<MusicAppDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<MusicAppDbContext>(options =>
+            options
+                .UseNpgsql(connectionString)
+                .UseSeeding(
+                    (d2, _) =>
+                    {
+                        var d = (MusicAppDbContext)d2;
+                        d.Database.ExecuteSql(
+                            $"""
+CREATE TYPE {Schemas.Music}.{Function.GetMusicInfoInMusicListReturnType} AS (
+"Id" UUID,
+"Title" character varying(200),
+"Artist" character varying(100),
+"Album" character varying(100)
+);
+"""
+                        );
+                        d.Database.ExecuteSql(
+                            $"""
+-- 定义函数
+CREATE OR REPLACE FUNCTION {Schemas.Music}.{Function.GetMusicInfoInMusicList}(
+	music_list_id UUID,
+    start_id UUID DEFAULT NULL,
+    num_items INTEGER DEFAULT 10,
+	is_desc BOOL DEFAULT false
+)
+RETURNS SETOF music.chain_tuple
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    current_id UUID := start_id;
+    rec RECORD;
+	result music.chain_tuple;
+BEGIN
+	IF current_id IS NOT NULL THEN
+		SELECT m."PrevId", m."NextId" INTO rec
+		FROM music."MusicInfoMusicListMap" AS m
+		WHERE m."MusicListId" = music_list_id AND m."MusicInfoId" = current_id;
+		-- 更新当前 ID 为 NextId
+		IF is_desc THEN
+			current_id := rec."PrevId";
+		ELSE
+			current_id := rec."NextId";
+		END IF;
+	END IF;
+    FOR i IN 1..num_items LOOP
+		-- 查询当前记录
+		IF current_id IS NULL THEN
+			IF is_desc THEN
+				SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
+				FROM music."MusicInfoMusicListMap" AS m
+				JOIN music."MusicInfo" AS mi ON m."MusicInfoId" = mi."Id"
+				WHERE m."MusicListId" = music_list_id AND m."NextId" is NULL;
+			ELSE
+				SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
+				FROM music."MusicInfoMusicListMap" AS m
+				JOIN music."MusicInfo" AS mi ON m."MusicInfoId" = mi."Id"
+				WHERE m."MusicListId" = music_list_id AND m."PrevId" is NULL;
+			END IF;
+		ELSE
+			SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
+			FROM music."MusicInfoMusicListMap" AS m
+			JOIN music."MusicInfo" AS mi ON m."MusicInfoId" = mi."Id"
+			WHERE m."MusicListId" = music_list_id AND m."MusicInfoId" = current_id;
+        END IF;
+        -- 如果未找到，退出循环
+		IF NOT FOUND THEN
+			EXIT;
+		END IF;
+
+		result."Id" := rec."Id";
+        result."Title" := rec."Title";
+        result."Artist" := rec."Artist";
+		result."Album" := rec."Album";
+		
+        -- 返回当前元组
+        RETURN Next result;
+        
+        -- 更新当前 ID 为 NextId
+        IF is_desc THEN
+			current_id := rec."PrevId";
+		ELSE
+			current_id := rec."NextId";
+		END IF;
+        
+        -- 如果 NextId 为 NULL，退出循环
+        IF current_id IS NULL THEN
+            EXIT;
+        END IF;
+    END LOOP;
+END;
+$$;
+"""
+                        );
+                    }
+                )
+        );
         services.AddDbContext<ManagementAppDbContext>(options =>
             options.UseNpgsql(connectionString)
         );
