@@ -24,20 +24,59 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(IMusicAppDbCont
             return ServiceResult.Err(404, ["MusicListId not found"]);
         }
 
+        var musicInfoMapToRemove = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+            e => e.MusicListId == request.MusicListId && e.MusicInfoId == request.MusicInfoId,
+            cancellationToken
+        );
+        if (musicInfoMapToRemove is null)
+        {
+            return ServiceResult.Err(404, ["musicInfoMapToRemove not found"]);
+        }
+
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
             cancellationToken
         );
-        if (
-            await dbContext
-                .MusicInfoMusicListMap.Where(e =>
-                    e.MusicListId == request.MusicListId && e.MusicInfoId == request.MusicInfoId
-                )
-                .ExecuteDeleteAsync(cancellationToken: cancellationToken) != 1
-        )
+        var expectedSubmitCount = 0;
+
+        // 更改目标歌曲的前后歌曲指针
+        if (musicInfoMapToRemove.PrevId is not null)
         {
-            await transaction.RollbackAsync(cancellationToken);
-            return ServiceResult.Err(404, ["MusicInfoMusicListMap not found"]);
+            var musicInfoMapPrev = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+                e =>
+                    e.MusicListId == request.MusicListId
+                    && e.MusicInfoId == musicInfoMapToRemove.PrevId,
+                cancellationToken
+            );
+            if (musicInfoMapPrev is null)
+            {
+                return ServiceResult.Err(404, ["musicInfoMapPrev not found"]);
+            }
+            musicInfoMapPrev.NextId = musicInfoMapToRemove.NextId;
+            expectedSubmitCount++;
         }
+        if (musicInfoMapToRemove.NextId is not null)
+        {
+            var musicInfoMapNext = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+                e =>
+                    e.MusicListId == request.MusicListId
+                    && e.MusicInfoId == musicInfoMapToRemove.NextId,
+                cancellationToken
+            );
+            if (musicInfoMapNext is null)
+            {
+                return ServiceResult.Err(404, ["musicInfoMapNext not found"]);
+            }
+            musicInfoMapNext.PrevId = musicInfoMapToRemove.PrevId;
+            expectedSubmitCount++;
+        }
+        
+        dbContext.MusicInfoMusicListMap.Remove(musicInfoMapToRemove);
+        expectedSubmitCount++;
+        if (await dbContext.SaveChangesAsync(cancellationToken) != expectedSubmitCount)
+        {
+            return ServiceResult.Err(404, ["Delete Failed"]);
+        }
+
         await transaction.CommitAsync(cancellationToken);
         return ServiceResult.Ok();
     }
