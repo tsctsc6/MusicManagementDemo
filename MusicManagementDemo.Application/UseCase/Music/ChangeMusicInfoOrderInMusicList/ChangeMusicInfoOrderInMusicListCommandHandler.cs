@@ -34,11 +34,6 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
             return ServiceResult.Err(404, ["musicInfoMapToMove not found"]);
         }
 
-        if (!await CheckNeighboringAsync(request, cancellationToken))
-        {
-            return ServiceResult.Err(404, ["Invalid input"]);
-        }
-
         var rowChanged = new HashSet<Guid>();
         if (
             musicInfoMapToMove.PrevId != request.PrevMusicInfoId
@@ -46,6 +41,42 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
         )
         {
             rowChanged.Add(request.TargetMusicInfoId);
+        }
+
+        // 查询目标歌曲，新位置的前后歌曲
+        MusicInfoMusicListMap? musicInfoMapPrevNew = null;
+        MusicInfoMusicListMap? musicInfoMapNextNew = null;
+        if (request.PrevMusicInfoId is not null)
+        {
+            musicInfoMapPrevNew = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+                e =>
+                    e.MusicListId == request.MusicListId
+                    && e.MusicInfoId == request.PrevMusicInfoId,
+                cancellationToken: cancellationToken
+            );
+            if (musicInfoMapPrevNew is null)
+            {
+                return ServiceResult.Err(404, ["musicInfoMapPrevNew not found"]);
+            }
+        }
+
+        if (request.NextMusicInfoId is not null)
+        {
+            musicInfoMapNextNew = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+                e =>
+                    e.MusicListId == request.MusicListId
+                    && e.MusicInfoId == request.NextMusicInfoId,
+                cancellationToken: cancellationToken
+            );
+            if (musicInfoMapNextNew is null)
+            {
+                return ServiceResult.Err(404, ["musicInfoMapNextNew not found"]);
+            }
+        }
+
+        if (!CheckNeighboringAsync(request, musicInfoMapPrevNew, musicInfoMapNextNew))
+        {
+            return ServiceResult.Err(404, ["Invalid input"]);
         }
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
@@ -85,39 +116,19 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
         }
 
         // 更改目标歌曲，新位置的前后歌曲的指针
-        if (request.PrevMusicInfoId is not null)
+        if (musicInfoMapPrevNew is not null)
         {
-            var musicInfoMapPrevNew = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
-                e =>
-                    e.MusicListId == request.MusicListId
-                    && e.MusicInfoId == request.PrevMusicInfoId,
-                cancellationToken: cancellationToken
-            );
-            if (musicInfoMapPrevNew is null)
-            {
-                return ServiceResult.Err(404, ["musicInfoMapPrevNew not found"]);
-            }
             musicInfoMapPrevNew.NextId = musicInfoMapToMove.MusicInfoId;
             rowChanged.Add(musicInfoMapPrevNew.MusicInfoId);
         }
-        musicInfoMapToMove.PrevId = request.PrevMusicInfoId;
-
-        if (request.NextMusicInfoId is not null)
+        if (musicInfoMapNextNew is not null)
         {
-            var musicInfoMapNextNew = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
-                e =>
-                    e.MusicListId == request.MusicListId
-                    && e.MusicInfoId == request.NextMusicInfoId,
-                cancellationToken: cancellationToken
-            );
-            if (musicInfoMapNextNew is null)
-            {
-                return ServiceResult.Err(404, ["musicInfoMapNextNew not found"]);
-            }
             musicInfoMapNextNew.PrevId = musicInfoMapToMove.MusicInfoId;
             rowChanged.Add(musicInfoMapNextNew.MusicInfoId);
         }
+        musicInfoMapToMove.PrevId = request.PrevMusicInfoId;
         musicInfoMapToMove.NextId = request.NextMusicInfoId;
+        rowChanged.Add(musicInfoMapToMove.MusicInfoId);
 
         if (await dbContext.SaveChangesAsync(cancellationToken) != rowChanged.Count)
         {
@@ -135,36 +146,18 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
     /// 如果 request.NextMusicInfoId is null ， 检查 request.PrevMusicInfoId 是否最后一个节点
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="prevMusicInfoMap"></param>
+    /// <param name="nextMusicInfoMap"></param>
     /// <returns>true for neighboring.</returns>
-    private async Task<bool> CheckNeighboringAsync(
+    private bool CheckNeighboringAsync(
         ChangeMusicInfoOrderInMusicListCommand request,
-        CancellationToken cancellationToken
+        MusicInfoMusicListMap? prevMusicInfoMap,
+        MusicInfoMusicListMap? nextMusicInfoMap
     )
     {
         if (request.PrevMusicInfoId is null && request.NextMusicInfoId is null)
         {
             return false;
-        }
-
-        MusicInfoMusicListMap? prevMusicInfoMap = null;
-        MusicInfoMusicListMap? nextMusicInfoMap = null;
-        if (request.PrevMusicInfoId is not null)
-        {
-            prevMusicInfoMap = await dbContext
-                .MusicInfoMusicListMap.Where(e =>
-                    e.MusicListId == request.MusicListId && e.MusicInfoId == request.PrevMusicInfoId
-                )
-                .SingleOrDefaultAsync(cancellationToken: cancellationToken);
-        }
-
-        if (request.NextMusicInfoId is not null)
-        {
-            nextMusicInfoMap = await dbContext
-                .MusicInfoMusicListMap.Where(e =>
-                    e.MusicListId == request.MusicListId && e.MusicInfoId == request.NextMusicInfoId
-                )
-                .SingleOrDefaultAsync(cancellationToken: cancellationToken);
         }
 
         if (
