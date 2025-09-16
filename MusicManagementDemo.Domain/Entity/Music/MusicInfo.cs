@@ -13,6 +13,8 @@ public sealed class MusicInfo
     public string Album { get; set; } = string.Empty;
 
     public string FilePath { get; set; } = string.Empty;
-
+#pragma warning disable CS8618
+    // ReSharper disable once InconsistentNaming
     public NpgsqlTsVector TitleTSV { get; set; }
+#pragma warning restore CS8618
 }
