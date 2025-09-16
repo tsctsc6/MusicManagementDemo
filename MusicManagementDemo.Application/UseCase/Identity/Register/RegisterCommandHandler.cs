@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
@@ -10,7 +11,8 @@ namespace MusicManagementDemo.Application.UseCase.Identity.Register;
 
 internal sealed class RegisterCommandHandler(
     UserManager<ApplicationUser> userMgr,
-    IdentityDbContext<ApplicationUser> dbContext
+    IdentityDbContext<ApplicationUser> dbContext,
+    ILogger<RegisterCommandHandler> logger
 ) : IRequestHandler<RegisterCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
@@ -25,7 +27,8 @@ internal sealed class RegisterCommandHandler(
         {
             return ServiceResult.Err(503, [.. result.Errors.Select(e => e.Description)]);
         }
-
+        logger.LogInformation("User {userId} registered.", user.Id);
+        
         if (isFirstUser)
         {
             var adminRole = await dbContext.Roles.SingleOrDefaultAsync(
@@ -37,6 +40,7 @@ internal sealed class RegisterCommandHandler(
                 return ServiceResult.Err(503, ["内部错误"]);
             }
             await userMgr.AddToRoleAsync(user, adminRole.NormalizedName!);
+            logger.LogInformation("User {userId} is admin.", user.Id);
         }
         return ServiceResult.Ok(Guid.Parse(user.Id));
     }

@@ -1,12 +1,15 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
 using RustSharp;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CancelJob;
 
-public class CancelJobCommandHandler(IJobManager jobManager)
-    : IRequestHandler<CancelJobCommand, IServiceResult>
+public class CancelJobCommandHandler(
+    IJobManager jobManager,
+    ILogger<CancelJobCommandHandler> logger
+) : IRequestHandler<CancelJobCommand, IServiceResult>
 {
     public Task<IServiceResult> Handle(
         CancelJobCommand request,
@@ -14,6 +17,10 @@ public class CancelJobCommandHandler(IJobManager jobManager)
     )
     {
         var result = jobManager.CancelJob(request.JobId);
+        if (result is ErrResult<long, string> err)
+        {
+            logger.LogError("{err}", err);
+        }
         return result switch
         {
             ErrResult<long, string> errResult => Task.FromResult<IServiceResult>(

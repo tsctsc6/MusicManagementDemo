@@ -1,13 +1,16 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.UseCase.Management.UpdateStorage;
 
-internal sealed class UpdateStorageCommandHandler(IManagementAppDbContext dbContext)
-    : IRequestHandler<UpdateStorageCommand, IServiceResult>
+internal sealed class UpdateStorageCommandHandler(
+    IManagementAppDbContext dbContext,
+    ILogger<UpdateStorageCommandHandler> logger
+) : IRequestHandler<UpdateStorageCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
         UpdateStorageCommand request,
@@ -20,6 +23,7 @@ internal sealed class UpdateStorageCommandHandler(IManagementAppDbContext dbCont
         );
         if (storageToUpdate is null)
         {
+            logger.LogError("storage {id} not found", request.Id);
             return ServiceResult.Err(404, ["没有找到对应存储"]);
         }
 

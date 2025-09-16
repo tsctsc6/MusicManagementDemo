@@ -1,13 +1,16 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadJob;
 
-public class ReadJobQueryHandler(IManagementAppDbContext dbContext)
-    : IRequestHandler<ReadJobQuery, IServiceResult>
+public class ReadJobQueryHandler(
+    IManagementAppDbContext dbContext,
+    ILogger<ReadJobQueryHandler> logger
+) : IRequestHandler<ReadJobQuery, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
         ReadJobQuery request,
@@ -19,6 +22,7 @@ public class ReadJobQueryHandler(IManagementAppDbContext dbContext)
             .SingleOrDefaultAsync(j => j.Id == request.Id, cancellationToken: cancellationToken);
         if (jobToRead is null)
         {
+            logger.LogError("Job with id: {RequestId} not found", request.Id);
             return ServiceResult.Err(406, ["Job not found"]);
         }
         return ServiceResult.Ok(

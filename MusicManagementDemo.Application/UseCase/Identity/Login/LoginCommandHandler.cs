@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
@@ -11,7 +12,8 @@ internal sealed class LoginCommandHandler(
     UserManager<ApplicationUser> userMgr,
     SignInManager<ApplicationUser> signInMgr,
     IJwtManager jwtManager,
-    IConfiguration config
+    IConfiguration config,
+    ILogger<LoginCommandHandler> logger
 ) : IRequestHandler<LoginCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
@@ -36,7 +38,8 @@ internal sealed class LoginCommandHandler(
             user.ConcurrencyStamp ?? string.Empty,
             config
         );
-
+        logger.LogInformation("User {userId} logged in.", user.Id);
+        
         return ServiceResult.Ok(new { token = tokenStr });
     }
 }

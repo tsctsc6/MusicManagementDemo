@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
@@ -9,7 +10,8 @@ namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;
 
 internal sealed class CreateJobCommandHandler(
     IManagementAppDbContext dbContext,
-    IJobManager jobManager
+    IJobManager jobManager,
+    ILogger<CreateJobCommandHandler> logger
 ) : IRequestHandler<CreateJobCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
@@ -27,6 +29,10 @@ internal sealed class CreateJobCommandHandler(
         await dbContext.Job.AddAsync(jobToAdd, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         var result = jobManager.CreateJob(jobToAdd.Id, request.Type);
+        if (result is ErrResult<long, string> err)
+        {
+            logger.LogError("{err}", err);
+        }
         return result switch
         {
             ErrResult<long, string> errResult => ServiceResult.Err(503, [errResult.Value]),
