@@ -19,6 +19,7 @@ using MusicManagementDemo.Infrastructure.Database;
 using MusicManagementDemo.Infrastructure.JobHandler;
 using MusicManagementDemo.Infrastructure.Jwt;
 using Serilog;
+using DbFunctions = MusicManagementDemo.Abstractions.DbFunctions;
 
 namespace MusicManagementDemo.Infrastructure;
 
@@ -84,7 +85,7 @@ public static class AssemblyInfo
 #pragma warning disable EF1002
                         d.Database.ExecuteSqlRaw(
                             $"""
-CREATE TYPE {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicListReturnType} AS (
+CREATE TYPE {DbSchemas.Music}.{DbFunctions.GetMusicInfoInMusicListReturnType} AS (
 "Id" UUID,
 "Title" character varying(200),
 "Artist" character varying(100),
@@ -96,19 +97,19 @@ CREATE TYPE {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicListReturnType} AS 
                         d.Database.ExecuteSqlRaw(
                             $"""
 -- 定义函数
-CREATE OR REPLACE FUNCTION {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicList}(
+CREATE OR REPLACE FUNCTION {DbSchemas.Music}.{DbFunctions.GetMusicInfoInMusicList}(
 	music_list_id UUID,
     start_id UUID DEFAULT NULL,
     num_items INTEGER DEFAULT 10,
 	is_desc BOOL DEFAULT false
 )
-RETURNS SETOF {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicListReturnType}
+RETURNS SETOF {DbSchemas.Music}.{DbFunctions.GetMusicInfoInMusicListReturnType}
 LANGUAGE plpgsql
 AS $$
 DECLARE
     current_id UUID := start_id;
     rec RECORD;
-	result {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicListReturnType};
+	result {DbSchemas.Music}.{DbFunctions.GetMusicInfoInMusicListReturnType};
 BEGIN
 	IF current_id IS NOT NULL THEN
 		SELECT m."PrevId", m."NextId" INTO rec
