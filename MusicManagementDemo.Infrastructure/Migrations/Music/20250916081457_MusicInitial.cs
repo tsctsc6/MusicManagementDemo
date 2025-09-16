@@ -39,6 +39,8 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                 {
                     MusicInfoId = table.Column<Guid>(type: "uuid", nullable: false),
                     MusicListId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PrevId = table.Column<Guid>(type: "uuid", nullable: true, defaultValueSql: "NULL"),
+                    NextId = table.Column<Guid>(type: "uuid", nullable: true, defaultValueSql: "NULL"),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>

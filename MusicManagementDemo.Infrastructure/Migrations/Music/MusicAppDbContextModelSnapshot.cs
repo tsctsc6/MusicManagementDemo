@@ -89,6 +89,16 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now()");
 
+                    b.Property<Guid?>("NextId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("NULL");
+
+                    b.Property<Guid?>("PrevId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("NULL");
+
                     b.HasKey("MusicListId", "MusicInfoId");
 
                     b.ToTable("MusicInfoMusicListMap", "music");

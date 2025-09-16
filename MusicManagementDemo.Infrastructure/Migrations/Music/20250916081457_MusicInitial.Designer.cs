@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Migrations.Music
 {
     [DbContext(typeof(MusicAppDbContext))]
-    [Migration("20250913075715_MusicInitial")]
+    [Migration("20250916081457_MusicInitial")]
     partial class MusicInitial
     {
         /// <inheritdoc />
@@ -91,6 +91,16 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now()");
+
+                    b.Property<Guid?>("NextId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("NULL");
+
+                    b.Property<Guid?>("PrevId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("NULL");
 
                     b.HasKey("MusicListId", "MusicInfoId");
 
