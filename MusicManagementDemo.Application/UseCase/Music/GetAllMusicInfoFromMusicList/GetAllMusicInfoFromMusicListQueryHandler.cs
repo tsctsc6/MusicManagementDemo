@@ -24,44 +24,30 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(IMusicAppDbContex
         {
             return ServiceResult.Err(404, ["MusicList not found"]);
         }
-        var musicInfosToReadQuery =
-            from m in dbContext.MusicInfoMusicListMap.Where(e =>
-                e.MusicListId == request.MusicListId
+
+        var musicInfosToReadQuery = dbContext
+            .MusicInfo.FromSqlRaw(
+                request.ReferenceId is null
+                    ? $"""
+                    SELECT * FROM {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicList}('{request.MusicListId}'::UUID, NULL::UUID, {request.PageSize}, {!request.Asc})
+                    """
+                    : $"""
+                    SELECT * FROM {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicList}('{request.MusicListId}'::UUID, '{request.ReferenceId}'::UUID, {request.PageSize}, {!request.Asc})
+                    """
             )
-            join mi in dbContext.MusicInfo on m.MusicInfoId equals mi.Id
-            select new
+            .Select(x => new
             {
-                mi.Id,
-                mi.Title,
-                mi.Artist,
-                mi.Album,
-            };
-        if (request.Asc)
-        {
-            musicInfosToReadQuery = musicInfosToReadQuery.OrderBy(e => e.Id);
-            if (request.ReferenceId is not null)
-            {
-                musicInfosToReadQuery = musicInfosToReadQuery.Where(e =>
-                    e.Id > request.ReferenceId
-                );
-            }
-        }
-        else
-        {
-            musicInfosToReadQuery = musicInfosToReadQuery.OrderByDescending(e => e.Id);
-            if (request.ReferenceId is not null)
-            {
-                musicInfosToReadQuery = musicInfosToReadQuery.Where(e =>
-                    e.Id < request.ReferenceId
-                );
-            }
-        }
-        var musicInfosToRead = await musicInfosToReadQuery
-            .Take(request.PageSize)
-            .AsNoTracking()
-            .ToArrayAsync(cancellationToken: cancellationToken);
+                x.Id,
+                x.Title,
+                x.Artist,
+                x.Album,
+            });
+        var musicInfosToRead = musicInfosToReadQuery.ToArrayAsync(
+            cancellationToken: cancellationToken
+        );
+
         return ServiceResult.Ok(
-            new { MusicListName = musicListToRead.Name, MusicInfos = musicInfosToRead }
+            new { MusicListName = musicListToRead.Name, MusicInfos = musicInfosToReadQuery }
         );
     }
 }
