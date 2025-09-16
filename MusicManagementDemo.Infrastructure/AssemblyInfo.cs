@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Domain.Entity.Identity;
+using MusicManagementDemo.Domain.Entity.Music;
 using MusicManagementDemo.Infrastructure.Database;
 using MusicManagementDemo.Infrastructure.JobHandler;
 using MusicManagementDemo.Infrastructure.Jwt;
@@ -80,9 +81,10 @@ public static class AssemblyInfo
                     (d2, _) =>
                     {
                         var d = (MusicAppDbContext)d2;
-                        d.Database.ExecuteSql(
+#pragma warning disable EF1002
+                        d.Database.ExecuteSqlRaw(
                             $"""
-CREATE TYPE {Schemas.Music}.{Function.GetMusicInfoInMusicListReturnType} AS (
+CREATE TYPE {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicListReturnType} AS (
 "Id" UUID,
 "Title" character varying(200),
 "Artist" character varying(100),
@@ -90,26 +92,27 @@ CREATE TYPE {Schemas.Music}.{Function.GetMusicInfoInMusicListReturnType} AS (
 );
 """
                         );
-                        d.Database.ExecuteSql(
+                        
+                        d.Database.ExecuteSqlRaw(
                             $"""
 -- 定义函数
-CREATE OR REPLACE FUNCTION {Schemas.Music}.{Function.GetMusicInfoInMusicList}(
+CREATE OR REPLACE FUNCTION {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicList}(
 	music_list_id UUID,
     start_id UUID DEFAULT NULL,
     num_items INTEGER DEFAULT 10,
 	is_desc BOOL DEFAULT false
 )
-RETURNS SETOF music.chain_tuple
+RETURNS SETOF {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicListReturnType}
 LANGUAGE plpgsql
 AS $$
 DECLARE
     current_id UUID := start_id;
     rec RECORD;
-	result music.chain_tuple;
+	result {DbSchemas.Music}.{DbFunction.GetMusicInfoInMusicListReturnType};
 BEGIN
 	IF current_id IS NOT NULL THEN
 		SELECT m."PrevId", m."NextId" INTO rec
-		FROM music."MusicInfoMusicListMap" AS m
+		FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}" AS m
 		WHERE m."MusicListId" = music_list_id AND m."MusicInfoId" = current_id;
 		-- 更新当前 ID 为 NextId
 		IF is_desc THEN
@@ -123,19 +126,19 @@ BEGIN
 		IF current_id IS NULL THEN
 			IF is_desc THEN
 				SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
-				FROM music."MusicInfoMusicListMap" AS m
-				JOIN music."MusicInfo" AS mi ON m."MusicInfoId" = mi."Id"
+				FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}" AS m
+				JOIN {DbSchemas.Music}."{nameof(MusicInfo)}" AS mi ON m."MusicInfoId" = mi."Id"
 				WHERE m."MusicListId" = music_list_id AND m."NextId" is NULL;
 			ELSE
 				SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
-				FROM music."MusicInfoMusicListMap" AS m
-				JOIN music."MusicInfo" AS mi ON m."MusicInfoId" = mi."Id"
+				FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}" AS m
+				JOIN {DbSchemas.Music}."{nameof(MusicInfo)}" AS mi ON m."MusicInfoId" = mi."Id"
 				WHERE m."MusicListId" = music_list_id AND m."PrevId" is NULL;
 			END IF;
 		ELSE
 			SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
-			FROM music."MusicInfoMusicListMap" AS m
-			JOIN music."MusicInfo" AS mi ON m."MusicInfoId" = mi."Id"
+			FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}" AS m
+			JOIN {DbSchemas.Music}."{nameof(MusicInfo)}" AS mi ON m."MusicInfoId" = mi."Id"
 			WHERE m."MusicListId" = music_list_id AND m."MusicInfoId" = current_id;
         END IF;
         -- 如果未找到，退出循环
@@ -166,6 +169,7 @@ BEGIN
 END;
 $$;
 """
+#pragma warning restore EF1002
                         );
                     }
                 )

@@ -1,6 +1,6 @@
-﻿namespace MusicManagementDemo.Infrastructure.Database;
+﻿namespace MusicManagementDemo.Abstractions;
 
-internal static class Schemas
+public static class DbSchemas
 {
     public const string Music = "music";
     public const string Identity = "id";

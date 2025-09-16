@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Domain.Entity.Management;
 using MusicManagementDemo.Infrastructure.DbConfig.Management;
@@ -18,7 +19,7 @@ public sealed class ManagementAppDbContext(
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema(Schemas.Management);
+        modelBuilder.HasDefaultSchema(DbSchemas.Management);
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new StorageConfiguration());
         modelBuilder.ApplyConfiguration(

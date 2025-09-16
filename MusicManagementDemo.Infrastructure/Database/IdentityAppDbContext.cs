@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Infrastructure.DbConfig.Identity;
 
@@ -10,7 +11,7 @@ public sealed class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> 
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema(Schemas.Identity);
+        modelBuilder.HasDefaultSchema(DbSchemas.Identity);
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
     }

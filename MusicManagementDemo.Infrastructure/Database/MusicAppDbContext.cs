@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Domain.Entity.Music;
 using MusicManagementDemo.Infrastructure.DbConfig.Music;
@@ -15,7 +16,7 @@ public sealed class MusicAppDbContext(DbContextOptions<MusicAppDbContext> option
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema(Schemas.Music);
+        modelBuilder.HasDefaultSchema(DbSchemas.Music);
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new MusicInfoConfiguration());
         modelBuilder.ApplyConfiguration(new MusicListConfiguration());
