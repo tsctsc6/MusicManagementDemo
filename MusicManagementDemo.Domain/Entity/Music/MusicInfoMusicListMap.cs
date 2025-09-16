@@ -6,7 +6,7 @@ public class MusicInfoMusicListMap
 
     public Guid MusicListId { get; set; }
 
-    public Guid? PriorId { get; set; }
+    public Guid? PrevId { get; set; }
 
     public Guid? NextId { get; set; }
 
