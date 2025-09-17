@@ -22,7 +22,7 @@ public class ReadJobQueryHandler(
             .SingleOrDefaultAsync(j => j.Id == request.Id, cancellationToken: cancellationToken);
         if (jobToRead is null)
         {
-            logger.LogError("Job with id: {RequestId} not found", request.Id);
+            logger.LogError("Job {RequestId} not found", request.Id);
             return ServiceResult.Err(406, ["Job not found"]);
         }
         return ServiceResult.Ok(

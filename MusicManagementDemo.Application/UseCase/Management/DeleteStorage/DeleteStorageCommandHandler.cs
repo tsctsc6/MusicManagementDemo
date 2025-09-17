@@ -31,13 +31,13 @@ internal sealed class DeleteStorageCommandHandler(
         {
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)
             {
-                logger.LogError("Error during delete storage: {id}", request.Id);
+                logger.LogError("Error during delete storage: {@storageToDelete}", storageToDelete);
                 return ServiceResult.Err(503, ["内部错误"]);
             }
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error during delete storage: {id}", request.Id);
+            logger.LogError(e, "Error during delete storage: {@storageToDelete}", storageToDelete);
             return ServiceResult.Err(503, ["内部错误"]);
         }
         return ServiceResult.Ok();
