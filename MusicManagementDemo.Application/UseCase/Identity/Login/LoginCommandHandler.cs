@@ -23,11 +23,21 @@ internal sealed class LoginCommandHandler(
     {
         var user = await userMgr.FindByEmailAsync(request.Email);
         if (user == null)
+        {
+            logger.LogError("User {userId} not find.", request.Email);
             return ServiceResult.Err(5004, ["邮箱或密码错误"]);
+        }
 
         var signInRes = await signInMgr.CheckPasswordSignInAsync(user, request.Password, false);
         if (!signInRes.Succeeded)
+        {
+            logger.LogError(
+                "User {userId} Sing in failed, reason: {@signInRes}",
+                request.Email,
+                signInRes
+            );
             return ServiceResult.Err(5004, ["邮箱或密码错误"]);
+        }
 
         var roles = await userMgr.GetRolesAsync(user);
 
@@ -39,7 +49,7 @@ internal sealed class LoginCommandHandler(
             config
         );
         logger.LogInformation("User {userId} logged in.", user.Id);
-        
+
         return ServiceResult.Ok(new { token = tokenStr });
     }
 }

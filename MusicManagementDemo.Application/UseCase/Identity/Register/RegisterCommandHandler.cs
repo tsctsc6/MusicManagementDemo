@@ -25,10 +25,11 @@ internal sealed class RegisterCommandHandler(
         var result = await userMgr.CreateAsync(user, request.Password);
         if (!result.Succeeded)
         {
+            logger.LogError("Create user failed, reason: {@result}", result);
             return ServiceResult.Err(503, [.. result.Errors.Select(e => e.Description)]);
         }
         logger.LogInformation("User {userId} registered.", user.Id);
-        
+
         if (isFirstUser)
         {
             var adminRole = await dbContext.Roles.SingleOrDefaultAsync(
@@ -37,6 +38,7 @@ internal sealed class RegisterCommandHandler(
             );
             if (adminRole is null)
             {
+                logger.LogError("Role Admin is not exist.");
                 return ServiceResult.Err(503, ["内部错误"]);
             }
             await userMgr.AddToRoleAsync(user, adminRole.NormalizedName!);
