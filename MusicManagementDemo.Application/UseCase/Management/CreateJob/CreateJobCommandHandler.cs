@@ -31,7 +31,7 @@ internal sealed class CreateJobCommandHandler(
         var result = jobManager.CreateJob(jobToAdd.Id, request.Type);
         if (result is ErrResult<long, string> err)
         {
-            logger.LogError("{err}", err);
+            logger.LogError("{err}", err.Value);
         }
         return result switch
         {

@@ -19,7 +19,7 @@ public class CancelJobCommandHandler(
         var result = jobManager.CancelJob(request.JobId);
         if (result is ErrResult<long, string> err)
         {
-            logger.LogError("{err}", err);
+            logger.LogError("{err}", err.Value);
         }
         return result switch
         {

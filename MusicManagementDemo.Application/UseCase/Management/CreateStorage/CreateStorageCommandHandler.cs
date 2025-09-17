@@ -23,29 +23,16 @@ internal sealed class CreateStorageCommandHandler(
         {
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)
             {
-                logger.LogError(
-                    "Error creating storage: {Name}, {Path}",
-                    storageToCreate.Name,
-                    storageToCreate.Path
-                );
+                logger.LogError("Error creating storage: {@storageToCreate}", storageToCreate);
                 return ServiceResult.Err(503, ["内部错误"]);
             }
         }
         catch (Exception e)
         {
-            logger.LogError(
-                e,
-                "Error creating storage: {Name}, {Path}",
-                storageToCreate.Name,
-                storageToCreate.Path
-            );
+            logger.LogError(e, "Error creating storage: {@storageToCreate}", storageToCreate);
             return ServiceResult.Err(503, ["内部错误"]);
         }
-        logger.LogInformation(
-            "Created storage: {Name}, {Path}",
-            storageToCreate.Name,
-            storageToCreate.Path
-        );
+        logger.LogInformation("Created storage: {@storageToCreate}", storageToCreate);
         return ServiceResult.Ok();
     }
 }
