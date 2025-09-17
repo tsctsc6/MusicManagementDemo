@@ -66,6 +66,6 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(IMusicAppDbContext db
         return ServiceResult.Ok(musicListsToRead);
     }
 
-    [GeneratedRegex(@"\s+")]
+    [GeneratedRegex(@"\s+", RegexOptions.None, 3000)]
     private static partial Regex WhiteSpaceRegex();
 }
