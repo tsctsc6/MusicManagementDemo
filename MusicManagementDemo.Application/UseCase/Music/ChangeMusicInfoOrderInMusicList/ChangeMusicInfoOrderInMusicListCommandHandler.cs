@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
@@ -7,14 +8,17 @@ using MusicManagementDemo.Domain.Entity.Music;
 
 namespace MusicManagementDemo.Application.UseCase.Music.ChangeMusicInfoOrderInMusicList;
 
-internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbContext dbContext)
-    : IRequestHandler<ChangeMusicInfoOrderInMusicListCommand, IServiceResult>
+internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
+    IMusicAppDbContext dbContext,
+    ILogger<ChangeMusicInfoOrderInMusicListCommandHandler> logger
+) : IRequestHandler<ChangeMusicInfoOrderInMusicListCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
         ChangeMusicInfoOrderInMusicListCommand request,
         CancellationToken cancellationToken
     )
     {
+        logger.LogInformation("Request args: {@request}", request);
         if (
             !await dbContext.MusicList.AnyAsync(
                 e => e.Id == request.MusicListId && e.UserId == request.UserId,
@@ -22,6 +26,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
             )
         )
         {
+            logger.LogError("MusicList {Id} not found", request.MusicListId);
             return ServiceResult.Err(404, ["MusicListId not found"]);
         }
 
@@ -31,6 +36,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
         );
         if (musicInfoMapToMove is null)
         {
+            logger.LogError("Target MusicInfo {Id} not found", request.TargetMusicInfoId);
             return ServiceResult.Err(404, ["musicInfoMapToMove not found"]);
         }
 
@@ -56,6 +62,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
             );
             if (musicInfoMapPrevNew is null)
             {
+                logger.LogError("Prev MusicInfoMap in new position not find");
                 return ServiceResult.Err(404, ["musicInfoMapPrevNew not found"]);
             }
         }
@@ -70,12 +77,24 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
             );
             if (musicInfoMapNextNew is null)
             {
+                logger.LogError("Next MusicInfoMap in new position not find");
                 return ServiceResult.Err(404, ["musicInfoMapNextNew not found"]);
             }
         }
+        logger.LogInformation(
+            "Prev MusicInfoMap in new position: {@musicInfoMapPrevNew}",
+            musicInfoMapPrevNew
+        );
+        logger.LogInformation(
+            "Next MusicInfoMap in new position: {@musicInfoMapNextNew}",
+            musicInfoMapNextNew
+        );
 
         if (!CheckNeighboringAsync(request, musicInfoMapPrevNew, musicInfoMapNextNew))
         {
+            logger.LogError(
+                "Prev MusicInfoMap in new position and Next MusicInfoMap in new position is not neighboring"
+            );
             return ServiceResult.Err(404, ["Invalid input"]);
         }
 
@@ -94,7 +113,8 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
             );
             if (musicInfoMapPrevOld is null)
             {
-                return ServiceResult.Err(404, ["musicInfoMapPrevOlds not found"]);
+                logger.LogError("Prev MusicInfoMap in old position not find");
+                return ServiceResult.Err(404, ["musicInfoMapPrevOld not found"]);
             }
             musicInfoMapPrevOld.NextId = musicInfoMapToMove.NextId;
             rowChanged.Add(musicInfoMapPrevOld.MusicInfoId);
@@ -109,6 +129,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
             );
             if (musicInfoMapNextOld is null)
             {
+                logger.LogError("Next MusicInfoMap in old position not find");
                 return ServiceResult.Err(404, ["musicInfoMapNextOld not found"]);
             }
             musicInfoMapNextOld.PrevId = musicInfoMapToMove.PrevId;
@@ -130,12 +151,24 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(IMusicAppDbC
         musicInfoMapToMove.NextId = request.NextMusicInfoId;
         rowChanged.Add(musicInfoMapToMove.MusicInfoId);
 
-        if (await dbContext.SaveChangesAsync(cancellationToken) != rowChanged.Count)
+        var submitCount = await dbContext.SaveChangesAsync(cancellationToken);
+        if (submitCount != rowChanged.Count)
         {
+            logger.LogError(
+                "Expected submit: {rowChangedCount}, submit in realy: {submitCount}",
+                rowChanged.Count,
+                submitCount
+            );
             return ServiceResult.Err(404, ["Move Failed"]);
         }
 
         await transaction.CommitAsync(cancellationToken);
+
+        logger.LogInformation(
+            "MusicInfo {MisicInfoId} in MisicList {MusicListId} moved.",
+            request.TargetMusicInfoId,
+            request.MusicListId
+        );
         return ServiceResult.Ok();
     }
 
