@@ -31,7 +31,7 @@ public class ReadJobQueryHandler(
                 jobToRead.Id,
                 Type = jobToRead.Type.ToString(),
                 jobToRead.JobArgs,
-                jobToRead.Status,
+                Status = jobToRead.Status.ToString(),
                 jobToRead.Description,
                 jobToRead.ErrorMesage,
                 jobToRead.Success,
