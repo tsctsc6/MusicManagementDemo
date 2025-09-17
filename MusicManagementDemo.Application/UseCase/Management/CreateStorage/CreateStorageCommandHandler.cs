@@ -33,6 +33,6 @@ internal sealed class CreateStorageCommandHandler(
             return ServiceResult.Err(503, ["内部错误"]);
         }
         logger.LogInformation("Created storage: {@storageToCreate}", storageToCreate);
-        return ServiceResult.Ok();
+        return ServiceResult.Ok(storageToCreate.Id);
     }
 }
