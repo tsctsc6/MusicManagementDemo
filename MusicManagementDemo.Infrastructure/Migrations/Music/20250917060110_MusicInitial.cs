@@ -25,6 +25,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                     Artist = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Album = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     FilePath = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    StorageId = table.Column<int>(type: "integer", nullable: false),
                     TitleTSV = table.Column<NpgsqlTsVector>(type: "TSVECTOR", nullable: false, computedColumnSql: "to_tsvector('simple', \"Title\")", stored: true)
                 },
                 constraints: table =>

@@ -48,6 +48,9 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Music
                         .IsUnicode(true)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<int>("StorageId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
