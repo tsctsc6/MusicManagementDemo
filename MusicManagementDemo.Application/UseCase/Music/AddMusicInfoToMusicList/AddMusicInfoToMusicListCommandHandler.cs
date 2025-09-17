@@ -28,7 +28,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
         );
         if (musicListWhichAddMusicInfo is null)
         {
-            logger.LogError("MusicList {musicListId} not find", request.MusicListId);
+            logger.LogError("MusicList {musicListId} not found", request.MusicListId);
             return ServiceResult.Err(404, ["没有找到歌单"]);
         }
 

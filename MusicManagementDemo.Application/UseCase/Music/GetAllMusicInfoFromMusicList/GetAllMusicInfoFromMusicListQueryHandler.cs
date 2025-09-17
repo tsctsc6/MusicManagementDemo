@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
@@ -7,8 +8,10 @@ using DbFunctions = MusicManagementDemo.Abstractions.DbFunctions;
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
 
-internal sealed class GetAllMusicInfoFromMusicListQueryHandler(IMusicAppDbContext dbContext)
-    : IRequestHandler<GetAllMusicInfoFromMusicListQuery, IServiceResult>
+internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
+    IMusicAppDbContext dbContext,
+    ILogger<GetAllMusicInfoFromMusicListQueryHandler> logger
+) : IRequestHandler<GetAllMusicInfoFromMusicListQuery, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
         GetAllMusicInfoFromMusicListQuery request,
@@ -23,6 +26,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(IMusicAppDbContex
             );
         if (musicListToRead is null)
         {
+            logger.LogError("MusicList {MusicListId} not found", request.MusicListId);
             return ServiceResult.Err(404, ["MusicList not found"]);
         }
 

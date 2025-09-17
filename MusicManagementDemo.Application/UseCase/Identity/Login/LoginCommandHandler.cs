@@ -24,7 +24,7 @@ internal sealed class LoginCommandHandler(
         var user = await userMgr.FindByEmailAsync(request.Email);
         if (user == null)
         {
-            logger.LogError("User {userId} not find.", request.Email);
+            logger.LogError("User {userId} not found.", request.Email);
             return ServiceResult.Err(5004, ["邮箱或密码错误"]);
         }
 

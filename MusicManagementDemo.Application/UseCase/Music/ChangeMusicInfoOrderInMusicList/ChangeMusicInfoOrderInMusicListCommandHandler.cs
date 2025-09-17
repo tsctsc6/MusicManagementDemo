@@ -62,7 +62,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
             );
             if (musicInfoMapPrevNew is null)
             {
-                logger.LogError("Prev MusicInfoMap in new position not find");
+                logger.LogError("Prev MusicInfoMap in new position not found");
                 return ServiceResult.Err(404, ["musicInfoMapPrevNew not found"]);
             }
         }
@@ -77,7 +77,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
             );
             if (musicInfoMapNextNew is null)
             {
-                logger.LogError("Next MusicInfoMap in new position not find");
+                logger.LogError("Next MusicInfoMap in new position not found");
                 return ServiceResult.Err(404, ["musicInfoMapNextNew not found"]);
             }
         }
@@ -113,7 +113,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
             );
             if (musicInfoMapPrevOld is null)
             {
-                logger.LogError("Prev MusicInfoMap in old position not find");
+                logger.LogError("Prev MusicInfoMap in old position not found");
                 return ServiceResult.Err(404, ["musicInfoMapPrevOld not found"]);
             }
             musicInfoMapPrevOld.NextId = musicInfoMapToMove.NextId;
@@ -129,7 +129,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
             );
             if (musicInfoMapNextOld is null)
             {
-                logger.LogError("Next MusicInfoMap in old position not find");
+                logger.LogError("Next MusicInfoMap in old position not found");
                 return ServiceResult.Err(404, ["musicInfoMapNextOld not found"]);
             }
             musicInfoMapNextOld.PrevId = musicInfoMapToMove.PrevId;
