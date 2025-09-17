@@ -1,13 +1,16 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.UseCase.Music.RemoveMusicInfoFromMusicList;
 
-internal sealed class RemoveMusicInfoFromMusicListCommandHandler(IMusicAppDbContext dbContext)
-    : IRequestHandler<RemoveMusicInfoFromMusicListCommand, IServiceResult>
+internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
+    IMusicAppDbContext dbContext,
+    ILogger<RemoveMusicInfoFromMusicListCommandHandler> logger
+) : IRequestHandler<RemoveMusicInfoFromMusicListCommand, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
         RemoveMusicInfoFromMusicListCommand request,
@@ -21,7 +24,8 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(IMusicAppDbCont
             )
         )
         {
-            return ServiceResult.Err(404, ["MusicListId not found"]);
+            logger.LogError("MusicList {MusicListId} not found", request.MusicListId);
+            return ServiceResult.Err(404, ["MusicList not found"]);
         }
 
         var musicInfoMapToRemove = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
@@ -30,6 +34,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(IMusicAppDbCont
         );
         if (musicInfoMapToRemove is null)
         {
+            logger.LogError("MusicInfo {MusicInfoId} not found", request.MusicInfoId);
             return ServiceResult.Err(404, ["musicInfoMapToRemove not found"]);
         }
 
@@ -49,6 +54,10 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(IMusicAppDbCont
             );
             if (musicInfoMapPrev is null)
             {
+                logger.LogError(
+                    "Prev MusicInfo {MusicInfoId} not found",
+                    musicInfoMapToRemove.PrevId
+                );
                 return ServiceResult.Err(404, ["musicInfoMapPrev not found"]);
             }
             musicInfoMapPrev.NextId = musicInfoMapToRemove.NextId;
@@ -64,20 +73,31 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(IMusicAppDbCont
             );
             if (musicInfoMapNext is null)
             {
+                logger.LogError(
+                    "Next MusicInfo {MusicInfoId} not found",
+                    musicInfoMapToRemove.NextId
+                );
                 return ServiceResult.Err(404, ["musicInfoMapNext not found"]);
             }
             musicInfoMapNext.PrevId = musicInfoMapToRemove.PrevId;
             expectedSubmitCount++;
         }
-        
+
         dbContext.MusicInfoMusicListMap.Remove(musicInfoMapToRemove);
         expectedSubmitCount++;
-        if (await dbContext.SaveChangesAsync(cancellationToken) != expectedSubmitCount)
+        var submitCount = await dbContext.SaveChangesAsync(cancellationToken);
+        if (submitCount != expectedSubmitCount)
         {
+            logger.LogError(
+                "Delete Failed, expected submit count: {expectedSubmitCount}, submit count: {submitCount}",
+                expectedSubmitCount,
+                submitCount
+            );
             return ServiceResult.Err(404, ["Delete Failed"]);
         }
 
         await transaction.CommitAsync(cancellationToken);
+        logger.LogInformation("MusicInfoMap {Id} Removed", musicInfoMapToRemove.MusicInfoId);
         return ServiceResult.Ok();
     }
 }

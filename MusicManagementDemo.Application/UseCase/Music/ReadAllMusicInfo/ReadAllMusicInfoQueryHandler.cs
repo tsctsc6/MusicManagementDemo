@@ -1,24 +1,29 @@
 ﻿using System.Text.RegularExpressions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;
 
-internal sealed partial class ReadAllMusicInfoQueryHandler(IMusicAppDbContext dbContext)
-    : IRequestHandler<ReadAllMusicInfoQuery, IServiceResult>
+internal sealed partial class ReadAllMusicInfoQueryHandler(
+    IMusicAppDbContext dbContext,
+    ILogger<ReadAllMusicInfoQueryHandler> logger
+) : IRequestHandler<ReadAllMusicInfoQuery, IServiceResult>
 {
     public async Task<IServiceResult> Handle(
         ReadAllMusicInfoQuery request,
         CancellationToken cancellationToken
     )
     {
+        logger.LogInformation("Original search term: \"{}\"", request.SearchTerm);
         var musicInfosToReadQuery = dbContext.MusicInfo.AsQueryable();
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
             var searchTerm = WhiteSpaceRegex().Replace(request.SearchTerm.Trim(), "|");
+            logger.LogInformation("Processed search term: \"{}\"", searchTerm);
             musicInfosToReadQuery = musicInfosToReadQuery
                 .Where(m =>
                     m.TitleTSV.Matches(
