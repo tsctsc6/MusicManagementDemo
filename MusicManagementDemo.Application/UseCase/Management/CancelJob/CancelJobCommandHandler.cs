@@ -21,11 +21,17 @@ public class CancelJobCommandHandler(
         {
             logger.LogError("{err}", err.Value);
         }
-        return result switch
+        switch (result)
         {
-            ErrResult<long, string> errResult => ServiceResult.Err(503, [errResult.Value]),
-            OkResult<long, string> okResult => ServiceResult.Ok(new { JobId = okResult.Value }),
-            _ => ServiceResult.Err(503, ["内部错误"]),
-        };
+            case ErrResult<long, string> errResult:
+                logger.LogError("{err}", errResult.Value);
+                return ServiceResult.Err(503, [errResult.Value]);
+            case OkResult<long, string> okResult:
+                logger.LogInformation("{err}", okResult.Value);
+                return ServiceResult.Ok(new { JobId = okResult.Value });
+            default:
+                logger.LogInformation("Unknown type {@result}", result);
+                return ServiceResult.Err(503, ["内部错误"]);
+        }
     }
 }

@@ -29,15 +29,17 @@ internal sealed class CreateJobCommandHandler(
         await dbContext.Job.AddAsync(jobToAdd, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         var result = await jobManager.CreateJobAsync(jobToAdd.Id, request.Type, cancellationToken);
-        if (result is ErrResult<long, string> err)
+        switch (result)
         {
-            logger.LogError("{err}", err.Value);
+            case ErrResult<long, string> errResult:
+                logger.LogError("{err}", errResult.Value);
+                return ServiceResult.Err(503, [errResult.Value]);
+            case OkResult<long, string> okResult:
+                logger.LogInformation("{err}", okResult.Value);
+                return ServiceResult.Ok(new { JobId = okResult.Value });
+            default:
+                logger.LogInformation("Unknown type {@result}", result);
+                return ServiceResult.Err(503, ["内部错误"]);
         }
-        return result switch
-        {
-            ErrResult<long, string> errResult => ServiceResult.Err(503, [errResult.Value]),
-            OkResult<long, string> okResult => ServiceResult.Ok(new { JobId = okResult.Value }),
-            _ => ServiceResult.Err(503, ["内部错误"]),
-        };
     }
 }

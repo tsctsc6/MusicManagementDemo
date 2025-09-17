@@ -34,13 +34,13 @@ internal sealed class UpdateStorageCommandHandler(
         {
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)
             {
-                logger.LogError("Update storage failed, {storageToUpdate}", storageToUpdate);
+                logger.LogError("Update storage failed, {@storageToUpdate}", storageToUpdate);
                 return ServiceResult.Err(503, ["内部错误"]);
             }
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Update storage failed, {storageToUpdate}", storageToUpdate);
+            logger.LogError(e, "Update storage failed, {@storageToUpdate}", storageToUpdate);
             return ServiceResult.Err(503, ["内部错误"]);
         }
 
