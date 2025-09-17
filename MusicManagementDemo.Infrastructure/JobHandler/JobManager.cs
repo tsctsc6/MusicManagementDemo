@@ -141,7 +141,7 @@ internal sealed class JobManager(IServiceProvider service) : IJobManager
             var title = resultFormatTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty;
             var artist = resultFormatTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty;
             var album = resultFormatTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty;
-            var filePath = fileInfo.FullName;
+            var filePath = Path.GetRelativePath(storage.Path, fileInfo.FullName);
             var oldMusicInfo = await musicDbContext
                 .MusicInfo.Where(e => e.Title == title && e.Artist == artist && e.Album == album)
                 .SingleOrDefaultAsync(cancellationToken: token);
