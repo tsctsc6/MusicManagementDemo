@@ -28,7 +28,7 @@ internal sealed class CreateJobCommandHandler(
         };
         await dbContext.Job.AddAsync(jobToAdd, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
-        var result = jobManager.CreateJob(jobToAdd.Id, request.Type);
+        var result = await jobManager.CreateJobAsync(jobToAdd.Id, request.Type, cancellationToken);
         if (result is ErrResult<long, string> err)
         {
             logger.LogError("{err}", err.Value);

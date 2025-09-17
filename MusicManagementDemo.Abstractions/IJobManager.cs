@@ -10,13 +10,19 @@ public interface IJobManager
     /// </summary>
     /// <param name="jobId"></param>
     /// <param name="jobType"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns>(jobId, errorMessage)</returns>
-    public Result<long, string> CreateJob(long jobId, JobType jobType);
+    public Task<Result<long, string>> CreateJobAsync(
+        long jobId,
+        JobType jobType,
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     ///
     /// </summary>
     /// <param name="jobId"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns>(jobId, errorMessage)</returns>
-    public Result<long, string> CancelJob(long jobId);
+    public Task<Result<long, string>> CancelJobAsync(long jobId);
 }
