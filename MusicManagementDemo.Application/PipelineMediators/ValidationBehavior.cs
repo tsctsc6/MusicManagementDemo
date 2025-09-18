@@ -9,7 +9,6 @@ internal sealed class ValidationBehavior<TRequest, TResponse>(
     IEnumerable<IValidator<TRequest>> validators
 ) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
-    where TResponse : IServiceResult
 {
     public async Task<TResponse> Handle(
         TRequest request,
