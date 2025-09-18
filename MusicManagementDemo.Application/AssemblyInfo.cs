@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using MusicManagementDemo.Application.PipelineMediators;
 
 namespace MusicManagementDemo.Application;
 
@@ -11,6 +12,7 @@ public static class AssemblyInfo
         {
             cfg.RegisterServicesFromAssemblyContaining(typeof(AssemblyInfo));
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            cfg.AddOpenBehavior(typeof(LoggingBehaviour<,>));
         });
         services.AddValidatorsFromAssemblyContaining(
             typeof(AssemblyInfo),
