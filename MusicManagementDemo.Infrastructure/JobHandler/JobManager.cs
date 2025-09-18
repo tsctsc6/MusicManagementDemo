@@ -91,7 +91,7 @@ internal sealed class JobManager(IServiceProvider service, ILogger<JobManager> l
     {
         try
         {
-            await Task.Delay(TimeSpan.FromSeconds(10), token);
+            //await Task.Delay(TimeSpan.FromSeconds(10), token);
             await using var scope = service.CreateAsyncScope();
             var managementDbContext =
                 scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
