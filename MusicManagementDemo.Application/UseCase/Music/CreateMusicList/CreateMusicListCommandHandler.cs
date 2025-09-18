@@ -23,7 +23,7 @@ internal sealed class CreateMusicListCommandHandler(
         {
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)
             {
-                logger.LogError("Create MisicList failed");
+                logger.LogError("Create MusicList failed");
                 return ServiceResult.Err(503, ["创建失败"]);
             }
         }
