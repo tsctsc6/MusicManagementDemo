@@ -11,6 +11,7 @@ public static class AssemblyInfo
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblyContaining(typeof(AssemblyInfo));
+            cfg.AddOpenBehavior(typeof(ExceptionHandlingBehavior<,>));
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             cfg.AddOpenBehavior(typeof(LoggingBehaviour<,>));
         });
