@@ -11,7 +11,11 @@ using RustSharp;
 
 namespace MusicManagementDemo.Infrastructure.JobHandler;
 
-internal sealed class JobManager(IServiceProvider service, ILogger<JobManager> logger) : IJobManager
+internal sealed class JobManager(
+    IServiceProvider service,
+    IFileEnumerator fileEnumerator,
+    ILogger<JobManager> logger
+) : IJobManager
 {
     private readonly ConcurrentDictionary<long, CancellationTokenSource> cancellationTokenSources =
     [];
@@ -51,12 +55,14 @@ internal sealed class JobManager(IServiceProvider service, ILogger<JobManager> l
             scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
         var jobToUpdate = await dbContext.Job.SingleOrDefaultAsync(
             e => e.Id == jobId,
+            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
             cancellationToken: cancellationToken
         );
         if (jobToUpdate is null)
             return Result.Err("Job not found");
         jobToUpdate.Status = JobStatus.Running;
         dbContext.Job.Update(jobToUpdate);
+        // ReSharper disable once PossiblyMistakenUseOfCancellationToken
         await dbContext.SaveChangesAsync(cancellationToken);
         return Result.Ok(jobToUpdate.Id);
     }
@@ -125,16 +131,21 @@ internal sealed class JobManager(IServiceProvider service, ILogger<JobManager> l
                 token
             );
 
-            var rootDir = new DirectoryInfo(storage.Path);
-            foreach (var fileInfo in rootDir.EnumerateFiles("*.flac", SearchOption.AllDirectories))
+            foreach (
+                var fileFullPath in fileEnumerator.EnumerateFiles(
+                    new DirectoryInfo(storage.Path),
+                    "*.flac",
+                    SearchOption.AllDirectories
+                )
+            )
             {
-                var ffprobeProcess = new Process()
+                var ffprobeProcess = new Process
                 {
-                    StartInfo = new ProcessStartInfo()
+                    StartInfo = new ProcessStartInfo
                     {
                         FileName = "ffprobe",
                         Arguments =
-                            $"""-v error -i "{fileInfo.FullName}" -print_format json -show_format""",
+                            $"""-v error -i "{fileFullPath}" -print_format json -show_format""",
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                     },
@@ -164,7 +175,7 @@ internal sealed class JobManager(IServiceProvider service, ILogger<JobManager> l
                 var artist =
                     resultFormatTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty;
                 var album = resultFormatTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty;
-                var filePath = Path.GetRelativePath(storage.Path, fileInfo.FullName);
+                var filePath = Path.GetRelativePath(storage.Path, fileFullPath);
                 var oldMusicInfo = await musicDbContext
                     .MusicInfo.Where(e =>
                         e.Title == title && e.Artist == artist && e.Album == album

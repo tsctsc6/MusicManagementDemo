@@ -65,6 +65,7 @@ public static class AssemblyInfo
 
         services.AddJsonOptions();
         services.AddSingleton<IJobManager, JobManager>();
+        services.AddSingleton<IFileEnumerator, FileEnumerator>();
         services.AddSingleton<IJwtManager, JwtManager>();
         return services;
     }
@@ -93,7 +94,7 @@ CREATE TYPE {DbSchemas.Music}.{DbFunctions.GetMusicInfoInMusicListReturnType} AS
 );
 """
                         );
-                        
+
                         d.Database.ExecuteSqlRaw(
                             $"""
 -- 定义函数
