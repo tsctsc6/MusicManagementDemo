@@ -25,7 +25,8 @@ public static class AssemblyInfo
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration
+        IConfiguration configuration,
+        bool isDevelopment
     )
     {
         services
@@ -34,7 +35,7 @@ public static class AssemblyInfo
             .AddDbContextCheck<MusicAppDbContext>()
             .AddDbContextCheck<ManagementAppDbContext>();
 
-        services.AddDatabase(configuration);
+        services.AddDatabase(configuration, isDevelopment);
 
         services
             .AddIdentity<ApplicationUser, IdentityRole>()
@@ -74,29 +75,40 @@ public static class AssemblyInfo
 
     private static IServiceCollection AddDatabase(
         this IServiceCollection services,
-        IConfiguration configuration
+        IConfiguration configuration,
+        bool isDevelopment
     )
     {
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MusicAppDbContext>(options =>
+        {
             options
                 .UseNpgsql(connectionString)
                 .UseSeeding(
                     (d2, _) =>
                     {
                         var d = (MusicAppDbContext)d2;
-#pragma warning disable EF1002
                         d.Database.ExecuteSqlRaw(
                             DbFunctions.DefineGetMusicInfoInMusicListReturnType
                         );
                         d.Database.ExecuteSqlRaw(DbFunctions.DefineGetMusicInfoInMusicList);
                     }
-                )
-        );
+                );
+            if (isDevelopment)
+            {
+                options.EnableSensitiveDataLogging();
+            }
+        });
         services.AddDbContext<ManagementAppDbContext>(options =>
-            options.UseNpgsql(connectionString)
-        );
+        {
+            options.UseNpgsql(connectionString);
+            if (isDevelopment)
+            {
+                options.EnableSensitiveDataLogging();
+            }
+        });
         services.AddDbContext<IdentityAppDbContext>(options =>
+        {
             options
                 .UseNpgsql(connectionString)
                 .UseSeeding(
@@ -106,8 +118,12 @@ public static class AssemblyInfo
                         d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
                         d.SaveChanges();
                     }
-                )
-        );
+                );
+            if (isDevelopment)
+            {
+                options.EnableSensitiveDataLogging();
+            }
+        });
         services.AddScoped<IManagementAppDbContext, ManagementAppDbContext>();
         services.AddScoped<IMusicAppDbContext, MusicAppDbContext>();
         return services;
