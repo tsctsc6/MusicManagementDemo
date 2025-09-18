@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
-using DbFunctions = MusicManagementDemo.Abstractions.DbFunctions;
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
 
@@ -34,10 +33,10 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
             .MusicInfo.FromSqlRaw(
                 request.ReferenceId is null
                     ? $"""
-                    SELECT * FROM {DbSchemas.Music}.{DbFunctions.GetMusicInfoInMusicList}('{request.MusicListId}'::UUID, NULL::UUID, {request.PageSize}, {!request.Asc})
+                    SELECT * FROM {DbSchemas.Music}.{DbSchemas.GetMusicInfoInMusicList}('{request.MusicListId}'::UUID, NULL::UUID, {request.PageSize}, {!request.Asc})
                     """
                     : $"""
-                    SELECT * FROM {DbSchemas.Music}.{DbFunctions.GetMusicInfoInMusicList}('{request.MusicListId}'::UUID, '{request.ReferenceId}'::UUID, {request.PageSize}, {!request.Asc})
+                    SELECT * FROM {DbSchemas.Music}.{DbSchemas.GetMusicInfoInMusicList}('{request.MusicListId}'::UUID, '{request.ReferenceId}'::UUID, {request.PageSize}, {!request.Asc})
                     """
             )
             .Select(x => new
