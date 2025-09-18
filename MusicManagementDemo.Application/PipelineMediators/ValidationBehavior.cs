@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using MediatR;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
 
-namespace MusicManagementDemo.Application;
+namespace MusicManagementDemo.Application.PipelineMediators;
 
 internal sealed class ValidationBehavior<TRequest, TResponse>(
     IEnumerable<IValidator<TRequest>> validators
