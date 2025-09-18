@@ -67,6 +67,10 @@ public static class AssemblyInfo
         services.AddSingleton<IJobManager, JobManager>();
         services.AddSingleton<IFileEnumerator, FileEnumerator>();
         services.AddSingleton<IJwtManager, JwtManager>();
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblyContaining(typeof(AssemblyInfo));
+        });
         return services;
     }
 

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text.Json.Nodes;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Domain.DomainEvents;
 using MusicManagementDemo.Domain.Entity.Management;
 using MusicManagementDemo.Infrastructure.Database;
 using RustSharp;
@@ -99,10 +101,9 @@ internal sealed class JobManager(
         {
             //await Task.Delay(TimeSpan.FromSeconds(10), token);
             await using var scope = service.CreateAsyncScope();
-            var managementDbContext =
-                scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
-            var musicDbContext = scope.ServiceProvider.GetRequiredService<MusicAppDbContext>();
-            var job = await managementDbContext
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
+            var job = await dbContext
                 .Job.AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == jobId, cancellationToken: token);
             if (job is null)
@@ -114,7 +115,7 @@ internal sealed class JobManager(
             {
                 return Result.Err("StorageId not found in JobArgs");
             }
-            var storage = await managementDbContext
+            var storage = await dbContext
                 .Storage.AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == storageId, cancellationToken: token);
             if (storage is null)
@@ -127,81 +128,23 @@ internal sealed class JobManager(
                 return Result.Err($"storage.Path {storage.Path} not found");
             }
 
-            await using var transaction = await musicDbContext.Database.BeginTransactionAsync(
-                token
-            );
-
-            foreach (
-                var fileFullPath in fileEnumerator.EnumerateFiles(
+            // 分批写入数据库
+            var tasks = fileEnumerator
+                .EnumerateFiles(
                     new DirectoryInfo(storage.Path),
                     "*.flac",
                     SearchOption.AllDirectories
                 )
-            )
+                .Select(async f => await ParseMusicInfoAsync(f, storage.Id, token))
+                .Chunk(500);
+            foreach (var task in tasks)
             {
-                var ffprobeProcess = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "ffprobe",
-                        Arguments =
-                            $"""-v error -i "{fileFullPath}" -print_format json -show_format""",
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                    },
-                };
-                ffprobeProcess.Start();
-                await ffprobeProcess.WaitForExitAsync(token);
-                var result = await ffprobeProcess.StandardOutput.ReadToEndAsync(token);
-                ffprobeProcess.Close();
-                ffprobeProcess.Dispose();
-
-                var resultJsonNode = JsonNode.Parse(result);
-                if (resultJsonNode is null)
-                {
-                    return Result.Err("Can't parse ffprobe output to JsonNode");
-                }
-                var resultFormatJsonObject = resultJsonNode["format"]?.AsObject();
-                if (resultFormatJsonObject is null)
-                {
-                    return Result.Err("Can't find \"format\" in ffprobe output");
-                }
-                var resultFormatTagsJsonObject = resultFormatJsonObject["tags"]?.AsObject();
-                if (resultFormatTagsJsonObject is null)
-                {
-                    return Result.Err("Can't find \"format:tags\" in ffprobe output");
-                }
-                var title = resultFormatTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty;
-                var artist =
-                    resultFormatTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty;
-                var album = resultFormatTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty;
-                var filePath = Path.GetRelativePath(storage.Path, fileFullPath);
-                var oldMusicInfo = await musicDbContext
-                    .MusicInfo.Where(e =>
-                        e.Title == title && e.Artist == artist && e.Album == album
-                    )
-                    .SingleOrDefaultAsync(cancellationToken: token);
-                if (oldMusicInfo is null)
-                {
-                    await musicDbContext.MusicInfo.AddAsync(
-                        new()
-                        {
-                            Title = title,
-                            Artist = artist,
-                            Album = album,
-                            FilePath = filePath,
-                            StorageId = storage.Id,
-                        },
-                        cancellationToken: token
-                    );
-                }
-                else
-                {
-                    oldMusicInfo.FilePath = filePath;
-                }
+                var results = await Task.WhenAll(task);
+                var items = results
+                    .OfType<OkResult<MusicFileFoundEventItem, string>>()
+                    .Select(r => r.Value);
+                await mediator.Publish(new MusicFileFoundEvent(items), token);
             }
-            await musicDbContext.SaveChangesAsync(token);
-            await transaction.CommitAsync(token);
             return Result.Ok(0);
         }
         catch (Exception e) when (e is TaskCanceledException or OperationCanceledException)
@@ -212,6 +155,76 @@ internal sealed class JobManager(
         {
             return Result.Err(e.Message);
         }
+    }
+
+    private async Task<Result<MusicFileFoundEventItem, string>> ParseMusicInfoAsync(
+        string fullPath,
+        int storageId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        using var ffprobeProcess = new Process();
+        ffprobeProcess.StartInfo = new ProcessStartInfo
+        {
+            FileName = "ffprobe",
+            Arguments = $"""-v error -i "{fullPath}" -print_format json -show_format""",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+        ffprobeProcess.Start();
+        await ffprobeProcess.WaitForExitAsync(cancellationToken);
+        var result = await ffprobeProcess.StandardOutput.ReadToEndAsync(cancellationToken);
+        ffprobeProcess.Close();
+
+        logger.LogInformation("ffprobe result: {result}", result);
+
+        var resultJsonNode = JsonNode.Parse(result);
+        if (resultJsonNode is null)
+        {
+            logger.LogError("Can't parse ffprobe output to JsonNode");
+            return Result.Err("Can't parse ffprobe output to JsonNode");
+        }
+        var resultFormatJsonObject = resultJsonNode["format"]?.AsObject();
+        if (resultFormatJsonObject is null)
+        {
+            logger.LogError("Can't find \"format\" in ffprobe output");
+            return Result.Err("Can't find \"format\" in ffprobe output");
+        }
+        var resultFormatTagsJsonObject = resultFormatJsonObject["tags"]?.AsObject();
+        if (resultFormatTagsJsonObject is null)
+        {
+            logger.LogError("Can't find \"format:tags\" in ffprobe output");
+            return Result.Err("Can't find \"format:tags\" in ffprobe output");
+        }
+
+        var title = resultFormatTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty;
+        if (string.IsNullOrEmpty(title))
+        {
+            logger.LogError("Can't find \"format:tags:title\" in ffprobe output");
+            return Result.Err("Can't find \"format:tags:title\" in ffprobe output");
+        }
+        var artist = resultFormatTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty;
+        if (string.IsNullOrEmpty(artist))
+        {
+            logger.LogError("Can't find \"format:tags:artist\" in ffprobe output");
+            return Result.Err("Can't find \"format:tags:artist\" in ffprobe output");
+        }
+        var album = resultFormatTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty;
+        if (string.IsNullOrEmpty(album))
+        {
+            logger.LogError("Can't find \"format:tags:album\" in ffprobe output");
+            return Result.Err("Can't find \"format:tags:album\" in ffprobe output");
+        }
+
+        return Result.Ok(
+            new MusicFileFoundEventItem(
+                Title: title,
+                Artist: artist,
+                Album: album,
+                FilePath: fullPath,
+                StorageId: storageId
+            )
+        );
     }
 
     private async Task HandleScanIncrementalContinueAsync(
