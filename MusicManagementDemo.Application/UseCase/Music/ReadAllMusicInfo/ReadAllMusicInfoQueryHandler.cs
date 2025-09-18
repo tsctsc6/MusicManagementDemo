@@ -22,7 +22,7 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
             var searchTerm = WhiteSpaceRegex().Replace(request.SearchTerm.Trim(), "|");
-            logger.LogInformation("Processed search term: \"{}\"", searchTerm);
+            logger.LogInformation("Processed search term: \"{searchTerm}\"", searchTerm);
             musicInfosToReadQuery = musicInfosToReadQuery
                 .Where(m =>
                     m.TitleTSV.Matches(
