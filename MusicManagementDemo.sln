@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		.csharpierrc.yaml = .csharpierrc.yaml
 		.gitignore = .gitignore
 		README.md = README.md
+		MusicManagementDemo.sln.DotSettings = MusicManagementDemo.sln.DotSettings
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Infrastructure", "MusicManagementDemo.Infrastructure\MusicManagementDemo.Infrastructure.csproj", "{21C50602-C156-449F-9C53-E2D658889CA4}"
