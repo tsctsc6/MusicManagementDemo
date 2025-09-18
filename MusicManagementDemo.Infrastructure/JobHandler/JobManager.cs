@@ -204,7 +204,7 @@ internal sealed class JobManager(
             await transaction.CommitAsync(token);
             return Result.Ok(0);
         }
-        catch (Exception e) when (e is TaskCanceledException || e is OperationCanceledException)
+        catch (Exception e) when (e is TaskCanceledException or OperationCanceledException)
         {
             return Result.Ok(1);
         }
