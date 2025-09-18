@@ -190,6 +190,7 @@ internal sealed class JobManager(
                             Artist = artist,
                             Album = album,
                             FilePath = filePath,
+                            StorageId = storage.Id,
                         },
                         cancellationToken: token
                     );
