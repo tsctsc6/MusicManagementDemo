@@ -1,6 +1,6 @@
 # 音乐管理项目开发文档
 
-## DDD建模
+## DDD 建模
 ### 统一语言
 * 用户：指听音乐的人。
 * 音乐信息：包括音乐标题、专辑名、歌手、文件位置。
@@ -11,7 +11,7 @@
 
 ### 聚合根
 * 用户认证
-    * ASP.NET Identity 的 7 个实体。
+    * ASP\.NET Identity 的 7 个实体。
 * 音乐信息
     * 音乐信息实体
     * 用户歌单实体
@@ -34,6 +34,39 @@ flowchart TD
     Application --> Abstractions
     Infrastructure --> Abstractions
     Abstractions --> Domain
+```
+
+## 简化的 ER 图
+```mermaid
+---
+title: 简化的 ER 图
+---
+erDiagram
+    AspNetUserRoles }|--|| AspNetRoles : ""
+    AspNetRoleClaims }|--|| AspNetRoles : ""
+    AspNetUserClaims }|--|| AspNetUsers : ""
+    AspNetUsers ||--|{ AspNetUserTokens : ""
+    AspNetUserRoles }|--|| AspNetUsers : ""
+    AspNetUsers ||--|{ AspNetUserLogins : ""
+
+    style AspNetUserRoles fill:#ff99ff
+    style AspNetRoleClaims fill:#ff99ff
+    style AspNetRoles fill:#ff99ff
+    style AspNetUserClaims fill:#ff99ff
+    style AspNetUsers fill:#ff99ff
+    style AspNetUserLogins fill:#ff99ff
+    style AspNetUserTokens fill:#ff99ff
+
+    AspNetUsers ||--|{ MusicList : ""
+    MusicListMusicInfoMap }|--|| MusicList : ""
+    MusicInfo ||--|{ MusicListMusicInfoMap : ""
+
+    style MusicListMusicInfoMap fill:#fff666
+    style MusicList fill:#fff666
+    style MusicInfo fill:#fff666
+
+    Job
+    Storage
 ```
 
 ## WebApi
