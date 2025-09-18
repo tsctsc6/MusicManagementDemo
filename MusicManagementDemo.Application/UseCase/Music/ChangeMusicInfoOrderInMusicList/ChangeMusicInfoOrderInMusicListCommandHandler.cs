@@ -18,7 +18,6 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        logger.LogInformation("Request args: {@request}", request);
         if (
             !await dbContext.MusicList.AnyAsync(
                 e => e.Id == request.MusicListId && e.UserId == request.UserId,
