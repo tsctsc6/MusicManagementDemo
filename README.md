@@ -50,8 +50,8 @@ flowchart TD
 
     subgraph Test_Application
     Test --> Infrastructure.TestEnv
-    Infrastructure.TestEnv --> Abstractions
     Test --> Application
+    Infrastructure.TestEnv --> Abstractions
     end
 ```
 
