@@ -40,11 +40,19 @@
 title: 项目结构图
 ---
 flowchart TD
+    subgraph Src
     WebApi --> Application
     WebApi --> Infrastructure
-    Application --> Abstractions
     Infrastructure --> Abstractions
+    Application --> Abstractions
     Abstractions --> Domain
+    end
+
+    subgraph Test_Application
+    Test --> Infrastructure.TestEnv
+    Infrastructure.TestEnv --> Abstractions
+    Test --> Application
+    end
 ```
 
 ## 简化的 ER 图
@@ -118,6 +126,8 @@ erDiagram
 #### 从歌单删除歌曲
 
 #### 查询歌单的歌曲
+
+#### 更改歌单中歌曲顺序
 
 #### 浏览所有歌曲（搜索歌曲）
 
