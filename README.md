@@ -41,8 +41,8 @@ title: 项目结构图
 ---
 flowchart TD
     subgraph Src
-    WebApi --> Application
     WebApi --> Infrastructure
+    WebApi --> Application
     Infrastructure --> Abstractions
     Application --> Abstractions
     Abstractions --> Domain
