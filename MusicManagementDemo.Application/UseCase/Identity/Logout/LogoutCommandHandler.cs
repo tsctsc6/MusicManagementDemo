@@ -11,7 +11,6 @@ namespace MusicManagementDemo.Application.UseCase.Identity.Logout;
 
 internal sealed class LogoutCommandHandler(
     IdentityDbContext<ApplicationUser> dbContext,
-    SignInManager<ApplicationUser> signInMgr,
     UserManager<ApplicationUser> userManager,
     ILogger<LogoutCommandHandler> logger
 ) : IRequestHandler<LogoutCommand, IServiceResult>
