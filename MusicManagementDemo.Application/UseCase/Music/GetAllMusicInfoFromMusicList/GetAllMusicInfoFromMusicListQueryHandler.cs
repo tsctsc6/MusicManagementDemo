@@ -30,14 +30,11 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
         }
 
         var musicInfosToReadQuery = dbContext
-            .MusicInfo.FromSqlRaw(
-                request.ReferenceId is null
-                    ? $"""
-                    SELECT * FROM {DbSchemas.Music}.{DbSchemas.GetMusicInfoInMusicList}('{request.MusicListId}'::UUID, NULL::UUID, {request.PageSize}, {!request.Asc})
-                    """
-                    : $"""
-                    SELECT * FROM {DbSchemas.Music}.{DbSchemas.GetMusicInfoInMusicList}('{request.MusicListId}'::UUID, '{request.ReferenceId}'::UUID, {request.PageSize}, {!request.Asc})
-                    """
+            .MusicInfo.GetMusicInfoInMusicList(
+                request.MusicListId,
+                request.ReferenceId,
+                request.PageSize,
+                request.Asc
             )
             .Select(x => new
             {
