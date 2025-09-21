@@ -46,12 +46,12 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
                 x.Artist,
                 x.Album,
             });
-        var musicInfosToRead = musicInfosToReadQuery.ToArrayAsync(
+        var musicInfosToRead = await musicInfosToReadQuery.ToArrayAsync(
             cancellationToken: cancellationToken
         );
 
         return ServiceResult.Ok(
-            new { MusicListName = musicListToRead.Name, MusicInfos = musicInfosToReadQuery }
+            new { MusicListName = musicListToRead.Name, MusicInfos = musicInfosToRead }
         );
     }
 }
