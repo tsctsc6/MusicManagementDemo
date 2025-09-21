@@ -48,10 +48,10 @@ flowchart TD
     Abstractions --> Domain
     end
 
-    subgraph Test_Application
-    Test --> Infrastructure.TestEnv
-    Test --> Application
-    Infrastructure.TestEnv --> Abstractions
+    subgraph Functional_Testing
+    FunctionalTesting --> FunctionalTesting.Infrastructure
+    FunctionalTesting --> Application
+    FunctionalTesting.Infrastructure --> Abstractions
     end
 ```
 
