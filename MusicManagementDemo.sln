@@ -21,14 +21,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Applica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Abstractions", "MusicManagementDemo.Abstractions\MusicManagementDemo.Abstractions.csproj", "{B3E3A842-853A-462A-B26B-B7862BC15759}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MigrationScript", "MigrationScript", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeployScript", "DeployScript", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		migrations_command.txt = migrations_command.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{D73A0538-911E-45CD-8940-F78E6AB05514}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1CB10A34-4797-4380-A5F1-1662EBF2FEBE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functional_Testing", "Functional_Testing", "{1CB10A34-4797-4380-A5F1-1662EBF2FEBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
