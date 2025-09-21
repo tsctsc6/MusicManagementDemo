@@ -138,7 +138,7 @@ internal sealed class JobManager(
                     "*.flac",
                     SearchOption.AllDirectories
                 )
-                .Select(async f => await musicInfoParser.ParseMusicInfoAsync(f, storage.Id, token))
+                .Select(async f => await musicInfoParser.ParseMusicInfoAsync(f, storage.Id, storage.Path, token))
                 .Chunk(500);
             foreach (var task in tasks)
             {

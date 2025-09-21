@@ -12,6 +12,7 @@ internal sealed class MusicInfoParser(ILogger<MusicInfoParser> logger) : IMusicI
     public async Task<Result<MusicFileFoundEventItem, string>> ParseMusicInfoAsync(
         string fullPath,
         int storageId,
+        string storagePath,
         CancellationToken cancellationToken = default
     )
     {
@@ -73,7 +74,7 @@ internal sealed class MusicInfoParser(ILogger<MusicInfoParser> logger) : IMusicI
                 Title: title,
                 Artist: artist,
                 Album: album,
-                FilePath: fullPath,
+                FilePath: Path.GetRelativePath(storagePath, fullPath),
                 StorageId: storageId
             )
         );
