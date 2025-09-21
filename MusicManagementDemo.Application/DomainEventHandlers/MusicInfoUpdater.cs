@@ -5,7 +5,7 @@ using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Domain.DomainEvents;
 using MusicManagementDemo.Domain.Entity.Music;
 
-namespace MusicManagementDemo.Infrastructure.JobHandler;
+namespace MusicManagementDemo.Application.DomainEventHandlers;
 
 internal sealed class MusicInfoUpdater(
     IMusicAppDbContext dbContext,

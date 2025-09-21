@@ -6,15 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Domain.DomainEvents;
 using MusicManagementDemo.Domain.Entity.Management;
-using MusicManagementDemo.Infrastructure.Database;
 using RustSharp;
 
-namespace MusicManagementDemo.Infrastructure.JobHandler;
+namespace MusicManagementDemo.Application.JobHandlers;
 
 internal sealed class JobManager(
-    IServiceProvider service,
+    IServiceProvider services,
+    IMusicInfoParser musicInfoParser,
     IFileEnumerator fileEnumerator,
     ILogger<JobManager> logger
 ) : IJobManager
@@ -52,9 +53,10 @@ internal sealed class JobManager(
                 logger.LogError("Unknown job type: {jobType}", jobType);
                 return Result.Err("Unknown job type");
         }
-        await using var scope = service.CreateAsyncScope();
+
+        await using var scope = services.CreateAsyncScope();
         await using var dbContext =
-            scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
+            scope.ServiceProvider.GetRequiredService<IManagementAppDbContext>();
         var jobToUpdate = await dbContext.Job.SingleOrDefaultAsync(
             e => e.Id == jobId,
             // ReSharper disable once PossiblyMistakenUseOfCancellationToken
@@ -100,9 +102,10 @@ internal sealed class JobManager(
         try
         {
             //await Task.Delay(TimeSpan.FromSeconds(10), token);
-            await using var scope = service.CreateAsyncScope();
+            await using var scope = services.CreateAsyncScope();
+            await using var dbContext =
+                scope.ServiceProvider.GetRequiredService<IManagementAppDbContext>();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
             var job = await dbContext
                 .Job.AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == jobId, cancellationToken: token);
@@ -135,7 +138,7 @@ internal sealed class JobManager(
                     "*.flac",
                     SearchOption.AllDirectories
                 )
-                .Select(async f => await ParseMusicInfoAsync(f, storage.Id, token))
+                .Select(async f => await musicInfoParser.ParseMusicInfoAsync(f, storage.Id, token))
                 .Chunk(500);
             foreach (var task in tasks)
             {
@@ -157,84 +160,14 @@ internal sealed class JobManager(
         }
     }
 
-    private async Task<Result<MusicFileFoundEventItem, string>> ParseMusicInfoAsync(
-        string fullPath,
-        int storageId,
-        CancellationToken cancellationToken = default
-    )
-    {
-        using var ffprobeProcess = new Process();
-        ffprobeProcess.StartInfo = new ProcessStartInfo
-        {
-            FileName = "ffprobe",
-            Arguments = $"""-v error -i "{fullPath}" -print_format json -show_format""",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
-        ffprobeProcess.Start();
-        await ffprobeProcess.WaitForExitAsync(cancellationToken);
-        var result = await ffprobeProcess.StandardOutput.ReadToEndAsync(cancellationToken);
-        ffprobeProcess.Close();
-
-        logger.LogInformation("ffprobe result: {result}", result);
-
-        var resultJsonNode = JsonNode.Parse(result);
-        if (resultJsonNode is null)
-        {
-            logger.LogError("Can't parse ffprobe output to JsonNode");
-            return Result.Err("Can't parse ffprobe output to JsonNode");
-        }
-        var resultFormatJsonObject = resultJsonNode["format"]?.AsObject();
-        if (resultFormatJsonObject is null)
-        {
-            logger.LogError("Can't find \"format\" in ffprobe output");
-            return Result.Err("Can't find \"format\" in ffprobe output");
-        }
-        var resultFormatTagsJsonObject = resultFormatJsonObject["tags"]?.AsObject();
-        if (resultFormatTagsJsonObject is null)
-        {
-            logger.LogError("Can't find \"format:tags\" in ffprobe output");
-            return Result.Err("Can't find \"format:tags\" in ffprobe output");
-        }
-
-        var title = resultFormatTagsJsonObject["title"]?.GetValue<string>() ?? string.Empty;
-        if (string.IsNullOrEmpty(title))
-        {
-            logger.LogError("Can't find \"format:tags:title\" in ffprobe output");
-            return Result.Err("Can't find \"format:tags:title\" in ffprobe output");
-        }
-        var artist = resultFormatTagsJsonObject["artist"]?.GetValue<string>() ?? string.Empty;
-        if (string.IsNullOrEmpty(artist))
-        {
-            logger.LogError("Can't find \"format:tags:artist\" in ffprobe output");
-            return Result.Err("Can't find \"format:tags:artist\" in ffprobe output");
-        }
-        var album = resultFormatTagsJsonObject["album"]?.GetValue<string>() ?? string.Empty;
-        if (string.IsNullOrEmpty(album))
-        {
-            logger.LogError("Can't find \"format:tags:album\" in ffprobe output");
-            return Result.Err("Can't find \"format:tags:album\" in ffprobe output");
-        }
-
-        return Result.Ok(
-            new MusicFileFoundEventItem(
-                Title: title,
-                Artist: artist,
-                Album: album,
-                FilePath: fullPath,
-                StorageId: storageId
-            )
-        );
-    }
-
     private async Task HandleScanIncrementalContinueAsync(
         long jobId,
         Result<int, string> taskResult
     )
     {
-        await using var scope = service.CreateAsyncScope();
+        await using var scope = services.CreateAsyncScope();
         await using var dbContext =
-            scope.ServiceProvider.GetRequiredService<ManagementAppDbContext>();
+            scope.ServiceProvider.GetRequiredService<IManagementAppDbContext>();
         var jobToUpdate = dbContext.Job.SingleOrDefault(e => e.Id == jobId);
         if (jobToUpdate is null)
         {

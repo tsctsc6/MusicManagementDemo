@@ -63,13 +63,9 @@ public static class AssemblyInfo
         services.AddSerilog();
 
         services.AddJsonOptions();
-        services.AddSingleton<IJobManager, JobManager>();
         services.AddSingleton<IFileEnumerator, FileEnumerator>();
+        services.AddSingleton<IMusicInfoParser, MusicInfoParser>();
         services.AddSingleton<IJwtManager, JwtManager>();
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssemblyContaining(typeof(AssemblyInfo));
-        });
         return services;
     }
 
