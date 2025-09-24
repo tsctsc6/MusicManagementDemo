@@ -139,16 +139,10 @@ public static class AssemblyInfo
                 {
                     OnTokenValidated = async context =>
                     {
-                        if (context.Principal is null)
-                        {
-                            context.Fail("Unauthorized");
-                            return;
-                        }
-
                         if (
                             !Guid.TryParse(
                                 context
-                                    .Principal.Claims.SingleOrDefault(c =>
+                                    .Principal?.Claims.SingleOrDefault(c =>
                                         c.Type == JwtRegisteredClaimNames.Sub
                                     )
                                     ?.Value,
