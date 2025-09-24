@@ -18,7 +18,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
     )
     {
         var musicListToRead = await dbContext
-            .MusicList.AsNoTracking()
+            .MusicLists.AsNoTracking()
             .SingleOrDefaultAsync(
                 e => e.UserId == request.UserId && e.Id == request.MusicListId,
                 cancellationToken: cancellationToken
@@ -30,7 +30,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
         }
 
         var musicInfosToReadQuery = dbContext
-            .MusicInfo.GetMusicInfoInMusicList(
+            .MusicInfos.GetMusicInfoInMusicList(
                 request.MusicListId,
                 request.ReferenceId,
                 request.PageSize,

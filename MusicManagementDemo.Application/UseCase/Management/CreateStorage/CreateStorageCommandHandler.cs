@@ -18,7 +18,7 @@ internal sealed class CreateStorageCommandHandler(
     )
     {
         var storageToCreate = new Storage { Name = request.Name, Path = request.Path };
-        await dbContext.Storage.AddAsync(storageToCreate, cancellationToken);
+        await dbContext.Storages.AddAsync(storageToCreate, cancellationToken);
         try
         {
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)

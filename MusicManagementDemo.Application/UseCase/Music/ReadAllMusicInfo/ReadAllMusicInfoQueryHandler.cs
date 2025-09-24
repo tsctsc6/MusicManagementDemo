@@ -18,7 +18,7 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var musicInfosToReadQuery = dbContext.MusicInfo.AsQueryable();
+        var musicInfosToReadQuery = dbContext.MusicInfos.AsQueryable();
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
             var searchTerm = WhiteSpaceRegex().Replace(request.SearchTerm.Trim(), "|");

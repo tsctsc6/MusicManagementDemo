@@ -18,7 +18,7 @@ public class GetMusicStreamQueryHandler(
     )
     {
         var musicInfoToGetStream = await musicDbContext
-            .MusicInfo.AsNoTracking()
+            .MusicInfos.AsNoTracking()
             .SingleOrDefaultAsync(
                 e => e.Id == request.MusicInfoId,
                 cancellationToken: cancellationToken
@@ -30,7 +30,7 @@ public class GetMusicStreamQueryHandler(
         }
 
         var storageToRead = await managementDbContext
-            .Storage.AsNoTracking()
+            .Storages.AsNoTracking()
             .SingleOrDefaultAsync(
                 e => e.Id == musicInfoToGetStream.StorageId,
                 cancellationToken: cancellationToken

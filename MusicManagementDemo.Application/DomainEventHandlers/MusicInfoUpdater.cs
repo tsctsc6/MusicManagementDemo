@@ -18,7 +18,7 @@ internal sealed class MusicInfoUpdater(
         foreach (var item in notification.Items)
         {
             var oldMusicInfo = await dbContext
-                .MusicInfo.Where(e =>
+                .MusicInfos.Where(e =>
                     e.Title == item.Title && e.Artist == item.Artist && e.Album == item.Album
                 )
                 .SingleOrDefaultAsync(cancellationToken: cancellationToken);
@@ -40,7 +40,7 @@ internal sealed class MusicInfoUpdater(
                 oldMusicInfo.FilePath = item.FilePath;
             }
         }
-        await dbContext.MusicInfo.AddRangeAsync(newMusicInfo, cancellationToken);
+        await dbContext.MusicInfos.AddRangeAsync(newMusicInfo, cancellationToken);
         var submitCount = await dbContext.SaveChangesAsync(cancellationToken);
         logger.LogInformation("{submitCount} rows Updated", submitCount);
     }

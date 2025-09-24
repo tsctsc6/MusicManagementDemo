@@ -17,7 +17,7 @@ internal sealed class UpdateMusicListCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var musicListToUpdate = await dbContext.MusicList.SingleOrDefaultAsync(
+        var musicListToUpdate = await dbContext.MusicLists.SingleOrDefaultAsync(
             e => e.Id == request.MusicListId && e.UserId == request.UserId,
             cancellationToken: cancellationToken
         );

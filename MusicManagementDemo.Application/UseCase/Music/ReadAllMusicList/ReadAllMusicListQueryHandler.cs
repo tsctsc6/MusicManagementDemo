@@ -14,7 +14,7 @@ internal sealed class ReadAllMusicListQueryHandler(IMusicAppDbContext dbContext)
         CancellationToken cancellationToken
     )
     {
-        var musicListsToReadQuery = dbContext.MusicList.AsQueryable();
+        var musicListsToReadQuery = dbContext.MusicLists.AsQueryable();
         if (request.Asc)
         {
             musicListsToReadQuery = musicListsToReadQuery.OrderBy(e => e.Id);

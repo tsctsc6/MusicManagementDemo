@@ -19,7 +19,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
     )
     {
         if (
-            !await dbContext.MusicList.AnyAsync(
+            !await dbContext.MusicLists.AnyAsync(
                 e => e.Id == request.MusicListId && e.UserId == request.UserId,
                 cancellationToken: cancellationToken
             )
@@ -29,7 +29,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
             return ServiceResult.Err(404, ["MusicListId not found"]);
         }
 
-        var musicInfoMapToMove = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+        var musicInfoMapToMove = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
             e => e.MusicListId == request.MusicListId && e.MusicInfoId == request.TargetMusicInfoId,
             cancellationToken
         );
@@ -53,7 +53,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
         MusicInfoMusicListMap? musicInfoMapNextNew = null;
         if (request.PrevMusicInfoId is not null)
         {
-            musicInfoMapPrevNew = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+            musicInfoMapPrevNew = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
                 e =>
                     e.MusicListId == request.MusicListId
                     && e.MusicInfoId == request.PrevMusicInfoId,
@@ -68,7 +68,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
 
         if (request.NextMusicInfoId is not null)
         {
-            musicInfoMapNextNew = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+            musicInfoMapNextNew = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
                 e =>
                     e.MusicListId == request.MusicListId
                     && e.MusicInfoId == request.NextMusicInfoId,
@@ -104,7 +104,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
         // 更改目标歌曲，旧位置的前后歌曲的指针
         if (musicInfoMapToMove.PrevId is not null)
         {
-            var musicInfoMapPrevOld = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+            var musicInfoMapPrevOld = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
                 e =>
                     e.MusicListId == request.MusicListId
                     && e.MusicInfoId == musicInfoMapToMove.PrevId,
@@ -120,7 +120,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
         }
         if (musicInfoMapToMove.NextId is not null)
         {
-            var musicInfoMapNextOld = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+            var musicInfoMapNextOld = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
                 e =>
                     e.MusicListId == request.MusicListId
                     && e.MusicInfoId == musicInfoMapToMove.NextId,

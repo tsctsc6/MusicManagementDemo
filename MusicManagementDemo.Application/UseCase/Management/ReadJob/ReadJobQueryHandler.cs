@@ -18,7 +18,7 @@ public class ReadJobQueryHandler(
     )
     {
         var jobToRead = await dbContext
-            .Job.AsNoTracking()
+            .Jobs.AsNoTracking()
             .SingleOrDefaultAsync(j => j.Id == request.Id, cancellationToken: cancellationToken);
         if (jobToRead is null)
         {

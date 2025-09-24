@@ -55,7 +55,7 @@ internal sealed class JobManager(
         await using var scope = services.CreateAsyncScope();
         await using var dbContext =
             scope.ServiceProvider.GetRequiredService<IManagementAppDbContext>();
-        var jobToUpdate = await dbContext.Job.SingleOrDefaultAsync(
+        var jobToUpdate = await dbContext.Jobs.SingleOrDefaultAsync(
             e => e.Id == jobId,
             // ReSharper disable once PossiblyMistakenUseOfCancellationToken
             cancellationToken: cancellationToken
@@ -63,7 +63,7 @@ internal sealed class JobManager(
         if (jobToUpdate is null)
             return Result.Err("Job not found");
         jobToUpdate.Status = JobStatus.Running;
-        dbContext.Job.Update(jobToUpdate);
+        dbContext.Jobs.Update(jobToUpdate);
         // ReSharper disable once PossiblyMistakenUseOfCancellationToken
         await dbContext.SaveChangesAsync(cancellationToken);
         return Result.Ok(jobToUpdate.Id);
@@ -105,7 +105,7 @@ internal sealed class JobManager(
                 scope.ServiceProvider.GetRequiredService<IManagementAppDbContext>();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
             var job = await dbContext
-                .Job.AsNoTracking()
+                .Jobs.AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == jobId, cancellationToken: token);
             if (job is null)
             {
@@ -117,7 +117,7 @@ internal sealed class JobManager(
                 return Result.Err("StorageId not found in JobArgs");
             }
             var storage = await dbContext
-                .Storage.AsNoTracking()
+                .Storages.AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == storageId, cancellationToken: token);
             if (storage is null)
             {
@@ -168,7 +168,7 @@ internal sealed class JobManager(
         await using var scope = services.CreateAsyncScope();
         await using var dbContext =
             scope.ServiceProvider.GetRequiredService<IManagementAppDbContext>();
-        var jobToUpdate = dbContext.Job.SingleOrDefault(e => e.Id == jobId);
+        var jobToUpdate = dbContext.Jobs.SingleOrDefault(e => e.Id == jobId);
         if (jobToUpdate is null)
         {
             logger.LogError("Job {JobId} not find", jobId);
@@ -201,7 +201,7 @@ internal sealed class JobManager(
 
         jobToUpdate.Status = JobStatus.Completed;
         jobToUpdate.CompletedAt = DateTime.UtcNow;
-        dbContext.Job.Update(jobToUpdate);
+        dbContext.Jobs.Update(jobToUpdate);
         await dbContext.SaveChangesAsync();
     }
 }

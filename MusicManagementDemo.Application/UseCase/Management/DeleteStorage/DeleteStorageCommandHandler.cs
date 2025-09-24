@@ -17,7 +17,7 @@ internal sealed class DeleteStorageCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var storageToDelete = await dbContext.Storage.SingleOrDefaultAsync(
+        var storageToDelete = await dbContext.Storages.SingleOrDefaultAsync(
             e => e.Id == request.Id,
             cancellationToken: cancellationToken
         );
@@ -26,7 +26,7 @@ internal sealed class DeleteStorageCommandHandler(
             logger.LogError("Storage with id: {RequestId} not found", request.Id);
             return ServiceResult.Err(404, ["未找到对应的存储"]);
         }
-        dbContext.Storage.Remove(storageToDelete);
+        dbContext.Storages.Remove(storageToDelete);
         try
         {
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)

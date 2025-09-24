@@ -18,7 +18,7 @@ internal sealed class CreateMusicListCommandHandler(
     )
     {
         var musicListToAdd = new MusicList { Name = request.Name, UserId = request.UserId };
-        await dbContext.MusicList.AddAsync(musicListToAdd, cancellationToken);
+        await dbContext.MusicLists.AddAsync(musicListToAdd, cancellationToken);
         try
         {
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)

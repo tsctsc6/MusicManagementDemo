@@ -14,7 +14,7 @@ internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbConte
         CancellationToken cancellationToken
     )
     {
-        var storagesToRead = dbContext.Storage.AsQueryable();
+        var storagesToRead = dbContext.Storages.AsQueryable();
         if (request.Asc)
         {
             storagesToRead = storagesToRead.OrderBy(e => e.Id);

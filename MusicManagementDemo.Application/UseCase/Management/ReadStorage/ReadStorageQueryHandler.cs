@@ -18,7 +18,7 @@ internal sealed class ReadStorageQueryHandler(
     )
     {
         var storageToRead = await dbContext
-            .Storage.AsNoTracking()
+            .Storages.AsNoTracking()
             .SingleOrDefaultAsync(cancellationToken: cancellationToken);
         if (storageToRead is null)
         {

@@ -5,6 +5,6 @@ namespace MusicManagementDemo.Abstractions.IDbContext;
 
 public interface IManagementAppDbContext : IDbContext
 {
-    public DbSet<Storage> Storage { get; }
-    public DbSet<Job> Job { get; }
+    public DbSet<Storage> Storages { get; }
+    public DbSet<Job> Jobs { get; }
 }

@@ -18,7 +18,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
     )
     {
         if (
-            !await dbContext.MusicList.AnyAsync(
+            !await dbContext.MusicLists.AnyAsync(
                 e => e.Id == request.MusicListId && e.UserId == request.UserId,
                 cancellationToken: cancellationToken
             )
@@ -28,7 +28,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
             return ServiceResult.Err(404, ["MusicList not found"]);
         }
 
-        var musicInfoMapToRemove = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+        var musicInfoMapToRemove = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
             e => e.MusicListId == request.MusicListId && e.MusicInfoId == request.MusicInfoId,
             cancellationToken
         );
@@ -46,7 +46,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
         // 更改目标歌曲的前后歌曲指针
         if (musicInfoMapToRemove.PrevId is not null)
         {
-            var musicInfoMapPrev = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+            var musicInfoMapPrev = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
                 e =>
                     e.MusicListId == request.MusicListId
                     && e.MusicInfoId == musicInfoMapToRemove.PrevId,
@@ -65,7 +65,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
         }
         if (musicInfoMapToRemove.NextId is not null)
         {
-            var musicInfoMapNext = await dbContext.MusicInfoMusicListMap.SingleOrDefaultAsync(
+            var musicInfoMapNext = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
                 e =>
                     e.MusicListId == request.MusicListId
                     && e.MusicInfoId == musicInfoMapToRemove.NextId,
@@ -83,7 +83,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
             expectedSubmitCount++;
         }
 
-        dbContext.MusicInfoMusicListMap.Remove(musicInfoMapToRemove);
+        dbContext.MusicInfoMusicListMaps.Remove(musicInfoMapToRemove);
         expectedSubmitCount++;
         var submitCount = await dbContext.SaveChangesAsync(cancellationToken);
         if (submitCount != expectedSubmitCount)

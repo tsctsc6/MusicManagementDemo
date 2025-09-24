@@ -26,7 +26,7 @@ internal sealed class CreateJobCommandHandler(
             Description = request.Description,
             Status = JobStatus.WaitingStart,
         };
-        await dbContext.Job.AddAsync(jobToAdd, cancellationToken);
+        await dbContext.Jobs.AddAsync(jobToAdd, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         var result = await jobManager.CreateJobAsync(jobToAdd.Id, request.Type, cancellationToken);
         switch (result)

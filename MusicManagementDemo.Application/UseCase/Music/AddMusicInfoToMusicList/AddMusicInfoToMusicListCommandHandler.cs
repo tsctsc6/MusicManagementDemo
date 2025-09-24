@@ -22,7 +22,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var musicListWhichAddMusicInfo = await dbContext.MusicList.SingleOrDefaultAsync(
+        var musicListWhichAddMusicInfo = await dbContext.MusicLists.SingleOrDefaultAsync(
             e => e.Id == request.MusicListId && e.UserId == request.UserId,
             cancellationToken: cancellationToken
         );
@@ -34,7 +34,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
 
         // 歌单中是否存在该歌曲
         if (
-            await dbContext.MusicInfoMusicListMap.AnyAsync(
+            await dbContext.MusicInfoMusicListMaps.AnyAsync(
                 e => e.MusicListId == request.MusicListId && e.MusicInfoId == request.MusicInfoId,
                 cancellationToken: cancellationToken
             )
@@ -46,7 +46,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
 
         // 查询歌单最后的歌曲
         var lastMusicInfoMap = await dbContext
-            .MusicInfoMusicListMap.Where(e =>
+            .MusicInfoMusicListMaps.Where(e =>
                 e.MusicListId == request.MusicListId && e.NextId == null
             )
             .SingleOrDefaultAsync(cancellationToken: cancellationToken);
@@ -62,12 +62,12 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
         if (lastMusicInfoMap is not null)
         {
             lastMusicInfoMap.NextId = request.MusicInfoId;
-            dbContext.MusicInfoMusicListMap.Update(lastMusicInfoMap);
+            dbContext.MusicInfoMusicListMaps.Update(lastMusicInfoMap);
             musicInfoMapToAdd.PrevId = lastMusicInfoMap.MusicInfoId;
             expectedSubmitCount++;
         }
 
-        await dbContext.MusicInfoMusicListMap.AddAsync(musicInfoMapToAdd, cancellationToken);
+        await dbContext.MusicInfoMusicListMaps.AddAsync(musicInfoMapToAdd, cancellationToken);
         expectedSubmitCount++;
         var submitCount = await dbContext.SaveChangesAsync(cancellationToken);
         if (submitCount != expectedSubmitCount)

@@ -18,12 +18,12 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         IManagementAppDbContext,
         IMusicAppDbContext
 {
-    public DbSet<Storage> Storage { get; set; }
-    public DbSet<Job> Job { get; set; }
+    public DbSet<Storage> Storages { get; set; }
+    public DbSet<Job> Jobs { get; set; }
 
-    public DbSet<MusicInfo> MusicInfo { get; set; }
-    public DbSet<MusicList> MusicList { get; set; }
-    public DbSet<MusicInfoMusicListMap> MusicInfoMusicListMap { get; set; }
+    public DbSet<MusicInfo> MusicInfos { get; set; }
+    public DbSet<MusicList> MusicLists { get; set; }
+    public DbSet<MusicInfoMusicListMap> MusicInfoMusicListMaps { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,18 +38,18 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens", DbSchemas.Identity);
         modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
 
-        modelBuilder.Entity<Storage>().ToTable("Storages", DbSchemas.Management);
-        modelBuilder.Entity<Job>().ToTable("Jobs", DbSchemas.Management);
+        modelBuilder.Entity<Storage>().ToTable($"{nameof(Storage)}s", DbSchemas.Management);
+        modelBuilder.Entity<Job>().ToTable($"{nameof(Job)}s", DbSchemas.Management);
         modelBuilder.ApplyConfiguration(new StorageConfiguration());
         modelBuilder.ApplyConfiguration(
             new JobConfiguration(AssemblyInfo.DefaultJsonSerializerOptions)
         );
 
-        modelBuilder.Entity<MusicInfo>().ToTable("MusicInfos", DbSchemas.Music);
-        modelBuilder.Entity<MusicList>().ToTable("MusicLists", DbSchemas.Music);
+        modelBuilder.Entity<MusicInfo>().ToTable($"{nameof(MusicInfo)}s", DbSchemas.Music);
+        modelBuilder.Entity<MusicList>().ToTable($"{nameof(MusicList)}s", DbSchemas.Music);
         modelBuilder
             .Entity<MusicInfoMusicListMap>()
-            .ToTable("MusicInfoMusicListMaps", DbSchemas.Music);
+            .ToTable($"{nameof(MusicInfoMusicListMap)}s", DbSchemas.Music);
         modelBuilder.ApplyConfiguration(new MusicInfoConfiguration());
         modelBuilder.ApplyConfiguration(new MusicListConfiguration());
         modelBuilder.ApplyConfiguration(new MusicInfoMusicListMapConfiguration());

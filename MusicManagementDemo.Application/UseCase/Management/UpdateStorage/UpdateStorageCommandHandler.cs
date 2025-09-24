@@ -17,7 +17,7 @@ internal sealed class UpdateStorageCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var storageToUpdate = await dbContext.Storage.SingleOrDefaultAsync(
+        var storageToUpdate = await dbContext.Storages.SingleOrDefaultAsync(
             e => e.Id == request.Id,
             cancellationToken: cancellationToken
         );

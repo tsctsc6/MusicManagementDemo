@@ -5,9 +5,9 @@ namespace MusicManagementDemo.Abstractions.IDbContext;
 
 public interface IMusicAppDbContext : IDbContext
 {
-    public DbSet<MusicInfo> MusicInfo { get; }
-    public DbSet<MusicList> MusicList { get; }
-    public DbSet<MusicInfoMusicListMap> MusicInfoMusicListMap { get; }
+    public DbSet<MusicInfo> MusicInfos { get; }
+    public DbSet<MusicList> MusicLists { get; }
+    public DbSet<MusicInfoMusicListMap> MusicInfoMusicListMaps { get; }
 }
 
 public static class MusicAppDbContextExtensions

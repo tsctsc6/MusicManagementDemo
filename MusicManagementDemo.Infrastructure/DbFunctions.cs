@@ -31,7 +31,7 @@ internal static class DbFunctions
       BEGIN
         IF current_id IS NOT NULL THEN
             SELECT m."PrevId", m."NextId" INTO rec
-            FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}" AS m
+            FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}s" AS m
             WHERE m."MusicListId" = music_list_id AND m."MusicInfoId" = current_id;
             -- 更新当前 ID 为 NextId
             IF is_desc THEN
@@ -45,25 +45,25 @@ internal static class DbFunctions
             IF current_id IS NULL THEN
                 IF is_desc THEN
                     SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
-                    FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}" AS m
+                    FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}s" AS m
                     JOIN {DbSchemas.Music}."{nameof(
 		                  MusicInfo
-	                  )}" AS mi ON m."MusicInfoId" = mi."Id"
+	                  )}s" AS mi ON m."MusicInfoId" = mi."Id"
                     WHERE m."MusicListId" = music_list_id AND m."NextId" is NULL;
                 ELSE
                     SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
-                    FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}" AS m
+                    FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}s" AS m
                     JOIN {DbSchemas.Music}."{nameof(
 		                  MusicInfo
-	                  )}" AS mi ON m."MusicInfoId" = mi."Id"
+	                  )}s" AS mi ON m."MusicInfoId" = mi."Id"
                     WHERE m."MusicListId" = music_list_id AND m."PrevId" is NULL;
                 END IF;
             ELSE
                 SELECT mi."Id", mi."Title", mi."Artist", mi."Album", m."PrevId", m."NextId" INTO rec
-                FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}" AS m
+                FROM {DbSchemas.Music}."{nameof(MusicInfoMusicListMap)}s" AS m
                 JOIN {DbSchemas.Music}."{nameof(
 	                  MusicInfo
-                  )}" AS mi ON m."MusicInfoId" = mi."Id"
+                  )}s" AS mi ON m."MusicInfoId" = mi."Id"
                 WHERE m."MusicListId" = music_list_id AND m."MusicInfoId" = current_id;
               END IF;
               -- 如果未找到，退出循环

@@ -18,7 +18,7 @@ internal sealed class DeleteMusicListCommandHandler(
     )
     {
         var musicListToDelete = await dbContext
-            .MusicList.Where(e => e.Id == request.MusicListId && e.UserId == request.UserId)
+            .MusicLists.Where(e => e.Id == request.MusicListId && e.UserId == request.UserId)
             .SingleOrDefaultAsync(cancellationToken: cancellationToken);
         if (musicListToDelete is null)
         {
@@ -30,10 +30,10 @@ internal sealed class DeleteMusicListCommandHandler(
         );
         // 删除关联的 MusicInfo
         var expectedSubmitCount = await dbContext
-            .MusicInfoMusicListMap.Where(e => e.MusicListId == request.MusicListId)
+            .MusicInfoMusicListMaps.Where(e => e.MusicListId == request.MusicListId)
             .CountAsync(cancellationToken);
         var submitCount = await dbContext
-            .MusicInfoMusicListMap.Where(e => e.MusicListId == request.MusicListId)
+            .MusicInfoMusicListMaps.Where(e => e.MusicListId == request.MusicListId)
             .ExecuteDeleteAsync(cancellationToken);
         if (submitCount != expectedSubmitCount)
         {
@@ -47,7 +47,7 @@ internal sealed class DeleteMusicListCommandHandler(
         }
         if (
             await dbContext
-                .MusicList.Where(e => e.Id == request.MusicListId && e.UserId == request.UserId)
+                .MusicLists.Where(e => e.Id == request.MusicListId && e.UserId == request.UserId)
                 .ExecuteDeleteAsync(cancellationToken) != 1
         )
         {
