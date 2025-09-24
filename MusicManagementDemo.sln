@@ -32,6 +32,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functional_Testing", "Funct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.DbInfrastructure", "MusicManagementDemo.DbInfrastructure\MusicManagementDemo.DbInfrastructure.csproj", "{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTesting", "FunctionalTesting\FunctionalTesting.csproj", "{16D68286-8FEB-4ED9-AA85-8D8AFA819D84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTesting.Infrastructure", "FunctionalTesting.Infrastructure\FunctionalTesting.Infrastructure.csproj", "{50967A8C-F951-4705-A486-4E6EB81C4D0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16D68286-8FEB-4ED9-AA85-8D8AFA819D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16D68286-8FEB-4ED9-AA85-8D8AFA819D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16D68286-8FEB-4ED9-AA85-8D8AFA819D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16D68286-8FEB-4ED9-AA85-8D8AFA819D84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50967A8C-F951-4705-A486-4E6EB81C4D0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50967A8C-F951-4705-A486-4E6EB81C4D0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50967A8C-F951-4705-A486-4E6EB81C4D0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50967A8C-F951-4705-A486-4E6EB81C4D0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,5 +88,7 @@ Global
 		{21C50602-C156-449F-9C53-E2D658889CA4} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 		{1166503B-753B-4F4D-8447-22F1631BF968} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877} = {D73A0538-911E-45CD-8940-F78E6AB05514}
+		{16D68286-8FEB-4ED9-AA85-8D8AFA819D84} = {1CB10A34-4797-4380-A5F1-1662EBF2FEBE}
+		{50967A8C-F951-4705-A486-4E6EB81C4D0C} = {1CB10A34-4797-4380-A5F1-1662EBF2FEBE}
 	EndGlobalSection
 EndGlobal
