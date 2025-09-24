@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Logout;
 
 internal sealed class LogoutCommandHandler(
-    IdentityDbContext<ApplicationUser> dbContext,
+    IIdentityDbContext dbContext,
     UserManager<ApplicationUser> userManager,
     ILogger<LogoutCommandHandler> logger
 ) : IRequestHandler<LogoutCommand, IServiceResult>

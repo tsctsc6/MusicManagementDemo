@@ -40,11 +40,7 @@ public static class AssemblyInfo
         bool isDevelopment
     )
     {
-        services
-            .AddHealthChecks()
-            .AddDbContextCheck<AppDbContext>()
-            .AddDbContextCheck<MusicAppDbContext>()
-            .AddDbContextCheck<ManagementAppDbContext>();
+        services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 
         services.AddDatabase(configuration, isDevelopment);
 
@@ -52,7 +48,6 @@ public static class AssemblyInfo
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
-        services.AddScoped<IdentityDbContext<ApplicationUser>, AppDbContext>();
 
         services.AddJwt(configuration);
         services.AddAuthorization();
@@ -87,33 +82,6 @@ public static class AssemblyInfo
     )
     {
         var connectionString = configuration.GetConnectionString("Default");
-        services.AddDbContext<MusicAppDbContext>(options =>
-        {
-            options
-                .UseNpgsql(connectionString)
-                .UseSeeding(
-                    (d2, _) =>
-                    {
-                        var d = (MusicAppDbContext)d2;
-                        d.Database.ExecuteSqlRaw(
-                            DbFunctions.DefineGetMusicInfoInMusicListReturnType
-                        );
-                        d.Database.ExecuteSqlRaw(DbFunctions.DefineGetMusicInfoInMusicList);
-                    }
-                );
-            if (isDevelopment)
-            {
-                options.EnableSensitiveDataLogging();
-            }
-        });
-        services.AddDbContext<ManagementAppDbContext>(options =>
-        {
-            options.UseNpgsql(connectionString);
-            if (isDevelopment)
-            {
-                options.EnableSensitiveDataLogging();
-            }
-        });
         services.AddDbContext<AppDbContext>(options =>
         {
             options
@@ -125,14 +93,25 @@ public static class AssemblyInfo
                         d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
                         d.SaveChanges();
                     }
+                )
+                .UseSeeding(
+                    (d2, _) =>
+                    {
+                        var d = (AppDbContext)d2;
+                        d.Database.ExecuteSqlRaw(
+                            DbFunctions.DefineGetMusicInfoInMusicListReturnType
+                        );
+                        d.Database.ExecuteSqlRaw(DbFunctions.DefineGetMusicInfoInMusicList);
+                    }
                 );
             if (isDevelopment)
             {
                 options.EnableSensitiveDataLogging();
             }
         });
-        services.AddScoped<IManagementAppDbContext, ManagementAppDbContext>();
-        services.AddScoped<IMusicAppDbContext, MusicAppDbContext>();
+        services.AddScoped<IIdentityDbContext, AppDbContext>();
+        services.AddScoped<IManagementAppDbContext, AppDbContext>();
+        services.AddScoped<IMusicAppDbContext, AppDbContext>();
         return services;
     }
 
@@ -198,9 +177,8 @@ public static class AssemblyInfo
                             return;
                         }
 
-                        var dbContext = context.HttpContext.RequestServices.GetRequiredService<
-                            IdentityDbContext<ApplicationUser>
-                        >();
+                        var dbContext =
+                            context.HttpContext.RequestServices.GetRequiredService<IIdentityDbContext>();
                         var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
                         if (user is null)
                         {

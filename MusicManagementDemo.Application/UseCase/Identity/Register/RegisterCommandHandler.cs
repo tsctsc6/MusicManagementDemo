@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
+using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
 
@@ -11,7 +12,7 @@ namespace MusicManagementDemo.Application.UseCase.Identity.Register;
 
 internal sealed class RegisterCommandHandler(
     UserManager<ApplicationUser> userMgr,
-    IdentityDbContext<ApplicationUser> dbContext,
+    IIdentityDbContext dbContext,
     ILogger<RegisterCommandHandler> logger
 ) : IRequestHandler<RegisterCommand, IServiceResult>
 {
