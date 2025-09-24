@@ -1,6 +1,7 @@
 using System.Reflection;
+using MusicManagementDemo.AppInfrastructure;
 using MusicManagementDemo.Application;
-using MusicManagementDemo.Infrastructure;
+using MusicManagementDemo.DbInfrastructure;
 using MusicManagementDemo.WebApi.Endpoints;
 using Serilog;
 
@@ -10,9 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder
-    .Services.AddApplication()
-    .AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication().AddDbInfrastructure(builder.Configuration).AddAppInfrastructure();
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 

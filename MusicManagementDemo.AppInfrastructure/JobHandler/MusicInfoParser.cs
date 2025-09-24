@@ -5,7 +5,7 @@ using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Domain.DomainEvents;
 using RustSharp;
 
-namespace MusicManagementDemo.Infrastructure.JobHandler;
+namespace MusicManagementDemo.AppInfrastructure.JobHandler;
 
 internal sealed class MusicInfoParser(ILogger<MusicInfoParser> logger) : IMusicInfoParser
 {

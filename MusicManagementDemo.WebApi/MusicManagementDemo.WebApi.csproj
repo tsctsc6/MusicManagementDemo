@@ -15,6 +15,6 @@
     <ItemGroup>
         <ProjectReference Include="..\MusicManagementDemo.Application\MusicManagementDemo.Application.csproj" />
         <ProjectReference Include="..\MusicManagementDemo.DbInfrastructure\MusicManagementDemo.DbInfrastructure.csproj" />
-        <ProjectReference Include="..\MusicManagementDemo.Infrastructure\MusicManagementDemo.Infrastructure.csproj" />
+        <ProjectReference Include="..\MusicManagementDemo.AppInfrastructure\MusicManagementDemo.AppInfrastructure.csproj" />
     </ItemGroup>
 </Project>

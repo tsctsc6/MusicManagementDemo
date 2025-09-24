@@ -1,6 +1,6 @@
 ﻿using MusicManagementDemo.Abstractions;
 
-namespace MusicManagementDemo.Infrastructure.JobHandler;
+namespace MusicManagementDemo.AppInfrastructure.JobHandler;
 
 internal sealed class FileEnumerator : IFileEnumerator
 {
