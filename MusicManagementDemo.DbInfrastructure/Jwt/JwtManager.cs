@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MusicManagementDemo.Abstractions;
 
-namespace MusicManagementDemo.Infrastructure.Jwt;
+namespace MusicManagementDemo.DbInfrastructure.Jwt;
 
 public class JwtManager : IJwtManager
 {

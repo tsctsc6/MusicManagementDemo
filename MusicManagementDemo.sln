@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{D73A0538-911
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functional_Testing", "Functional_Testing", "{1CB10A34-4797-4380-A5F1-1662EBF2FEBE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.DbInfrastructure", "MusicManagementDemo.DbInfrastructure\MusicManagementDemo.DbInfrastructure.csproj", "{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{B3E3A842-853A-462A-B26B-B7862BC15759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3E3A842-853A-462A-B26B-B7862BC15759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3E3A842-853A-462A-B26B-B7862BC15759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +75,6 @@ Global
 		{85A388AD-F06C-4561-9A71-9CBDF0AACC63} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 		{21C50602-C156-449F-9C53-E2D658889CA4} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 		{1166503B-753B-4F4D-8447-22F1631BF968} = {D73A0538-911E-45CD-8940-F78E6AB05514}
+		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 	EndGlobalSection
 EndGlobal

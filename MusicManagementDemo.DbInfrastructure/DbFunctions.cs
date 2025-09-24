@@ -1,7 +1,7 @@
 ﻿using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Domain.Entity.Music;
 
-namespace MusicManagementDemo.Infrastructure;
+namespace MusicManagementDemo.DbInfrastructure;
 
 internal static class DbFunctions
 {

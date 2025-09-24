@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MusicManagementDemo.Domain.Entity.Management;
 
-namespace MusicManagementDemo.Infrastructure.DbConfig.Management;
+namespace MusicManagementDemo.DbInfrastructure.DbConfig.Management;
 
 public class StorageConfiguration : IEntityTypeConfiguration<Storage>
 {

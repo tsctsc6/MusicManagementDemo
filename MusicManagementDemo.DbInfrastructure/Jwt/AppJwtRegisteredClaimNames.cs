@@ -1,4 +1,4 @@
-﻿namespace MusicManagementDemo.Infrastructure.Jwt;
+﻿namespace MusicManagementDemo.DbInfrastructure.Jwt;
 
 public static class AppJwtRegisteredClaimNames
 {
