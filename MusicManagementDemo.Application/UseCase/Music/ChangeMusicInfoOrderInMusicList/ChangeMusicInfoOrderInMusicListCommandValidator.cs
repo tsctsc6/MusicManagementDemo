@@ -9,7 +9,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandValidator
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
 
-        RuleFor(x => x.UserId).NotEmpty().MaximumLength(36);
+        RuleFor(x => x.UserId).NotNull();
 
         RuleFor(x => x.MusicListId).NotNull();
 

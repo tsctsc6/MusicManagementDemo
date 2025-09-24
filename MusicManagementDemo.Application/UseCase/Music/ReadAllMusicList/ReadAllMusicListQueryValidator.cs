@@ -8,7 +8,7 @@ internal sealed class ReadAllMusicListQueryValidator : AbstractValidator<ReadAll
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
 
-        RuleFor(x => x.UserId).NotEmpty().MaximumLength(36);
+        RuleFor(x => x.UserId).NotNull();
 
         RuleFor(x => x.ReferenceId);
 

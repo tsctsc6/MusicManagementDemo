@@ -1,8 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using MusicManagementDemo.Application.UseCase.Music.DeleteMusicList;
+using MusicManagementDemo.WebApi.Utils;
+using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
@@ -21,16 +22,18 @@ internal sealed class DeleteMusicList : IEndpoint
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    var userId =
-                        claimsPrincipal
-                            .Claims.SingleOrDefault(e => e.Type == JwtRegisteredClaimNames.Sub)
-                            ?.Value
-                        ?? string.Empty;
-                    var result = await mediator.Send(
-                        new DeleteMusicListCommand(userId, request.MusicListId),
-                        cancellationToken
-                    );
-                    return Results.Ok(result);
+                    var optionalUserId = claimsPrincipal.GetUserId();
+                    return optionalUserId switch
+                    {
+                        NoneOption<Guid> => Results.Unauthorized(),
+                        SomeOption<Guid> userId => Results.Ok(
+                            await mediator.Send(
+                                new DeleteMusicListCommand(userId.Value, request.MusicListId),
+                                cancellationToken
+                            )
+                        ),
+                        _ => throw new ArgumentOutOfRangeException(nameof(optionalUserId)),
+                    };
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute());

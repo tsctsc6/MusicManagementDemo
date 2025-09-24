@@ -4,7 +4,7 @@ using MusicManagementDemo.Abstractions;
 namespace MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
 
 public sealed record GetAllMusicInfoFromMusicListQuery(
-    string UserId,
+    Guid UserId,
     Guid MusicListId,
     int PageSize,
     Guid? ReferenceId,

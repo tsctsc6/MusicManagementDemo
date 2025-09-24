@@ -1,8 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using MusicManagementDemo.Application.UseCase.Music.ChangeMusicInfoOrderInMusicList;
+using MusicManagementDemo.WebApi.Utils;
+using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
@@ -26,22 +27,24 @@ internal sealed class ChangeMusicInfoOrderInMusicList : IEndpoint
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    var userId =
-                        claimsPrincipal
-                            .Claims.SingleOrDefault(e => e.Type == JwtRegisteredClaimNames.Sub)
-                            ?.Value
-                        ?? string.Empty;
-                    var result = await mediator.Send(
-                        new ChangeMusicInfoOrderInMusicListCommand(
-                            userId,
-                            request.MusicListId,
-                            request.TargetMusicInfoId,
-                            request.PrevMusicInfoId,
-                            request.NextMusicInfoId
+                    var optionalUserId = claimsPrincipal.GetUserId();
+                    return optionalUserId switch
+                    {
+                        NoneOption<Guid> => Results.Unauthorized(),
+                        SomeOption<Guid> userId => Results.Ok(
+                            await mediator.Send(
+                                new ChangeMusicInfoOrderInMusicListCommand(
+                                    userId.Value,
+                                    request.MusicListId,
+                                    request.TargetMusicInfoId,
+                                    request.PrevMusicInfoId,
+                                    request.NextMusicInfoId
+                                ),
+                                cancellationToken
+                            )
                         ),
-                        cancellationToken
-                    );
-                    return Results.Ok(result);
+                        _ => throw new ArgumentOutOfRangeException(nameof(optionalUserId)),
+                    };
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute());

@@ -8,7 +8,7 @@ internal sealed class DeleteMusicListCommandValidator : AbstractValidator<Delete
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
 
-        RuleFor(e => e.UserId).NotEmpty().MaximumLength(36);
+        RuleFor(e => e.UserId).NotNull();
 
         RuleFor(e => e.MusicListId).NotNull();
     }

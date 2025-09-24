@@ -1,8 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using MusicManagementDemo.Application.UseCase.Music.RemoveMusicInfoFromMusicList;
+using MusicManagementDemo.WebApi.Utils;
+using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
@@ -21,20 +22,22 @@ internal sealed class RemoveMusicInfoFromMusicList : IEndpoint
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    var userId =
-                        claimsPrincipal
-                            .Claims.SingleOrDefault(e => e.Type == JwtRegisteredClaimNames.Sub)
-                            ?.Value
-                        ?? string.Empty;
-                    var result = await mediator.Send(
-                        new RemoveMusicInfoFromMusicListCommand(
-                            userId,
-                            request.MusicListId,
-                            request.MusicInfoId
+                    var optionalUserId = claimsPrincipal.GetUserId();
+                    return optionalUserId switch
+                    {
+                        NoneOption<Guid> => Results.Unauthorized(),
+                        SomeOption<Guid> userId => Results.Ok(
+                            await mediator.Send(
+                                new RemoveMusicInfoFromMusicListCommand(
+                                    userId.Value,
+                                    request.MusicListId,
+                                    request.MusicInfoId
+                                ),
+                                cancellationToken
+                            )
                         ),
-                        cancellationToken
-                    );
-                    return Results.Ok(result);
+                        _ => throw new ArgumentOutOfRangeException(nameof(optionalUserId)),
+                    };
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute());

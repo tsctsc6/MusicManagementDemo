@@ -3,4 +3,4 @@ using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 
-public sealed record CreateMusicListCommand(string UserId, string Name) : IRequest<IServiceResult>;
+public sealed record CreateMusicListCommand(Guid UserId, string Name) : IRequest<IServiceResult>;

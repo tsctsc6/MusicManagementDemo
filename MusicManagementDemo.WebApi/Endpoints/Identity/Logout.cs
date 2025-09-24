@@ -21,14 +21,14 @@ internal sealed class Logout : IEndpoint
                     var userId = claimsPrincipal.GetUserId();
                     return userId switch
                     {
-                        NoneOption<Guid> _ => Results.Unauthorized(),
+                        NoneOption<Guid> => Results.Unauthorized(),
                         SomeOption<Guid> someOption => Results.Ok(
                             await mediator.Send(
                                 new LogoutCommand(someOption.Value),
                                 cancellationToken
                             )
                         ),
-                        _ => throw new ArgumentOutOfRangeException(),
+                        _ => throw new ArgumentOutOfRangeException(nameof(userId)),
                     };
                 }
             )

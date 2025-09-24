@@ -6,7 +6,7 @@ public class MusicList
 
     public string Name { get; set; } = string.Empty;
 
-    public string UserId { get; set; } = Guid.Empty.ToString();
+    public Guid UserId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 }
