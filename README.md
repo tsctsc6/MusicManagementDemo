@@ -51,7 +51,6 @@ flowchart TD
     subgraph Functional_Testing
     FunctionalTesting --> FunctionalTesting.Infrastructure
     FunctionalTesting --> Application
-    FunctionalTesting.Infrastructure --> Infrastructure
     FunctionalTesting.Infrastructure --> Abstractions
     end
 ```
