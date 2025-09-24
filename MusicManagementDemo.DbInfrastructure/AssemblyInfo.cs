@@ -65,6 +65,8 @@ public static class AssemblyInfo
             .CreateLogger();
         services.AddSerilog();
 
+        services.AddJsonOptions();
+
         services.AddSingleton<IJwtManager, JwtManager>();
 
         return services;
