@@ -6,5 +6,7 @@ public interface IDbContext : IDisposable, IAsyncDisposable
 {
     public DatabaseFacade Database { get; }
 
+    public int SaveChanges();
+
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
