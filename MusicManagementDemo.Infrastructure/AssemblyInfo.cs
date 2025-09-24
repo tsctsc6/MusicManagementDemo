@@ -90,18 +90,12 @@ public static class AssemblyInfo
                     (d2, _) =>
                     {
                         var d = (AppDbContext)d2;
-                        d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
-                        d.SaveChanges();
-                    }
-                )
-                .UseSeeding(
-                    (d2, _) =>
-                    {
-                        var d = (AppDbContext)d2;
                         d.Database.ExecuteSqlRaw(
                             DbFunctions.DefineGetMusicInfoInMusicListReturnType
                         );
                         d.Database.ExecuteSqlRaw(DbFunctions.DefineGetMusicInfoInMusicList);
+                        d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
+                        d.SaveChanges();
                     }
                 );
             if (isDevelopment)
