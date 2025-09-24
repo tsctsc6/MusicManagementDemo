@@ -1,5 +1,5 @@
 在解决方案目录中：
 
-dotnet ef migrations add Initial -c AppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj -o Migrations/App --verbose
+dotnet ef migrations add Initial -c AppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.DbInfrastructure/MusicManagementDemo.DbInfrastructure.csproj -o Migrations/App --verbose
 
-dotnet ef database update -c AppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.Infrastructure/MusicManagementDemo.Infrastructure.csproj
+dotnet ef database update -c AppDbContext --startup-project MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj -p MusicManagementDemo.DbInfrastructure/MusicManagementDemo.DbInfrastructure.csproj
