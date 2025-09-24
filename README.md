@@ -51,6 +51,7 @@ flowchart TD
     subgraph Functional_Testing
     FunctionalTesting --> FunctionalTesting.Infrastructure
     FunctionalTesting --> Application
+    FunctionalTesting.Infrastructure --> Infrastructure
     FunctionalTesting.Infrastructure --> Abstractions
     end
 ```
@@ -61,22 +62,22 @@ flowchart TD
 title: 简化的 ER 图
 ---
 erDiagram
-    AspNetUserRoles }|--|| AspNetRoles : ""
-    AspNetRoleClaims }|--|| AspNetRoles : ""
-    AspNetUserClaims }|--|| AspNetUsers : ""
-    AspNetUsers ||--|{ AspNetUserTokens : ""
-    AspNetUserRoles }|--|| AspNetUsers : ""
-    AspNetUsers ||--|{ AspNetUserLogins : ""
+    UserRoles }|--|| Roles : ""
+    RoleClaims }|--|| Roles : ""
+    UserClaims }|--|| Users : ""
+    Users ||--|{ UserTokens : ""
+    UserRoles }|--|| Users : ""
+    Users ||--|{ UserLogins : ""
 
-    style AspNetUserRoles fill:#ff99ff
-    style AspNetRoleClaims fill:#ff99ff
-    style AspNetRoles fill:#ff99ff
-    style AspNetUserClaims fill:#ff99ff
-    style AspNetUsers fill:#ff99ff
-    style AspNetUserLogins fill:#ff99ff
-    style AspNetUserTokens fill:#ff99ff
+    style UserRoles fill:#ff99ff
+    style RoleClaims fill:#ff99ff
+    style Roles fill:#ff99ff
+    style UserClaims fill:#ff99ff
+    style Users fill:#ff99ff
+    style UserLogins fill:#ff99ff
+    style UserTokens fill:#ff99ff
 
-    AspNetUsers ||--|{ MusicList : ""
+    Users ||--|{ MusicList : ""
     MusicListMusicInfoMap }|--|| MusicList : ""
     MusicInfo ||--|{ MusicListMusicInfoMap : ""
 
