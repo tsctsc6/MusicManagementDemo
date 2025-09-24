@@ -12,7 +12,7 @@ builder.Services.AddOpenApi();
 
 builder
     .Services.AddApplication()
-    .AddInfrastructure(builder.Configuration, builder.Environment.IsDevelopment());
+    .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 

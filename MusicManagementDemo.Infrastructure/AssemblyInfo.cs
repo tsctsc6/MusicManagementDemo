@@ -35,13 +35,12 @@ public static class AssemblyInfo
 
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration,
-        bool isDevelopment
+        IConfiguration configuration
     )
     {
         services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 
-        services.AddDatabase(configuration, isDevelopment);
+        services.AddDatabase(configuration);
 
         services
             .AddIdentity<ApplicationUser, IdentityRole<Guid>>()
@@ -76,8 +75,7 @@ public static class AssemblyInfo
 
     private static IServiceCollection AddDatabase(
         this IServiceCollection services,
-        IConfiguration configuration,
-        bool isDevelopment
+        IConfiguration configuration
     )
     {
         var connectionString = configuration.GetConnectionString("Default");
@@ -97,10 +95,9 @@ public static class AssemblyInfo
                         d.SaveChanges();
                     }
                 );
-            if (isDevelopment)
-            {
+#if DEBUG
                 options.EnableSensitiveDataLogging();
-            }
+#endif
         });
         services.AddScoped<IIdentityDbContext, AppDbContext>();
         services.AddScoped<IManagementAppDbContext, AppDbContext>();
