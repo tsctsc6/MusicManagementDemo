@@ -13,6 +13,18 @@ public class MusicInfoParser : IMusicInfoParser
         CancellationToken cancellationToken = default
     )
     {
-        throw new NotImplementedException();
+        var relativePath = Path.GetRelativePath(storagePath, fullPath);
+        var array = relativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return Task.FromResult<Result<MusicFileFoundEventItem, string>>(
+            Result.Ok(
+                new MusicFileFoundEventItem(
+                    Title: array[2],
+                    Artist: array[0],
+                    Album: array[1],
+                    FilePath: relativePath,
+                    StorageId: storageId
+                )
+            )
+        );
     }
 }
