@@ -23,6 +23,17 @@ namespace MusicManagementDemo.Infrastructure;
 
 public static class AssemblyInfo
 {
+    public static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new()
+    {
+        DefaultBufferSize = 1024,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        MaxDepth = 12,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        AllowTrailingCommas = false,
+        WriteIndented = false,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    };
+
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration,
@@ -31,7 +42,7 @@ public static class AssemblyInfo
     {
         services
             .AddHealthChecks()
-            .AddDbContextCheck<IdentityAppDbContext>()
+            .AddDbContextCheck<AppDbContext>()
             .AddDbContextCheck<MusicAppDbContext>()
             .AddDbContextCheck<ManagementAppDbContext>();
 
@@ -39,9 +50,9 @@ public static class AssemblyInfo
 
         services
             .AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<IdentityAppDbContext>()
+            .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
-        services.AddScoped<IdentityDbContext<ApplicationUser>, IdentityAppDbContext>();
+        services.AddScoped<IdentityDbContext<ApplicationUser>, AppDbContext>();
 
         services.AddJwt(configuration);
         services.AddAuthorization();
@@ -103,14 +114,14 @@ public static class AssemblyInfo
                 options.EnableSensitiveDataLogging();
             }
         });
-        services.AddDbContext<IdentityAppDbContext>(options =>
+        services.AddDbContext<AppDbContext>(options =>
         {
             options
                 .UseNpgsql(connectionString)
                 .UseSeeding(
                     (d2, _) =>
                     {
-                        var d = (IdentityAppDbContext)d2;
+                        var d = (AppDbContext)d2;
                         d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
                         d.SaveChanges();
                     }
