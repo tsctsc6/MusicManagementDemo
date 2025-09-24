@@ -40,7 +40,7 @@ public static class AssemblyInfo
     {
         services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 
-        services.AddDatabase(configuration);
+        services.AddDatabase(configuration.GetConnectionString("Default") ?? string.Empty);
 
         services
             .AddIdentity<ApplicationUser, IdentityRole<Guid>>()
@@ -75,10 +75,9 @@ public static class AssemblyInfo
 
     private static IServiceCollection AddDatabase(
         this IServiceCollection services,
-        IConfiguration configuration
+        string connectionString
     )
     {
-        var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<AppDbContext>(options =>
         {
             options
@@ -96,7 +95,7 @@ public static class AssemblyInfo
                     }
                 );
 #if DEBUG
-                options.EnableSensitiveDataLogging();
+            options.EnableSensitiveDataLogging();
 #endif
         });
         services.AddScoped<IIdentityDbContext, AppDbContext>();
