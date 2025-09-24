@@ -14,6 +14,6 @@ internal sealed class ReadAllMusicInfoQueryValidator : AbstractValidator<ReadAll
 
         RuleFor(x => x.Asc).NotNull();
 
-        RuleFor(x => x.SearchTerm).NotNull();
+        RuleFor(x => x.SearchTerm).NotNull().MaximumLength(200);
     }
 }
