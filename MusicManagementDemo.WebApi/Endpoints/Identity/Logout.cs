@@ -1,7 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using MediatR;
 using MusicManagementDemo.Application.UseCase.Identity.Logout;
+using MusicManagementDemo.WebApi.Utils;
+using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Identity;
 
@@ -17,13 +18,18 @@ internal sealed class Logout : IEndpoint
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    var userId =
-                        claimsPrincipal
-                            .Claims.SingleOrDefault(e => e.Type == JwtRegisteredClaimNames.Sub)
-                            ?.Value
-                        ?? string.Empty;
-                    var result = await mediator.Send(new LogoutCommand(userId), cancellationToken);
-                    return Results.Ok(result);
+                    var userId = claimsPrincipal.GetUserId();
+                    return userId switch
+                    {
+                        NoneOption<Guid> _ => Results.Unauthorized(),
+                        SomeOption<Guid> someOption => Results.Ok(
+                            await mediator.Send(
+                                new LogoutCommand(someOption.Value),
+                                cancellationToken
+                            )
+                        ),
+                        _ => throw new ArgumentOutOfRangeException(),
+                    };
                 }
             )
             .RequireAuthorization();

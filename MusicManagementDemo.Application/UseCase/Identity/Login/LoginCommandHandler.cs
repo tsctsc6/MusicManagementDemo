@@ -42,7 +42,7 @@ internal sealed class LoginCommandHandler(
         var roles = await userMgr.GetRolesAsync(user);
 
         var tokenStr = jwtManager.GenerateJwtToken(
-            user.Id,
+            user.Id.ToString(),
             user.UserName!,
             roles,
             user.ConcurrencyStamp ?? string.Empty,

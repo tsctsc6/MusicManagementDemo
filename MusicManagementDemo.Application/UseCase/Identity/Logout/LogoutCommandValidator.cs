@@ -8,6 +8,6 @@ internal sealed class LogoutCommandValidator : AbstractValidator<LogoutCommand>
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
 
-        RuleFor(x => x.UserId).NotEmpty().MaximumLength(36);
+        RuleFor(x => x.UserId).NotNull();
     }
 }

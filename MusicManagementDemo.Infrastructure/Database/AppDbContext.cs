@@ -13,7 +13,7 @@ using MusicManagementDemo.Infrastructure.DbConfig.Music;
 namespace MusicManagementDemo.Infrastructure.Database;
 
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
-    : IdentityDbContext<ApplicationUser>(options),
+    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options),
         IIdentityDbContext,
         IManagementAppDbContext,
         IMusicAppDbContext

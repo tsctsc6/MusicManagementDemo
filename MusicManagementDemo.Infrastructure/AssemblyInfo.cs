@@ -149,12 +149,16 @@ public static class AssemblyInfo
                             return;
                         }
 
-                        var userId = context
-                            .Principal.Claims.SingleOrDefault(c =>
-                                c.Type == JwtRegisteredClaimNames.Sub
+                        if (
+                            !Guid.TryParse(
+                                context
+                                    .Principal.Claims.SingleOrDefault(c =>
+                                        c.Type == JwtRegisteredClaimNames.Sub
+                                    )
+                                    ?.Value,
+                                out var userId
                             )
-                            ?.Value;
-                        if (string.IsNullOrEmpty(userId))
+                        )
                         {
                             context.Fail("Unauthorized");
                             return;
