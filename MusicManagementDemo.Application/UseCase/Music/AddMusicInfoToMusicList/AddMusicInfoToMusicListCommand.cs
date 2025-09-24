@@ -3,8 +3,5 @@ using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
 
-public sealed record AddMusicInfoToMusicListCommand(
-    Guid UserId,
-    Guid MusicListId,
-    Guid MusicInfoId
-) : IRequest<IServiceResult>;
+public sealed record AddMusicInfoToMusicListCommand(Guid UserId, Guid MusicListId, Guid MusicInfoId)
+    : IRequest<IServiceResult>;

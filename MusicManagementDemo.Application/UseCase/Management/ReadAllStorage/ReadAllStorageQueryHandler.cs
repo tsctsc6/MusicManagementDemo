@@ -20,9 +20,7 @@ internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbConte
             storagesToRead = storagesToRead.OrderBy(e => e.Id);
             if (request.ReferenceId is not null)
             {
-                storagesToRead = storagesToRead.Where(e =>
-                    e.Id > request.ReferenceId
-                );
+                storagesToRead = storagesToRead.Where(e => e.Id > request.ReferenceId);
             }
         }
         else
@@ -30,9 +28,7 @@ internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbConte
             storagesToRead = storagesToRead.OrderByDescending(e => e.Id);
             if (request.ReferenceId is not null)
             {
-                storagesToRead = storagesToRead.Where(e =>
-                    e.Id < request.ReferenceId
-                );
+                storagesToRead = storagesToRead.Where(e => e.Id < request.ReferenceId);
             }
         }
         var musicListsToRead = await storagesToRead
