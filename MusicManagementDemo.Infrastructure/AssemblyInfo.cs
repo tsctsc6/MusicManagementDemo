@@ -44,7 +44,7 @@ public static class AssemblyInfo
         services.AddDatabase(configuration, isDevelopment);
 
         services
-            .AddIdentity<ApplicationUser, IdentityRole>()
+            .AddIdentity<ApplicationUser, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 

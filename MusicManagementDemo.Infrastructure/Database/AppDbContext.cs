@@ -30,12 +30,12 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<ApplicationUser>().ToTable("Users", DbSchemas.Identity);
-        modelBuilder.Entity<IdentityRole>().ToTable("Roles", DbSchemas.Identity);
-        modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", DbSchemas.Identity);
-        modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims", DbSchemas.Identity);
-        modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins", DbSchemas.Identity);
-        modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles", DbSchemas.Identity);
-        modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", DbSchemas.Identity);
+        modelBuilder.Entity<IdentityRole<Guid>>().ToTable("Roles", DbSchemas.Identity);
+        modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims", DbSchemas.Identity);
+        modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims", DbSchemas.Identity);
+        modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins", DbSchemas.Identity);
+        modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles", DbSchemas.Identity);
+        modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens", DbSchemas.Identity);
         modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
 
         modelBuilder.Entity<Storage>().ToTable("Storages", DbSchemas.Management);
