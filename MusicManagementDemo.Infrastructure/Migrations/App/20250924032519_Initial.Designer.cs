@@ -2,22 +2,25 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicManagementDemo.Infrastructure.Database;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 
 #nullable disable
 
-namespace MusicManagementDemo.Infrastructure.Migrations.Identity
+namespace MusicManagementDemo.Infrastructure.Migrations.App
 {
     [DbContext(typeof(AppDbContext))]
-    partial class IdentityAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250924032519_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("id")
                 .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -46,7 +49,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", "id");
+                    b.ToTable("Roles", "id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -71,7 +74,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", "id");
+                    b.ToTable("RoleClaims", "id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -96,7 +99,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", "id");
+                    b.ToTable("UserClaims", "id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -118,7 +121,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", "id");
+                    b.ToTable("UserLogins", "id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -133,7 +136,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", "id");
+                    b.ToTable("UserRoles", "id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -152,7 +155,7 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", "id");
+                    b.ToTable("UserTokens", "id");
                 });
 
             modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Identity.ApplicationUser", b =>
@@ -216,7 +219,198 @@ namespace MusicManagementDemo.Infrastructure.Migrations.Identity
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", "id");
+                    b.ToTable("Users", "id");
+                });
+
+            modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Management.Job", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("ErrorMesage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobArgs")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<bool>("Success")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Jobs", "management");
+                });
+
+            modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Management.Storage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Path")
+                        .IsUnique();
+
+                    b.ToTable("Storages", "management");
+                });
+
+            modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Music.MusicInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Album")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Artist")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<int>("StorageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<NpgsqlTsVector>("TitleTSV")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("TSVECTOR")
+                        .HasComputedColumnSql("to_tsvector('simple', \"Title\")", true)
+                        .HasAnnotation("TsVectorConfig", "simple");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilePath")
+                        .IsUnique();
+
+                    b.HasIndex("TitleTSV");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("TitleTSV"), "GIN");
+
+                    b.HasIndex("Title", "Artist", "Album")
+                        .IsUnique();
+
+                    b.ToTable("MusicInfos", "music");
+                });
+
+            modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Music.MusicInfoMusicListMap", b =>
+                {
+                    b.Property<Guid>("MusicListId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MusicInfoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<Guid?>("NextId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("NULL");
+
+                    b.Property<Guid?>("PrevId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("NULL");
+
+                    b.HasKey("MusicListId", "MusicInfoId");
+
+                    b.ToTable("MusicInfoMusicListMaps", "music");
+                });
+
+            modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Music.MusicList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MusicLists", "music");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
