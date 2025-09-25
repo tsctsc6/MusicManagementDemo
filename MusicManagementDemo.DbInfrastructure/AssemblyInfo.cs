@@ -97,6 +97,7 @@ public static class AssemblyInfo
             options.EnableSensitiveDataLogging();
 #endif
         });
+        services.AddScoped<IDbContext, AppDbContext>();
         services.AddScoped<IIdentityDbContext, AppDbContext>();
         services.AddScoped<IManagementAppDbContext, AppDbContext>();
         services.AddScoped<IMusicAppDbContext, AppDbContext>();
