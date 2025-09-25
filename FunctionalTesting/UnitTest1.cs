@@ -1,17 +1,10 @@
-﻿using MusicManagementDemo.Abstractions.IDbContext;
+﻿namespace FunctionalTesting;
 
-namespace FunctionalTesting;
-
-public class UnitTest1
+public class UnitTest1(IServiceProvider services) : BaseTestingClass(services)
 {
-    private readonly IMusicAppDbContext _dbContext;
-
-    public UnitTest1(IMusicAppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-        _dbContext.Database.EnsureCreated();
-    }
-
     [Fact]
-    public void Test1() { }
+    public void Test1()
+    {
+        Assert.True(true);
+    }
 }
