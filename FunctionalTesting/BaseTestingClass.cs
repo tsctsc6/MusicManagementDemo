@@ -30,7 +30,7 @@ public class BaseTestingClass : IDisposable
             dbContext.Database.Migrate();
 
             mediator = _services.GetRequiredService<IMediator>();
-            var x = _services.GetRequiredService<ILogger>();
+            var x = _services.GetRequiredService<ILogger<BaseTestingClass>>();
         }
         catch (Exception)
         {

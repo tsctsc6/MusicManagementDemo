@@ -10,19 +10,6 @@ namespace FunctionalTesting;
 
 public static class Startup
 {
-    public static void ConfigureServices(IServiceCollection services)
-    {
-        /*var configurationBuilder = new ConfigurationBuilder();
-        configurationBuilder.AddJsonFile(
-            "appsettings.Testing.json",
-            optional: false,
-            reloadOnChange: true
-        );
-        var configuration = configurationBuilder.Build();
-        services.AddDbInfrastructure(configuration).AddTestInfrastructure().AddApplication();
-        services.AddSingleton(_ => configurationBuilder.Build());*/
-    }
-
     public static IServiceProvider ConfigureMyServices()
     {
         IServiceCollection servicesBuilder = new ServiceCollection();
@@ -51,7 +38,6 @@ public static class Startup
             .AddTestInfrastructure()
             .AddApplication();
         servicesBuilder.AddSingleton(_ => newConfiguration);
-        servicesBuilder.AddSerilog();
         return servicesBuilder.BuildServiceProvider();
     }
 }
