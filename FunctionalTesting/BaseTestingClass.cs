@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MusicManagementDemo.Abstractions.IDbContext;
@@ -9,6 +10,7 @@ namespace FunctionalTesting;
 public class BaseTestingClass : IDisposable
 {
     private readonly IServiceProvider _services;
+    protected readonly IMediator mediator;
 
     public BaseTestingClass(IServiceProvider services)
     {
@@ -22,7 +24,10 @@ public class BaseTestingClass : IDisposable
         using var scope = services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
         dbContext.Database.Migrate();
+
         _services = services;
+
+        mediator = services.GetRequiredService<IMediator>();
     }
 
     public void Dispose()
