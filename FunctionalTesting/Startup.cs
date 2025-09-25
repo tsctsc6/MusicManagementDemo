@@ -18,6 +18,6 @@ public class Startup
         );
         var configuration = configurationBuilder.Build();
         services.AddDbInfrastructure(configuration).AddTestInfrastructure().AddApplication();
-        services.AddSingleton<IConfiguration>(_ => configurationBuilder.Build());
+        services.AddSingleton(_ => configurationBuilder.Build());
     }
 }

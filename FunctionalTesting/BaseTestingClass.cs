@@ -14,7 +14,7 @@ public class BaseTestingClass : IDisposable
 
     public BaseTestingClass(IServiceProvider services)
     {
-        var config = services.GetRequiredService<IConfiguration>();
+        var config = services.GetRequiredService<IConfigurationRoot>();
         using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
         conn.Open();
         new NpgsqlCommand(
@@ -32,7 +32,7 @@ public class BaseTestingClass : IDisposable
 
     public void Dispose()
     {
-        var config = _services.GetRequiredService<IConfiguration>();
+        var config = _services.GetRequiredService<IConfigurationRoot>();
         using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
         conn.Open();
         new NpgsqlCommand(
