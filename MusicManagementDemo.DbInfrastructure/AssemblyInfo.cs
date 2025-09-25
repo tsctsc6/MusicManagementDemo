@@ -15,7 +15,6 @@ using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.DbInfrastructure.Database;
 using MusicManagementDemo.DbInfrastructure.Jwt;
 using MusicManagementDemo.Domain.Entity.Identity;
-using Serilog;
 
 namespace MusicManagementDemo.DbInfrastructure;
 
@@ -48,22 +47,6 @@ public static class AssemblyInfo
 
         services.AddJwt(configuration);
         services.AddAuthorization();
-
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .WriteTo.File(
-                path: Path.Combine(
-                    Path.GetDirectoryName(Environment.ProcessPath)!,
-                    "logs",
-                    "log-.txt"
-                ),
-                rollingInterval: RollingInterval.Day,
-                retainedFileCountLimit: 7,
-                rollOnFileSizeLimit: true,
-                fileSizeLimitBytes: 10000000
-            )
-            .CreateLogger();
-        services.AddSerilog();
 
         services.AddJsonOptions();
 
