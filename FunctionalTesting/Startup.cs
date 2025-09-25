@@ -1,10 +1,8 @@
 ﻿using FunctionalTesting.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Application;
 using MusicManagementDemo.DbInfrastructure;
-using Serilog;
 
 namespace FunctionalTesting;
 
