@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using Npgsql;
 
@@ -9,25 +10,33 @@ namespace FunctionalTesting;
 
 public class BaseTestingClass : IDisposable
 {
-    private readonly IServiceProvider _services;
+    protected readonly IServiceProvider _services;
     protected readonly IMediator mediator;
 
-    public BaseTestingClass(IServiceProvider services)
+    public BaseTestingClass()
     {
-        var config = services.GetRequiredService<IConfigurationRoot>();
-        using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
-        conn.Open();
-        new NpgsqlCommand(
-            $"CREATE DATABASE {config["DbName"]} WITH TABLESPACE = {config["VirtualTableSpace"]};",
-            conn
-        ).ExecuteNonQuery();
-        using var scope = services.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
-        dbContext.Database.Migrate();
+        try
+        {
+            _services = Startup.ConfigureMyServices();
+            var config = _services.GetRequiredService<IConfigurationRoot>();
+            using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
+            conn.Open();
+            new NpgsqlCommand(
+                $"CREATE DATABASE {config["DbName"]} WITH TABLESPACE = {config["VirtualTableSpace"]};",
+                conn
+            ).ExecuteNonQuery();
+            using var scope = _services.CreateScope();
+            using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
+            dbContext.Database.Migrate();
 
-        _services = services;
-
-        mediator = services.GetRequiredService<IMediator>();
+            mediator = _services.GetRequiredService<IMediator>();
+            var x = _services.GetRequiredService<ILogger>();
+        }
+        catch (Exception)
+        {
+            Dispose();
+            throw;
+        }
     }
 
     public void Dispose()

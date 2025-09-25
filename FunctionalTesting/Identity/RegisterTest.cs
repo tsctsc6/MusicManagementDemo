@@ -2,7 +2,7 @@
 
 namespace FunctionalTesting.Identity;
 
-public class RegisterTest(IServiceProvider service) : BaseTestingClass(service)
+public class RegisterTest() : BaseTestingClass
 {
     [Fact]
     public async Task Test()
