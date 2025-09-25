@@ -8,27 +8,37 @@ namespace FunctionalTesting;
 
 public class BaseTestingClass : IDisposable
 {
-    private IServiceProvider _services;
+    private readonly IServiceProvider _services;
 
     public BaseTestingClass(IServiceProvider services)
     {
-        using var scope = services.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
-        var configuration = services.GetRequiredService<IConfiguration>();
-        using var conn = new NpgsqlConnection(configuration["ConnectionStrings:Postgres"]);
+        var config = services.GetRequiredService<IConfiguration>();
+        using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
         conn.Open();
         new NpgsqlCommand(
-            $"CREATE DATABASE {configuration["DbName"]} WITH TABLESPACE = {configuration["VirtualTableSpace"]};",
+            $"CREATE DATABASE {config["DbName"]} WITH TABLESPACE = {config["VirtualTableSpace"]};",
             conn
         ).ExecuteNonQuery();
+        using var scope = services.CreateScope();
+        using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
         dbContext.Database.Migrate();
         _services = services;
     }
 
     public void Dispose()
     {
-        using var scope = _services.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
-        dbContext.Database.EnsureDeleted();
+        var config = _services.GetRequiredService<IConfiguration>();
+        using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
+        conn.Open();
+        new NpgsqlCommand(
+            $"UPDATE pg_database SET datallowconn = 'false' WHERE datname = '{config["DbName"]}';",
+            conn
+        ).ExecuteNonQuery();
+        new NpgsqlCommand(
+            $"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{config["DbName"]}';",
+            conn
+        ).ExecuteNonQuery();
+        new NpgsqlCommand($"DROP DATABASE {config["DbName"]};", conn).ExecuteNonQuery();
+        GC.SuppressFinalize(this);
     }
 }
