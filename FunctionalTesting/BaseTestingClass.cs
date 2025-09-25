@@ -15,9 +15,9 @@ public class BaseTestingClass : IDisposable
 
     public BaseTestingClass()
     {
+        _services = Startup.ConfigureMyServices();
         try
         {
-            _services = Startup.ConfigureMyServices();
             var config = _services.GetRequiredService<IConfigurationRoot>();
             using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
             conn.Open();
