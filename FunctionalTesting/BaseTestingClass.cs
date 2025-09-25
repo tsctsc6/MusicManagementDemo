@@ -16,15 +16,15 @@ public class BaseTestingClass : IDisposable
     public BaseTestingClass()
     {
         _services = Startup.ConfigureMyServices();
+        var config = _services.GetRequiredService<IConfigurationRoot>();
+        using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
+        conn.Open();
+        new NpgsqlCommand(
+            $"CREATE DATABASE {config["DbName"]} WITH TABLESPACE = {config["VirtualTableSpace"]};",
+            conn
+        ).ExecuteNonQuery();
         try
         {
-            var config = _services.GetRequiredService<IConfigurationRoot>();
-            using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
-            conn.Open();
-            new NpgsqlCommand(
-                $"CREATE DATABASE {config["DbName"]} WITH TABLESPACE = {config["VirtualTableSpace"]};",
-                conn
-            ).ExecuteNonQuery();
             using var scope = _services.CreateScope();
             using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
             dbContext.Database.Migrate();
