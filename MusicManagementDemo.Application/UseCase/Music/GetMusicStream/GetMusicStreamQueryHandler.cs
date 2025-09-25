@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using RustSharp;
 
@@ -9,6 +10,7 @@ namespace MusicManagementDemo.Application.UseCase.Music.GetMusicStream;
 public class GetMusicStreamQueryHandler(
     IMusicAppDbContext musicDbContext,
     IManagementAppDbContext managementDbContext,
+    IFileStreamProvider fileStreamProvider,
     ILogger<GetMusicStreamQueryHandler> logger
 ) : IRequestHandler<GetMusicStreamQuery, Option<Stream>>
 {
@@ -42,16 +44,17 @@ public class GetMusicStreamQueryHandler(
         }
 
         string fullPath = Path.Combine(storageToRead.Path, musicInfoToGetStream.FilePath);
-        Stream stream;
-        try
+        var resultStream = fileStreamProvider.OpenRead(fullPath);
+        switch (resultStream)
         {
-            stream = File.OpenRead(fullPath);
+            case ErrResult<Stream, string> e:
+                logger.LogError("Can not open file: {FilePath}, {e}", fullPath, e.Value);
+                return Option<Stream>.None();
+            case OkResult<Stream, string> stream:
+                return Option<Stream>.Some(stream.Value);
+            default:
+                logger.LogError("{resultStream}", resultStream);
+                return Option<Stream>.None();
         }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Can not open file: {FilePath}", fullPath);
-            return Option<Stream>.None();
-        }
-        return Option<Stream>.Some(stream);
     }
 }

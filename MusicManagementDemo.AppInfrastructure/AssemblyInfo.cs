@@ -10,6 +10,7 @@ public static class AssemblyInfo
     {
         services.AddSingleton<IFileEnumerator, FileEnumerator>();
         services.AddSingleton<IMusicInfoParser, MusicInfoParser>();
+        services.AddSingleton<IFileStreamProvider, FileStreamProvider>();
         return services;
     }
 }
