@@ -1,0 +1,14 @@
+-- 在命令行一次性执行 SQL
+psql -h 127.0.0.1 -p 5432 -U postgres -c "<command>"
+
+-- 创建表空间
+CREATE TABLESPACE ram_tablespace LOCATION 'R:/pg_ram_db';
+
+-- 查看表空间是否创建成功
+SELECT spcname, pg_tablespace_location(oid) FROM pg_tablespace;
+
+-- 创建新数据库到指定表空间
+CREATE DATABASE <DbName> WITH TABLESPACE = ram_tablespace;
+
+-- 删除表空间
+DROP TABLESPACE ram_tablespace;
