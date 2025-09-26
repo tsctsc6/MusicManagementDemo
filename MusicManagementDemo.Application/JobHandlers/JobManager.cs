@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.IO;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -124,18 +125,25 @@ internal sealed class JobManager(
                 return Result.Err($"Storage {storageId} not found");
             }
 
-            if (!Directory.Exists(storage.Path))
+            var filesResult = fileEnumerator.EnumerateFiles(
+                storage.Path,
+                "*.flac",
+                SearchOption.AllDirectories
+            );
+            IEnumerable<string> files = [];
+            switch (filesResult)
             {
-                return Result.Err($"storage.Path {storage.Path} not found");
+                case ErrResult<IEnumerable<string>, string> errResult:
+                    return Result.Err(errResult.Value);
+                case OkResult<IEnumerable<string>, string> okResult:
+                    files = okResult.Value;
+                    break;
+                default:
+                    return Result.Err("未知错误");
             }
 
             // 分批写入数据库
-            var tasks = fileEnumerator
-                .EnumerateFiles(
-                    new DirectoryInfo(storage.Path),
-                    "*.flac",
-                    SearchOption.AllDirectories
-                )
+            var tasks = files
                 .Select(async f =>
                     await musicInfoParser.ParseMusicInfoAsync(f, storage.Id, storage.Path, token)
                 )

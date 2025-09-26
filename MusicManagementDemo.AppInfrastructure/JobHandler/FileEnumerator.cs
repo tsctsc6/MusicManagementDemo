@@ -1,17 +1,24 @@
 ﻿using MusicManagementDemo.Abstractions;
+using RustSharp;
 
 namespace MusicManagementDemo.AppInfrastructure.JobHandler;
 
 internal sealed class FileEnumerator : IFileEnumerator
 {
-    public IEnumerable<string> EnumerateFiles(
-        DirectoryInfo rootDir,
+    public Result<IEnumerable<string>, string> EnumerateFiles(
+        string rootDir,
         string searchPattern,
         SearchOption searchOption
     )
     {
-        return rootDir
-            .EnumerateFiles(searchPattern, searchOption)
-            .Select(fileInfo => fileInfo.FullName);
+        if (!Directory.Exists(rootDir))
+        {
+            return Result.Err($"storage.Path {rootDir} not found");
+        }
+        return Result.Ok(
+            new DirectoryInfo(rootDir)
+                .EnumerateFiles(searchPattern, searchOption)
+                .Select(fileInfo => fileInfo.FullName)
+        );
     }
 }

@@ -1,26 +1,23 @@
-﻿using Bogus;
-using MusicManagementDemo.Abstractions;
+﻿using MusicManagementDemo.Abstractions;
+using RustSharp;
 
 namespace FunctionalTesting.Infrastructure.JobHandler;
 
 internal sealed class FileEnumerator : IFileEnumerator
 {
-    public IEnumerable<string> EnumerateFiles(
-        DirectoryInfo rootDir,
+    public Result<IEnumerable<string>, string> EnumerateFiles(
+        string rootDir,
         string searchPattern,
         SearchOption searchOption
     )
     {
         var storage = VirtualFileSystem.VirtualFileSystem.VirtualStorages.SingleOrDefault(s =>
-            s.Path == rootDir.FullName
+            s.Path == rootDir
         );
         if (storage is null)
         {
-            yield break;
+            return Result.Err($"storage.Path {rootDir} not found");
         }
-        foreach (var file in storage.Files)
-        {
-            yield return Path.Combine(rootDir.FullName, file.Path);
-        }
+        return Result.Ok(storage.Files.Select(f => Path.Combine(rootDir, f.Path)));
     }
 }
