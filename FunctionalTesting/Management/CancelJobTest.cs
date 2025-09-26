@@ -6,7 +6,7 @@ using MusicManagementDemo.Domain.Entity.Management;
 
 namespace FunctionalTesting.Management;
 
-public class CancelJob : BaseTestingClass
+public class CancelJobTest : BaseTestingClass
 {
     [Fact]
     public async Task Normal()

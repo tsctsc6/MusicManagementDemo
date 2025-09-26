@@ -6,7 +6,7 @@ using MusicManagementDemo.Domain.Entity.Management;
 
 namespace FunctionalTesting.Management;
 
-public class CreateJob : BaseTestingClass
+public class CreateJobTest : BaseTestingClass
 {
     [Fact]
     public async Task Normal()
