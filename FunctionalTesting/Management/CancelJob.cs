@@ -25,5 +25,6 @@ public class CancelJob : BaseTestingClass
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
     }
 }
