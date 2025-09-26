@@ -1,0 +1,84 @@
+﻿using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
+using MusicManagementDemo.Application.UseCase.Management.ReadAllStorage;
+
+namespace FunctionalTesting.Management;
+
+public class ReadAllStorageTest : BaseTestingClass
+{
+    public record ThreeAscWithReferenceIdArgs(bool IsReferenceIdNull, bool Asc);
+
+    public static TheoryData<ThreeAscWithReferenceIdArgs> ThreeAscWithReferenceIdTestData =>
+        [
+            new(new(false, false)),
+            new(new(false, true)),
+            new(new(true, false)),
+            new(new(true, true)),
+        ];
+
+    private async Task<List<int>> CreateThreeStorageAsync()
+    {
+        List<int> guids = [];
+        var result = await mediator.Send(
+            new CreateStorageCommand("a", "X:\\a"),
+            TestContext.Current.CancellationToken
+        );
+        guids.Add(int.Parse(result.Data!.ToString()!));
+        result = await mediator.Send(
+            new CreateStorageCommand("b", "X:\\b"),
+            TestContext.Current.CancellationToken
+        );
+        guids.Add(int.Parse(result.Data!.ToString()!));
+        result = await mediator.Send(
+            new CreateStorageCommand("c", "X:\\c"),
+            TestContext.Current.CancellationToken
+        );
+        guids.Add(int.Parse(result.Data!.ToString()!));
+        return guids;
+    }
+
+    [Fact]
+    public async Task Empty()
+    {
+        var result = await mediator.Send(
+            new ReadAllStorageQuery(null, 10, false),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.Equal(200, result.Code);
+    }
+
+    [Fact]
+    public async Task ZeroPageSize()
+    {
+        var result = await mediator.Send(
+            new ReadAllStorageQuery(null, 0, false),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
+
+    [Fact]
+    public async Task MaxPageSize()
+    {
+        var result = await mediator.Send(
+            new ReadAllStorageQuery(null, 30, false),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
+
+    [Theory]
+    [MemberData(nameof(ThreeAscWithReferenceIdTestData))]
+    public async Task ThreeAscWithReferenceId(ThreeAscWithReferenceIdArgs args)
+    {
+        var storageIds = await CreateThreeStorageAsync();
+        var result = await mediator.Send(
+            new ReadAllStorageQuery(args.IsReferenceIdNull ? null : storageIds[1], 10, args.Asc),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.Equal(200, result.Code);
+    }
+}
