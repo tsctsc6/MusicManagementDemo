@@ -13,7 +13,7 @@ public class MusicInfoParser : IMusicInfoParser
         CancellationToken cancellationToken = default
     )
     {
-        await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken);
+        await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
         var storage = VirtualFileSystem.VirtualFileSystem.VirtualStorages.SingleOrDefault(s =>
             s.Path == storagePath
         );
