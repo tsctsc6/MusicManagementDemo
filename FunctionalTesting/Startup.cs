@@ -41,6 +41,7 @@ public static class Startup
             .AddTestInfrastructure()
             .AddApplication();
         servicesBuilder.AddSingleton(_ => newConfiguration);
+        servicesBuilder.AddSingleton<IConfiguration>(_ => newConfiguration);
         return servicesBuilder.BuildServiceProvider();
     }
 }
