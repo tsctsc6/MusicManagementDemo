@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36408.4
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11018.127 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.WebApi", "MusicManagementDemo.WebApi\MusicManagementDemo.WebApi.csproj", "{1166503B-753B-4F4D-8447-22F1631BF968}"
 EndProject
@@ -9,8 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		.csharpierrc.yaml = .csharpierrc.yaml
 		.gitignore = .gitignore
-		README.md = README.md
 		MusicManagementDemo.sln.DotSettings = MusicManagementDemo.sln.DotSettings
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.AppInfrastructure", "MusicManagementDemo.AppInfrastructure\MusicManagementDemo.AppInfrastructure.csproj", "{21C50602-C156-449F-9C53-E2D658889CA4}"
@@ -23,7 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Abstrac
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeployScript", "DeployScript", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		migrations_command.txt = migrations_command.txt
+		DeployScript\add-ram-disk.ps1 = DeployScript\add-ram-disk.ps1
+		DeployScript\migrations_command.txt = DeployScript\migrations_command.txt
+		DeployScript\pg-ram-disk.txt = DeployScript\pg-ram-disk.txt
+		DeployScript\remove-ram-disk.ps1 = DeployScript\remove-ram-disk.ps1
+		DeployScript\reset-pg-ram-tablespace.ps1 = DeployScript\reset-pg-ram-tablespace.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{D73A0538-911E-45CD-8940-F78E6AB05514}"
@@ -78,17 +82,17 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D8DB2980-39F0-42FD-BF01-5ECDFB50E674}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B3E3A842-853A-462A-B26B-B7862BC15759} = {D73A0538-911E-45CD-8940-F78E6AB05514}
-		{73B30323-B8F6-4E84-9B0B-B81865398101} = {D73A0538-911E-45CD-8940-F78E6AB05514}
-		{85A388AD-F06C-4561-9A71-9CBDF0AACC63} = {D73A0538-911E-45CD-8940-F78E6AB05514}
-		{21C50602-C156-449F-9C53-E2D658889CA4} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 		{1166503B-753B-4F4D-8447-22F1631BF968} = {D73A0538-911E-45CD-8940-F78E6AB05514}
+		{21C50602-C156-449F-9C53-E2D658889CA4} = {D73A0538-911E-45CD-8940-F78E6AB05514}
+		{85A388AD-F06C-4561-9A71-9CBDF0AACC63} = {D73A0538-911E-45CD-8940-F78E6AB05514}
+		{73B30323-B8F6-4E84-9B0B-B81865398101} = {D73A0538-911E-45CD-8940-F78E6AB05514}
+		{B3E3A842-853A-462A-B26B-B7862BC15759} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 		{16D68286-8FEB-4ED9-AA85-8D8AFA819D84} = {1CB10A34-4797-4380-A5F1-1662EBF2FEBE}
 		{50967A8C-F951-4705-A486-4E6EB81C4D0C} = {1CB10A34-4797-4380-A5F1-1662EBF2FEBE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8DB2980-39F0-42FD-BF01-5ECDFB50E674}
 	EndGlobalSection
 EndGlobal
