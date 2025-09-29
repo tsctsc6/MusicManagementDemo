@@ -95,8 +95,20 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     [Fact]
     public async Task Empty()
     {
+        await PrepareAsync();
         var result = await mediator.Send(
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.Equal(200, result.Code);
+    }
+
+    [Fact]
+    public async Task Search()
+    {
+        var result = await mediator.Send(
+            new ReadAllMusicInfoQuery(null, 10, false, "right asx"),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
