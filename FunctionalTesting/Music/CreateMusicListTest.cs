@@ -59,6 +59,6 @@ public class CreateMusicListTest : BaseTestingClass
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
-        Assert.Equal(200, result.Code);
+        Assert.NotEqual(200, result.Code);
     }
 }

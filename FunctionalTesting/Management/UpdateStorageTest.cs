@@ -20,6 +20,7 @@ public class UpdateStorageTest : BaseTestingClass
     [Fact]
     public async Task Normal()
     {
+        await PrepareAsync();
         var result = await mediator.Send(
             new UpdateStorageCommand(storageId, "Test2", "X:\\storage1"),
             TestContext.Current.CancellationToken

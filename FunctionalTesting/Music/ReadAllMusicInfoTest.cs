@@ -119,7 +119,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     public async Task InvalidSearchTerm()
     {
         var sb = new StringBuilder();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             sb.Append("abcdefgh123");
         }
