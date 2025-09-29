@@ -46,7 +46,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
 
         // 歌曲是否存在
         if (
-            await dbContext.MusicInfos.AnyAsync(
+            !await dbContext.MusicInfos.AnyAsync(
                 e => e.Id == request.MusicInfoId,
                 cancellationToken: cancellationToken
             )
