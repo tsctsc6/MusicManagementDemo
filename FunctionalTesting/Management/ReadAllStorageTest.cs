@@ -15,25 +15,25 @@ public class ReadAllStorageTest : BaseTestingClass
             new(new(true, true)),
         ];
 
-    private async Task<List<int>> CreateThreeStorageAsync()
+    private List<int> storageIds = [];
+
+    private async Task PrepareAsync()
     {
-        List<int> guids = [];
         var result = await mediator.Send(
             new CreateStorageCommand("a", "X:\\a"),
             TestContext.Current.CancellationToken
         );
-        guids.Add(int.Parse(result.Data!.ToString()!));
+        storageIds.Add(int.Parse(result.Data!.ToString()!));
         result = await mediator.Send(
             new CreateStorageCommand("b", "X:\\b"),
             TestContext.Current.CancellationToken
         );
-        guids.Add(int.Parse(result.Data!.ToString()!));
+        storageIds.Add(int.Parse(result.Data!.ToString()!));
         result = await mediator.Send(
             new CreateStorageCommand("c", "X:\\c"),
             TestContext.Current.CancellationToken
         );
-        guids.Add(int.Parse(result.Data!.ToString()!));
-        return guids;
+        storageIds.Add(int.Parse(result.Data!.ToString()!));
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class ReadAllStorageTest : BaseTestingClass
     [MemberData(nameof(ThreeAscWithReferenceIdTestData))]
     public async Task ThreeAscWithReferenceId(ThreeAscWithReferenceIdArgs args)
     {
-        var storageIds = await CreateThreeStorageAsync();
+        await PrepareAsync();
         var result = await mediator.Send(
             new ReadAllStorageQuery(args.IsReferenceIdNull ? null : storageIds[1], 10, args.Asc),
             TestContext.Current.CancellationToken
