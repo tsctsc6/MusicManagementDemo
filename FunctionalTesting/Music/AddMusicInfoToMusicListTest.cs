@@ -13,7 +13,7 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
 {
     private Guid userId;
     private Guid musicListId;
-    private Guid[] musicInfoIds;
+    private Guid[] musicInfoIds = [];
 
     private async Task PrepareAsync()
     {
