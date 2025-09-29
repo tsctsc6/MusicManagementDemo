@@ -58,18 +58,7 @@ public class GetMusicStreamTest : BaseTestingClass
             new GetMusicStreamQuery(musicInfoIds[0]),
             TestContext.Current.CancellationToken
         );
-        switch (result)
-        {
-            case SomeOption<Stream>:
-                Assert.True(true);
-                break;
-            case NoneOption<Stream>:
-                Assert.True(false);
-                break;
-            default:
-                Assert.True(false);
-                break;
-        }
+        Assert.True(!result.IsNone);
     }
 
     [Fact]
@@ -80,17 +69,6 @@ public class GetMusicStreamTest : BaseTestingClass
             new GetMusicStreamQuery(Guid.Empty),
             TestContext.Current.CancellationToken
         );
-        switch (result)
-        {
-            case SomeOption<Stream>:
-                Assert.True(true);
-                break;
-            case NoneOption<Stream>:
-                Assert.True(false);
-                break;
-            default:
-                Assert.True(false);
-                break;
-        }
+        Assert.True(result.IsNone);
     }
 }
