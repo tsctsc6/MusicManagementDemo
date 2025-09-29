@@ -1,18 +1,25 @@
-﻿using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
+﻿using System.Text;
+using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Management.UpdateStorage;
 
 namespace FunctionalTesting.Management;
 
 public class UpdateStorageTest : BaseTestingClass
 {
-    [Fact]
-    public async Task Normal()
+    private int storageId;
+
+    private async Task PrepareAsync()
     {
         var createStorageResult = await mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!;
+        storageId = (int)createStorageResult.Data!;
+    }
+
+    [Fact]
+    public async Task Normal()
+    {
         var result = await mediator.Send(
             new UpdateStorageCommand(storageId, "Test2", "X:\\storage1"),
             TestContext.Current.CancellationToken
@@ -26,6 +33,40 @@ public class UpdateStorageTest : BaseTestingClass
     {
         var result = await mediator.Send(
             new UpdateStorageCommand(114514, "Test2", "X:\\storage1"),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
+
+    [Fact]
+    public async Task InvalidName()
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i < 10; i++)
+        {
+            sb.Append("abdefghi123");
+        }
+        await PrepareAsync();
+        var result = await mediator.Send(
+            new UpdateStorageCommand(storageId, sb.ToString(), "X:\\storage1"),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
+
+    [Fact]
+    public async Task InvalidPath()
+    {
+        var sb = new StringBuilder("X:\\");
+        for (int i = 0; i < 22; i++)
+        {
+            sb.Append("abdefghi123\\");
+        }
+        await PrepareAsync();
+        var result = await mediator.Send(
+            new UpdateStorageCommand(storageId, "Test", sb.ToString()),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);

@@ -116,7 +116,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     }
 
     [Fact]
-    public async Task SearchTermInvalid()
+    public async Task InvalidSearchTerm()
     {
         var sb = new StringBuilder();
         for (int i = 0; i < 10; i++)

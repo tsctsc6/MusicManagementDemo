@@ -50,7 +50,7 @@ public class UpdateMusicListTest : BaseTestingClass
     }
 
     [Fact]
-    public async Task NameInvalid()
+    public async Task InvalidName()
     {
         await PrepareAsync();
         var sb = new StringBuilder();

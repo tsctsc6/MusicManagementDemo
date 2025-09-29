@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text;
+using System.Text.Json.Nodes;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Management.ReadJob;
@@ -79,5 +80,30 @@ public class CreateJobTest : BaseTestingClass
         var success = result.Data?.GetProperty("Success");
         Assert.NotNull(completedAt);
         Assert.Equal(false, success);
+    }
+
+    [Fact]
+    public async Task InvalidDescription()
+    {
+        var createStorageResult = await mediator.Send(
+            new CreateStorageCommand("Test", "X:\\storage1"),
+            TestContext.Current.CancellationToken
+        );
+        var storageId = (int)createStorageResult.Data!;
+        var sb = new StringBuilder(600);
+        for (int i = 0; i < 20; i++)
+        {
+            sb.Append("abcdefghijklmnopqrstuvwxyz");
+        }
+        var result = await mediator.Send(
+            new CreateJobCommand(
+                JobType.ScanIncremental,
+                sb.ToString(),
+                JsonNode.Parse($"{{\"storageId\": {storageId}}}")!
+            ),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
     }
 }

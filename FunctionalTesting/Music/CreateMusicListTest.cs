@@ -46,7 +46,7 @@ public class CreateMusicListTest : BaseTestingClass
     }
 
     [Fact]
-    public async Task NameInvalid()
+    public async Task InvalidName()
     {
         var sb = new StringBuilder();
         for (int i = 0; i < 10; i++)
