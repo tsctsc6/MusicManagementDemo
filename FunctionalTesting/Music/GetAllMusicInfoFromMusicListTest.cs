@@ -143,4 +143,17 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
         Assert.NotNull(result);
         Assert.NotEqual(200, result.Code);
     }
+
+    [Fact]
+    public async Task MusicListNotExist()
+    {
+        await PrepareAsync(0);
+        var result = await mediator.Send(
+            new GetAllMusicInfoFromMusicListQuery(userId, Guid.Empty, 30, null, false),
+            TestContext.Current.CancellationToken
+        );
+        ;
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
 }
