@@ -3,7 +3,6 @@ using MusicManagementDemo.Application.UseCase.Identity.Register;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
-using MusicManagementDemo.Application.UseCase.Music.ChangeMusicInfoOrderInMusicList;
 using MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;
 using MusicManagementDemo.Application.UseCase.Music.RemoveMusicInfoFromMusicList;
