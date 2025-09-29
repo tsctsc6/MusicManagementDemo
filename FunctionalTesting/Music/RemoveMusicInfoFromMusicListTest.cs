@@ -80,11 +80,23 @@ public class RemoveMusicInfoFromMusicListTest : BaseTestingClass
     }
 
     [Fact]
-    public async Task NotExist()
+    public async Task MusicInfoNotExist()
     {
         await PrepareAsync();
         var result = await mediator.Send(
             new RemoveMusicInfoFromMusicListCommand(userId, musicListId, Guid.Empty),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
+
+    [Fact]
+    public async Task MusicListNotExist()
+    {
+        await PrepareAsync();
+        var result = await mediator.Send(
+            new RemoveMusicInfoFromMusicListCommand(userId, Guid.Empty, musicInfoIds[1]),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
