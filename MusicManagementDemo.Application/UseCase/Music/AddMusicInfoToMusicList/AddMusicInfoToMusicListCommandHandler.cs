@@ -44,6 +44,18 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
             return ServiceResult.Err(404, ["该歌曲已存在该歌单中"]);
         }
 
+        // 歌曲是否存在
+        if (
+            await dbContext.MusicInfos.AnyAsync(
+                e => e.Id == request.MusicInfoId,
+                cancellationToken: cancellationToken
+            )
+        )
+        {
+            logger.LogError("MusicInfo {musicInfoId} not exist", request.MusicInfoId);
+            return ServiceResult.Err(404, ["该歌曲不存在"]);
+        }
+
         // 查询歌单最后的歌曲
         var lastMusicInfoMap = await dbContext
             .MusicInfoMusicListMaps.Where(e =>
