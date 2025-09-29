@@ -10,17 +10,10 @@ namespace FunctionalTesting.Music;
 
 public class GetMusicStreamTest : BaseTestingClass
 {
-    private Guid userId;
     private Guid[] musicInfoIds = [];
 
     private async Task PrepareAsync()
     {
-        var regResult = await mediator.Send(
-            new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
-            TestContext.Current.CancellationToken
-        );
-        userId = Guid.Parse(regResult.Data!.ToString()!);
-
         var createStorageResult = await mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
