@@ -5,7 +5,6 @@ using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Music.GetMusicStream;
 using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;
 using MusicManagementDemo.Domain.Entity.Management;
-using RustSharp;
 
 namespace FunctionalTesting.Music;
 
