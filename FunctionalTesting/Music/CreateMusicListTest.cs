@@ -5,14 +5,21 @@ namespace FunctionalTesting.Music;
 
 public class CreateMusicListTest : BaseTestingClass
 {
-    [Fact]
-    public async Task Normal()
+    private Guid userId;
+
+    private async Task PrepareAsync()
     {
         var regResult = await mediator.Send(
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        var userId = Guid.Parse(regResult.Data!.ToString()!);
+        userId = Guid.Parse(regResult.Data!.ToString()!);
+    }
+
+    [Fact]
+    public async Task Normal()
+    {
+        await PrepareAsync();
         var result = await mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
@@ -24,11 +31,7 @@ public class CreateMusicListTest : BaseTestingClass
     [Fact]
     public async Task Repeatedly()
     {
-        var regResult = await mediator.Send(
-            new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
-            TestContext.Current.CancellationToken
-        );
-        var userId = Guid.Parse(regResult.Data!.ToString()!);
+        await PrepareAsync();
         await mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
