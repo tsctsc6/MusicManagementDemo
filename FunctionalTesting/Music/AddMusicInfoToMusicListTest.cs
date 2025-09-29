@@ -83,4 +83,40 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
         Assert.NotNull(result);
         Assert.NotEqual(200, result.Code);
     }
+
+    [Fact]
+    public async Task UserNotExist()
+    {
+        await PrepareAsync();
+        var result = await mediator.Send(
+            new AddMusicInfoToMusicListCommand(Guid.Empty, musicListId, musicInfoIds[0]),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
+
+    [Fact]
+    public async Task MusicListNotExist()
+    {
+        await PrepareAsync();
+        var result = await mediator.Send(
+            new AddMusicInfoToMusicListCommand(userId, Guid.Empty, musicInfoIds[0]),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
+
+    [Fact]
+    public async Task MusicInfoNotExist()
+    {
+        await PrepareAsync();
+        var result = await mediator.Send(
+            new AddMusicInfoToMusicListCommand(userId, musicListId, Guid.Empty),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
 }
