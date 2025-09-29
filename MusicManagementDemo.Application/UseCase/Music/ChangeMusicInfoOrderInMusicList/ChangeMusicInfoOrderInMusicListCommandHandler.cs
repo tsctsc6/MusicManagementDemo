@@ -29,6 +29,17 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
             return ServiceResult.Err(404, ["MusicListId not found"]);
         }
 
+        if (
+            request.TargetMusicInfoId == request.PrevMusicInfoId
+            || request.TargetMusicInfoId == request.NextMusicInfoId
+        )
+        {
+            logger.LogError(
+                "request.TargetMusicInfoId == request.PrevMusicInfoId || request.TargetMusicInfoId == request.NextMusicInfoId"
+            );
+            return ServiceResult.Err(404, ["args eror"]);
+        }
+
         var musicInfoMapToMove = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
             e => e.MusicListId == request.MusicListId && e.MusicInfoId == request.TargetMusicInfoId,
             cancellationToken
