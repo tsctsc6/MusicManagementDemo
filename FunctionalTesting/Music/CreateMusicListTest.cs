@@ -1,4 +1,5 @@
-﻿using MusicManagementDemo.Application.UseCase.Identity.Register;
+﻿using System.Text;
+using MusicManagementDemo.Application.UseCase.Identity.Register;
 using MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 
 namespace FunctionalTesting.Music;
@@ -38,6 +39,23 @@ public class CreateMusicListTest : BaseTestingClass
         );
         var result = await mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.Equal(200, result.Code);
+    }
+
+    [Fact]
+    public async Task NameInvalid()
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i < 10; i++)
+        {
+            sb.Append("abcdefgh123");
+        }
+        await PrepareAsync();
+        var result = await mediator.Send(
+            new CreateMusicListCommand(userId, sb.ToString()),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);

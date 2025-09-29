@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Nodes;
-using MusicManagementDemo.Application.UseCase.Identity.Register;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Music.GetMusicStream;
@@ -54,7 +53,7 @@ public class GetMusicStreamTest : BaseTestingClass
     }
 
     [Fact]
-    public async Task MusicInfoNotExist()
+    public async Task NotExist()
     {
         await PrepareAsync();
         var result = await mediator.Send(

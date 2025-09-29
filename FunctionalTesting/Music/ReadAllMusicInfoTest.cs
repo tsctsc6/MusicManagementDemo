@@ -1,9 +1,9 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text;
+using System.Text.Json.Nodes;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;
 using MusicManagementDemo.Domain.Entity.Management;
-using static FunctionalTesting.Management.ReadAllStorageTest;
 
 namespace FunctionalTesting.Music;
 
@@ -113,5 +113,21 @@ public class ReadAllMusicInfoTest : BaseTestingClass
         );
         Assert.NotNull(result);
         Assert.Equal(200, result.Code);
+    }
+
+    [Fact]
+    public async Task SearchTermInvalid()
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i < 10; i++)
+        {
+            sb.Append("abcdefgh123");
+        }
+        var result = await mediator.Send(
+            new ReadAllMusicInfoQuery(null, 10, false, sb.ToString()),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
     }
 }
