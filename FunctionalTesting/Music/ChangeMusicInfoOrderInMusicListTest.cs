@@ -186,4 +186,25 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
         Assert.NotNull(result);
         Assert.NotEqual(200, result.Code);
     }
+
+    [Fact]
+    public async Task ArgsError()
+    {
+        await PrepareAsync();
+        var targetMusicInfoId = musicInfoIds[1];
+        var prevMusicInfoId = musicInfoIds[1];
+        var nextMusicInfoId = musicInfoIds[2];
+        var result = await mediator.Send(
+            new ChangeMusicInfoOrderInMusicListCommand(
+                userId,
+                musicListId,
+                targetMusicInfoId,
+                prevMusicInfoId,
+                nextMusicInfoId
+            ),
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(result);
+        Assert.NotEqual(200, result.Code);
+    }
 }
