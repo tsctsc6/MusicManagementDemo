@@ -12,7 +12,7 @@ public class ReadStorageTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!;
+        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
         var result = await mediator.Send(
             new ReadStorageQuery(storageId),
             TestContext.Current.CancellationToken

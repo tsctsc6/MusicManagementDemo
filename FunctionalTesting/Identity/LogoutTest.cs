@@ -14,7 +14,7 @@ public class LogoutTest : BaseTestingClass
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.ToString()!);
+        userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
     }
 
     [Fact]

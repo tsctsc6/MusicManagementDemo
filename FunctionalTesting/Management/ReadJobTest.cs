@@ -15,7 +15,7 @@ public class ReadJobTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!;
+        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
         var createJobResult = await mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,

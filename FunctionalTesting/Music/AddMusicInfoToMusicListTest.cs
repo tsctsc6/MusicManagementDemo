@@ -21,7 +21,7 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.ToString()!);
+        userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
         var createMusicListResult = await mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
@@ -32,7 +32,7 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!;
+        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
         var createJobResult = await mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,

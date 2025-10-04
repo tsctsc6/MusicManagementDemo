@@ -16,7 +16,7 @@ public class CreateJobTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!;
+        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
         var result = await mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -60,7 +60,7 @@ public class CreateJobTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage13"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!;
+        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
         var createJobResult = await mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -89,7 +89,7 @@ public class CreateJobTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!;
+        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
         var sb = new StringBuilder(600);
         for (int i = 0; i < 20; i++)
         {

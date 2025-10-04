@@ -15,7 +15,7 @@ public class ReadAllMusicListTest : BaseTestingClass
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.ToString()!);
+        userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
         for (int i = 0; i < createMusicListCount; i++)
         {
             var createMusicListResult = await mediator.Send(

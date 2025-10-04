@@ -14,7 +14,7 @@ public class UpdateStorageTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        storageId = (int)createStorageResult.Data!;
+        storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
     }
 
     [Fact]
