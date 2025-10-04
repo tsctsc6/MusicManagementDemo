@@ -23,11 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Abstrac
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeployScript", "DeployScript", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		DeployScript\add-ram-disk.ps1 = DeployScript\add-ram-disk.ps1
 		DeployScript\migrations_command.txt = DeployScript\migrations_command.txt
-		DeployScript\pg-ram-disk.txt = DeployScript\pg-ram-disk.txt
-		DeployScript\remove-ram-disk.ps1 = DeployScript\remove-ram-disk.ps1
-		DeployScript\reset-pg-ram-tablespace.ps1 = DeployScript\reset-pg-ram-tablespace.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{D73A0538-911E-45CD-8940-F78E6AB05514}"
@@ -39,6 +35,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTesting", "FunctionalTesting\FunctionalTesting.csproj", "{16D68286-8FEB-4ED9-AA85-8D8AFA819D84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTesting.Infrastructure", "FunctionalTesting.Infrastructure\FunctionalTesting.Infrastructure.csproj", "{50967A8C-F951-4705-A486-4E6EB81C4D0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{5F60DC50-443B-4C66-B60D-E0AFD0E8B969}"
+	ProjectSection(SolutionItems) = preProject
+		DeployScript\testing\add-ram-disk.ps1 = DeployScript\testing\add-ram-disk.ps1
+		DeployScript\testing\pg-ram-disk.txt = DeployScript\testing\pg-ram-disk.txt
+		DeployScript\testing\remove-ram-disk.ps1 = DeployScript\testing\remove-ram-disk.ps1
+		DeployScript\testing\reset-pg-ram-tablespace.ps1 = DeployScript\testing\reset-pg-ram-tablespace.ps1
+		DeployScript\testing\drop-all-testing-db.ps1 = DeployScript\testing\drop-all-testing-db.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +96,7 @@ Global
 		{5EE2CD9E-8F20-491B-93D1-BF5C188A8877} = {D73A0538-911E-45CD-8940-F78E6AB05514}
 		{16D68286-8FEB-4ED9-AA85-8D8AFA819D84} = {1CB10A34-4797-4380-A5F1-1662EBF2FEBE}
 		{50967A8C-F951-4705-A486-4E6EB81C4D0C} = {1CB10A34-4797-4380-A5F1-1662EBF2FEBE}
+		{5F60DC50-443B-4C66-B60D-E0AFD0E8B969} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8DB2980-39F0-42FD-BF01-5ECDFB50E674}
