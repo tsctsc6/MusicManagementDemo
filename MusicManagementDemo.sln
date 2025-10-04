@@ -45,6 +45,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{5F60
 		DeployScript\testing\drop-all-testing-db.ps1 = DeployScript\testing\drop-all-testing-db.ps1
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{E1898659-8573-42B6-8769-95AD1A5BE797}"
+	ProjectSection(SolutionItems) = preProject
+		doc\architecture.md = doc\architecture.md
+		doc\DDD-design.md = doc\DDD-design.md
+		doc\web-api.md = doc\web-api.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
