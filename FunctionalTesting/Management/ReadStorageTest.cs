@@ -25,7 +25,7 @@ public class ReadStorageTest : BaseTestingClass
     public async Task NotExist()
     {
         var result = await mediator.Send(
-            new ReadStorageQuery(114514),
+            new ReadStorageQuery(0721),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);

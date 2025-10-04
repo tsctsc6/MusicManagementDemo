@@ -25,7 +25,7 @@ public class DeleteStorageTest : BaseTestingClass
     public async Task StorageNotExist()
     {
         var result = await mediator.Send(
-            new DeleteStorageCommand(114514),
+            new DeleteStorageCommand(0x0d00),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
