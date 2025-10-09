@@ -43,3 +43,14 @@ Infrastructure 层分为 AppInfrastructure 和 DbInfrastructure 。
 在每个 IEndpoint 中，在类的内部定义私有 `record` ，用于序列化在请求体中的 json 。
 
 在 Program.cs 中，调用各层的依赖注入方法，映射 Endpoints ，启动应用程序。
+
+## 测试代码架构
+### FunctionalTesting.Infrastructure
+在测试环境中替换 AppInfrastructure ，创建测试环境。
+
+### FunctionalTesting
+相当于 WebApi 层。
+
+定义 `BaseTestingClass` ，在开始测试前，启动依赖注入服务；在测试结束后，释放资源。
+
+单元测试类继承 `BaseTestingClass` ，根据领域根归类。

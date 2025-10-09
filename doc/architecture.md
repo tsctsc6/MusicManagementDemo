@@ -62,3 +62,4 @@ erDiagram
 * 使用依赖注入，通过 Microsoft.Extensions.DependencyInjection 实现。
 * 使用中介者模式，通过 MediatR 实现。
 * 使用 Result 模式， 通过 RustSharp 实现。
+* 单元测试使用 xUnit v3.
