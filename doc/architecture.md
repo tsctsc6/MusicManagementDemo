@@ -54,3 +54,8 @@ erDiagram
     Job
     Storage
 ```
+
+## 技术方案
+* .NET 9, CSharp 13
+* 数据库： PostgresSQL 17
+* ORM： EFCore 
