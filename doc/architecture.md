@@ -58,4 +58,7 @@ erDiagram
 ## 技术方案
 * .NET 9, CSharp 13
 * 数据库： PostgresSQL 17
-* ORM： EFCore 
+* ORM： EFCore
+* 使用依赖注入，通过 Microsoft.Extensions.DependencyInjection 实现。
+* 使用中介者模式，通过 MediatR 实现。
+* 使用 Result 模式， 通过 RustSharp 实现。
