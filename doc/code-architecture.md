@@ -40,4 +40,6 @@ Infrastructure 层分为 AppInfrastructure 和 DbInfrastructure 。
 
 使用 Minimal Api 定义 Web 接口，在 EndpointExtensions 中编写依赖注入，从而 Map Endpoint 。根据领域根归类。
 
-在 Program.cs 中，调用各层的依赖注入方法，映射 EndPoints ，启动应用程序。
+在每个 IEndpoint 中，在类的内部定义私有 `record` ，用于序列化在请求体中的 json 。
+
+在 Program.cs 中，调用各层的依赖注入方法，映射 Endpoints ，启动应用程序。
