@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11018.127 d18.0
+VisualStudioVersion = 18.0.11018.127
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.WebApi", "MusicManagementDemo.WebApi\MusicManagementDemo.WebApi.csproj", "{1166503B-753B-4F4D-8447-22F1631BF968}"
 EndProject
@@ -23,6 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Abstrac
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeployScript", "DeployScript", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
+		DeployScript\deploy.ps1 = DeployScript\deploy.ps1
 		DeployScript\migrations_command.txt = DeployScript\migrations_command.txt
 	EndProjectSection
 EndProject
@@ -39,16 +40,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{5F60DC50-443B-4C66-B60D-E0AFD0E8B969}"
 	ProjectSection(SolutionItems) = preProject
 		DeployScript\testing\add-ram-disk.ps1 = DeployScript\testing\add-ram-disk.ps1
+		DeployScript\testing\drop-all-testing-db.ps1 = DeployScript\testing\drop-all-testing-db.ps1
 		DeployScript\testing\pg-ram-disk.txt = DeployScript\testing\pg-ram-disk.txt
 		DeployScript\testing\remove-ram-disk.ps1 = DeployScript\testing\remove-ram-disk.ps1
 		DeployScript\testing\reset-pg-ram-tablespace.ps1 = DeployScript\testing\reset-pg-ram-tablespace.ps1
-		DeployScript\testing\drop-all-testing-db.ps1 = DeployScript\testing\drop-all-testing-db.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{E1898659-8573-42B6-8769-95AD1A5BE797}"
 	ProjectSection(SolutionItems) = preProject
 		doc\architecture.md = doc\architecture.md
-		doc\DDD-design.md = doc\DDD-design.md
+		doc\code-architecture.md = doc\code-architecture.md
+		doc\DDD.md = doc\DDD.md
+		doc\testing.md = doc\testing.md
 		doc\web-api.md = doc\web-api.md
 	EndProjectSection
 EndProject
