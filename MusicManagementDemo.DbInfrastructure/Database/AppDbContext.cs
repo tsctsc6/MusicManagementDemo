@@ -54,4 +54,22 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         modelBuilder.ApplyConfiguration(new MusicListConfiguration());
         modelBuilder.ApplyConfiguration(new MusicInfoMusicListMapConfiguration());
     }
+
+    public IQueryable<MusicInfo> GetMusicInfoInMusicList(
+        Guid musicListId,
+        Guid? referenceId,
+        int pageSize,
+        bool asc
+    )
+    {
+        return MusicInfos.FromSqlRaw(
+            referenceId is null
+                ? $"""
+                SELECT * FROM {DbSchemas.Music}.{DbSchemas.GetMusicInfoInMusicList}('{musicListId}'::UUID, NULL::UUID, {pageSize}, {!asc})
+                """
+                : $"""
+                SELECT * FROM {DbSchemas.Music}.{DbSchemas.GetMusicInfoInMusicList}('{musicListId}'::UUID, '{referenceId}'::UUID, {pageSize}, {!asc})
+                """
+        );
+    }
 }

@@ -30,7 +30,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
         }
 
         var musicInfosToReadQuery = dbContext
-            .MusicInfos.GetMusicInfoInMusicList(
+            .GetMusicInfoInMusicList(
                 request.MusicListId,
                 request.ReferenceId,
                 request.PageSize,
