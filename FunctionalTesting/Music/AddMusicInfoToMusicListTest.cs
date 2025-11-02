@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Nodes;
+using FunctionalTesting.Provisions;
 using MusicManagementDemo.Application.UseCase.Identity.Register;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
@@ -17,23 +18,23 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await Mediator.Send(
+        userId = await IdentityProvision.RegisterAsync(
+            Mediator,
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.GetPropertyValue("Id")!.ToString()!);
-        var createMusicListResult = await Mediator.Send(
+        musicListId = await MusicProvision.CreateMusicListAsync(
+            Mediator,
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
-        musicListId = Guid.Parse(createMusicListResult.Data!.GetPropertyValue("Id")!.ToString()!);
-
-        var createStorageResult = await Mediator.Send(
+        var storageId = await ManagementProvision.CreateStorageAsync(
+            Mediator,
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
-        var createJobResult = await Mediator.Send(
+        var jobId = await ManagementProvision.CreateJobAsync(
+            Mediator,
             new CreateJobCommand(
                 JobType.ScanIncremental,
                 "ddd",
@@ -41,19 +42,12 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
-
-        var readAllMusicInfoResult = await Mediator.Send(
+        musicInfoIds = await MusicProvision.ReadAllMusicInfoAsync(
+            Mediator,
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
             TestContext.Current.CancellationToken
         );
-        musicInfoIds =
-        [
-            .. (readAllMusicInfoResult.Data! as IEnumerable<object>)!.Select(o =>
-                Guid.Parse(o.GetPropertyValue("Id")!.ToString()!)
-            ),
-        ];
     }
 
     [Fact]

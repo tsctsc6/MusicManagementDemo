@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json.Nodes;
+using FunctionalTesting.Provisions;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;
@@ -13,12 +14,13 @@ public class ReadAllMusicInfoTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var createStorageResult = await Mediator.Send(
+        var storageId = await ManagementProvision.CreateStorageAsync(
+            Mediator,
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
-        var createJobResult = await Mediator.Send(
+        _ = await ManagementProvision.CreateJobAsync(
+            Mediator,
             new CreateJobCommand(
                 JobType.ScanIncremental,
                 "ddd",
@@ -26,40 +28,27 @@ public class ReadAllMusicInfoTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
-        var readAllMusicInfoResult = await Mediator.Send(
+        musicInfoIds = await MusicProvision.ReadAllMusicInfoAsync(
+            Mediator,
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
             TestContext.Current.CancellationToken
         );
-        musicInfoIds =
-        [
-            .. (readAllMusicInfoResult.Data! as IEnumerable<object>)!.Select(o =>
-                Guid.Parse(o.GetPropertyValue("Id")!.ToString()!)
-            ),
-        ];
     }
 
-    public record NormalArgs(bool IsReferenceIdNull, bool Asc);
-
-    public static IEnumerable<TheoryDataRow<NormalArgs>> NormalTestData =>
-        [
-            new(new(false, false)),
-            new(new(false, true)),
-            new(new(true, false)),
-            new(new(true, true)),
-        ];
-
     [Theory]
-    [MemberData(nameof(NormalTestData))]
-    public async Task Normal(NormalArgs args)
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public async Task Normal(bool isReferenceIdNull, bool asc)
     {
         await PrepareAsync();
         var result = await Mediator.Send(
             new ReadAllMusicInfoQuery(
-                args.IsReferenceIdNull ? null : musicInfoIds[1],
+                isReferenceIdNull ? null : musicInfoIds[1],
                 10,
-                args.Asc,
+                asc,
                 string.Empty
             ),
             TestContext.Current.CancellationToken
@@ -119,7 +108,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     public async Task InvalidSearchTerm()
     {
         var sb = new StringBuilder();
-        for (int i = 0; i < 20; i++)
+        for (var i = 0; i < 20; i++)
         {
             sb.Append("abcdefgh123");
         }

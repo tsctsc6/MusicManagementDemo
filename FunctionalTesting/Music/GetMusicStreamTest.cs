@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Nodes;
+using FunctionalTesting.Provisions;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Music.GetMusicStream;
@@ -13,12 +14,13 @@ public class GetMusicStreamTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var createStorageResult = await Mediator.Send(
+        var storageId = await ManagementProvision.CreateStorageAsync(
+            Mediator,
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
-        var createJobResult = await Mediator.Send(
+        _ = await ManagementProvision.CreateJobAsync(
+            Mediator,
             new CreateJobCommand(
                 JobType.ScanIncremental,
                 "ddd",
@@ -26,19 +28,12 @@ public class GetMusicStreamTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
-
-        var readAllMusicInfoResult = await Mediator.Send(
+        musicInfoIds = await MusicProvision.ReadAllMusicInfoAsync(
+            Mediator,
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
             TestContext.Current.CancellationToken
         );
-        musicInfoIds =
-        [
-            .. (readAllMusicInfoResult.Data! as IEnumerable<object>)!.Select(o =>
-                Guid.Parse(o.GetPropertyValue("Id")!.ToString()!)
-            ),
-        ];
     }
 
     [Fact]
@@ -49,7 +44,7 @@ public class GetMusicStreamTest : BaseTestingClass
             new GetMusicStreamQuery(musicInfoIds[0]),
             TestContext.Current.CancellationToken
         );
-        Assert.True(!result.IsNone);
+        Assert.False(result.IsNone);
     }
 
     [Fact]

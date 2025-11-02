@@ -1,4 +1,5 @@
-﻿using MusicManagementDemo.Application.UseCase.Identity.Register;
+﻿using FunctionalTesting.Provisions;
+using MusicManagementDemo.Application.UseCase.Identity.Register;
 using MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicList;
 
@@ -7,23 +8,23 @@ namespace FunctionalTesting.Music;
 public class ReadAllMusicListTest : BaseTestingClass
 {
     private Guid userId;
-    private List<Guid> musicListIds = [];
+    private readonly List<Guid> musicListIds = [];
 
     private async Task PrepareAsync(int createMusicListCount)
     {
-        var regResult = await Mediator.Send(
+        userId = await IdentityProvision.RegisterAsync(
+            Mediator,
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.GetPropertyValue("Id")!.ToString()!);
-        for (int i = 0; i < createMusicListCount; i++)
+        for (var i = 0; i < createMusicListCount; i++)
         {
-            var createMusicListResult = await Mediator.Send(
-                new CreateMusicListCommand(userId, "New MusicList"),
-                TestContext.Current.CancellationToken
-            );
             musicListIds.Add(
-                Guid.Parse(createMusicListResult.Data!.GetPropertyValue("Id")!.ToString()!)
+                await MusicProvision.CreateMusicListAsync(
+                    Mediator,
+                    new CreateMusicListCommand(userId, "New MusicList"),
+                    TestContext.Current.CancellationToken
+                )
             );
         }
     }

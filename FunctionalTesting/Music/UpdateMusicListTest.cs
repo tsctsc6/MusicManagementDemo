@@ -1,8 +1,8 @@
-﻿using MusicManagementDemo.Application.UseCase.Identity.Register;
+﻿using System.Text;
+using FunctionalTesting.Provisions;
+using MusicManagementDemo.Application.UseCase.Identity.Register;
 using MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 using MusicManagementDemo.Application.UseCase.Music.UpdateMusicList;
-using System.Text;
-using Xunit.Sdk;
 
 namespace FunctionalTesting.Music;
 
@@ -13,16 +13,16 @@ public class UpdateMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await Mediator.Send(
+        userId = await IdentityProvision.RegisterAsync(
+            Mediator,
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.GetPropertyValue("Id")!.ToString()!);
-        var createMusicListResult = await Mediator.Send(
+        musicListId = await MusicProvision.CreateMusicListAsync(
+            Mediator,
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
-        musicListId = Guid.Parse(createMusicListResult.Data!.GetPropertyValue("Id")!.ToString()!);
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class UpdateMusicListTest : BaseTestingClass
     {
         await PrepareAsync();
         var sb = new StringBuilder();
-        for (int i = 0; i < 8; i++)
+        for (var i = 0; i < 8; i++)
         {
             sb.Append("New MusicList2");
         }

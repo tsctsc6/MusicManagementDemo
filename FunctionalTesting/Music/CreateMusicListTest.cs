@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using FunctionalTesting.Provisions;
 using MusicManagementDemo.Application.UseCase.Identity.Register;
 using MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 
@@ -10,11 +11,11 @@ public class CreateMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await Mediator.Send(
+        userId = await IdentityProvision.RegisterAsync(
+            Mediator,
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.GetPropertyValue("Id")!.ToString()!);
     }
 
     [Fact]
@@ -49,7 +50,7 @@ public class CreateMusicListTest : BaseTestingClass
     public async Task InvalidName()
     {
         var sb = new StringBuilder();
-        for (int i = 0; i < 10; i++)
+        for (var i = 0; i < 10; i++)
         {
             sb.Append("abcdefgh123");
         }
