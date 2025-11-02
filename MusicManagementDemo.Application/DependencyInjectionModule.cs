@@ -18,7 +18,7 @@ public static class DependencyInjectionModule
             options.ServiceLifetime = ServiceLifetime.Scoped;
             options.GenerateTypesAsInternal = true;
             options.NotificationPublisherType = typeof(ForeachAwaitPublisher);
-            options.Assemblies = [typeof(DependencyInjectionModule)];
+            //options.Assemblies = [typeof(DependencyInjectionModule)];
             options.PipelineBehaviors =
             [
                 typeof(ExceptionHandlingBehavior<,>),
