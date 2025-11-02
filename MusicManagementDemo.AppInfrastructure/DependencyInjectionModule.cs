@@ -5,7 +5,7 @@ using Serilog;
 
 namespace MusicManagementDemo.AppInfrastructure;
 
-public static class AssemblyInfo
+public static class DependencyInjectionModule
 {
     public static IServiceCollection AddAppInfrastructure(this IServiceCollection services)
     {

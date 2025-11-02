@@ -6,7 +6,7 @@ using MusicManagementDemo.Application.PipelineMediators;
 
 namespace MusicManagementDemo.Application;
 
-public static class AssemblyInfo
+public static class DependencyInjectionModule
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
@@ -14,13 +14,13 @@ public static class AssemblyInfo
 
         services.AddMediatR(cfg =>
         {
-            cfg.RegisterServicesFromAssemblyContaining(typeof(AssemblyInfo));
+            cfg.RegisterServicesFromAssemblyContaining(typeof(DependencyInjectionModule));
             cfg.AddOpenBehavior(typeof(ExceptionHandlingBehavior<,>));
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             cfg.AddOpenBehavior(typeof(LoggingBehaviour<,>));
         });
         services.AddValidatorsFromAssemblyContaining(
-            typeof(AssemblyInfo),
+            typeof(DependencyInjectionModule),
             includeInternalTypes: true
         );
         return services;

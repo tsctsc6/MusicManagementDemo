@@ -42,7 +42,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         modelBuilder.Entity<Job>().ToTable($"{nameof(Job)}s", DbSchemas.Management);
         modelBuilder.ApplyConfiguration(new StorageConfiguration());
         modelBuilder.ApplyConfiguration(
-            new JobConfiguration(AssemblyInfo.DefaultJsonSerializerOptions)
+            new JobConfiguration(DependencyInjectionModule.DefaultJsonSerializerOptions)
         );
 
         modelBuilder.Entity<MusicInfo>().ToTable($"{nameof(MusicInfo)}s", DbSchemas.Music);

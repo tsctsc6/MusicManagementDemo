@@ -7,7 +7,7 @@ using MusicManagementDemo.Abstractions;
 
 namespace FunctionalTesting.Infrastructure;
 
-public static class AssemblyInfo
+public static class DependencyInjectionModule
 {
     public static IServiceCollection AddTestInfrastructure(this IServiceCollection services)
     {

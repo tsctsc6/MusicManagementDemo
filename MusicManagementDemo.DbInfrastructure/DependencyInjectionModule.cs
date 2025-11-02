@@ -18,7 +18,7 @@ using MusicManagementDemo.Domain.Entity.Identity;
 
 namespace MusicManagementDemo.DbInfrastructure;
 
-public static class AssemblyInfo
+public static class DependencyInjectionModule
 {
     public static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new()
     {
