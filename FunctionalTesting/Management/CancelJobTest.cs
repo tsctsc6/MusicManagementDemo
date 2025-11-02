@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Nodes;
 using FunctionalTesting.Provisions;
-using MediatR;
 using MusicManagementDemo.Application.UseCase.Management.CancelJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
