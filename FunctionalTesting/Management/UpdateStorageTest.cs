@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using FunctionalTesting.Provisions;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Management.UpdateStorage;
 
@@ -10,11 +11,11 @@ public class UpdateStorageTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var createStorageResult = await Mediator.Send(
+        storageId = await ManagementProvision.CreateStorageAsync(
+            Mediator,
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
     }
 
     [Fact]
@@ -44,7 +45,7 @@ public class UpdateStorageTest : BaseTestingClass
     public async Task InvalidName()
     {
         var sb = new StringBuilder();
-        for (int i = 0; i < 10; i++)
+        for (var i = 0; i < 10; i++)
         {
             sb.Append("abdefghi123");
         }
@@ -61,7 +62,7 @@ public class UpdateStorageTest : BaseTestingClass
     public async Task InvalidPath()
     {
         var sb = new StringBuilder("X:\\");
-        for (int i = 0; i < 22; i++)
+        for (var i = 0; i < 22; i++)
         {
             sb.Append("abdefghi123\\");
         }

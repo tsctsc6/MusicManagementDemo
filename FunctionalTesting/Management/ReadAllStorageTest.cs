@@ -1,4 +1,5 @@
-﻿using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
+﻿using FunctionalTesting.Provisions;
+using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Management.ReadAllStorage;
 
 namespace FunctionalTesting.Management;
@@ -19,21 +20,27 @@ public class ReadAllStorageTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var result = await Mediator.Send(
-            new CreateStorageCommand("a", "X:\\a"),
-            TestContext.Current.CancellationToken
+        storageIds.Add(
+            await ManagementProvision.CreateStorageAsync(
+                Mediator,
+                new CreateStorageCommand("a", "X:\\a"),
+                TestContext.Current.CancellationToken
+            )
         );
-        storageIds.Add((int)result.Data!.GetPropertyValue("Id")!);
-        result = await Mediator.Send(
-            new CreateStorageCommand("b", "X:\\b"),
-            TestContext.Current.CancellationToken
+        storageIds.Add(
+            await ManagementProvision.CreateStorageAsync(
+                Mediator,
+                new CreateStorageCommand("b", "X:\\b"),
+                TestContext.Current.CancellationToken
+            )
         );
-        storageIds.Add((int)result.Data!.GetPropertyValue("Id")!);
-        result = await Mediator.Send(
-            new CreateStorageCommand("c", "X:\\c"),
-            TestContext.Current.CancellationToken
+        storageIds.Add(
+            await ManagementProvision.CreateStorageAsync(
+                Mediator,
+                new CreateStorageCommand("c", "X:\\c"),
+                TestContext.Current.CancellationToken
+            )
         );
-        storageIds.Add((int)result.Data!.GetPropertyValue("Id")!);
     }
 
     [Fact]

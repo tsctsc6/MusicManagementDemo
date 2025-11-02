@@ -1,18 +1,26 @@
-﻿using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
+﻿using FunctionalTesting.Provisions;
+using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Management.ReadStorage;
 
 namespace FunctionalTesting.Management;
 
 public class ReadStorageTest : BaseTestingClass
 {
-    [Fact]
-    public async Task Normal()
+    private int storageId;
+
+    private async Task PrepareAsync()
     {
-        var createStorageResult = await Mediator.Send(
+        storageId = await ManagementProvision.CreateStorageAsync(
+            Mediator,
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
+    }
+
+    [Fact]
+    public async Task Normal()
+    {
+        await PrepareAsync();
         var result = await Mediator.Send(
             new ReadStorageQuery(storageId),
             TestContext.Current.CancellationToken
