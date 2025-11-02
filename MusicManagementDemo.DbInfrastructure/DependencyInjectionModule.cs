@@ -100,10 +100,16 @@ public static class DependencyInjectionModule
             options.EnableSensitiveDataLogging();
 #endif
         });
-        services.AddScoped<IDbContext, AppDbContext>();
-        services.AddScoped<IIdentityDbContext, AppDbContext>();
-        services.AddScoped<IManagementAppDbContext, AppDbContext>();
-        services.AddScoped<IMusicAppDbContext, AppDbContext>();
+        services.AddScoped<IDbContext, AppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
+        services.AddScoped<IIdentityDbContext, AppDbContext>(sp =>
+            sp.GetRequiredService<AppDbContext>()
+        );
+        services.AddScoped<IManagementAppDbContext, AppDbContext>(sp =>
+            sp.GetRequiredService<AppDbContext>()
+        );
+        services.AddScoped<IMusicAppDbContext, AppDbContext>(sp =>
+            sp.GetRequiredService<AppDbContext>()
+        );
 
         return services;
     }
