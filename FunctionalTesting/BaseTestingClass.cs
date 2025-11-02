@@ -72,7 +72,8 @@ public class BaseTestingClass : IAsyncLifetime
 
     public async ValueTask DisposeAsync()
     {
-        var dbContext = ServiceProvider.GetRequiredService<IDbContext>();
+        await using var scope = ServiceProvider.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
         await dbContext.Database.EnsureDeletedAsync();
         GC.SuppressFinalize(this);
     }
