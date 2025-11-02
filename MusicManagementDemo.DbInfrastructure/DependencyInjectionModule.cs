@@ -75,7 +75,27 @@ public static class DependencyInjectionModule
                         d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
                         d.SaveChanges();
                     }
+                )
+                .UseAsyncSeeding(
+                    async (d2, _, ct) =>
+                    {
+                        var d = (AppDbContext)d2;
+                        await d.Database.ExecuteSqlRawAsync(
+                            DbFunctions.DefineGetMusicInfoInMusicListReturnType,
+                            ct
+                        );
+                        await d.Database.ExecuteSqlRawAsync(
+                            DbFunctions.DefineGetMusicInfoInMusicList,
+                            cancellationToken: ct
+                        );
+                        await d.Roles.AddAsync(
+                            new() { Name = "Admin", NormalizedName = "ADMIN" },
+                            ct
+                        );
+                        await d.SaveChangesAsync(ct);
+                    }
                 );
+            ;
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif
