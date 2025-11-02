@@ -1,58 +1,89 @@
-﻿using MediatR;
+﻿using FunctionalTesting.Infrastructure;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
+using MusicManagementDemo.Application;
+using MusicManagementDemo.DbInfrastructure;
 using Npgsql;
 
 namespace FunctionalTesting;
 
-public class BaseTestingClass : IDisposable
+public class BaseTestingClass : IAsyncLifetime
 {
     protected readonly IServiceProvider _services;
-    protected readonly IMediator mediator;
+    protected IMediator mediator;
 
-    public BaseTestingClass()
+    protected BaseTestingClass()
     {
-        _services = Startup.ConfigureMyServices();
+        IServiceCollection servicesBuilder = new ServiceCollection();
+        var oldConfiguration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.Testing.json", optional: false, reloadOnChange: true)
+            .Build();
+
+        var guid = Guid.NewGuid().ToString().Replace('-', '_');
+        var oldConnectionString = oldConfiguration.GetConnectionString("Default");
+
+        var newConfiguration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.Testing.json", optional: false, reloadOnChange: true)
+            .AddInMemoryCollection(
+                [
+                    new("DbName", $"functional_testing_{guid}"),
+                    new(
+                        "ConnectionStrings:Default",
+                        $"{oldConnectionString}Database=functional_testing_{guid};"
+                    ),
+                ]
+            )
+            .Build();
+
+        servicesBuilder
+            .AddDbInfrastructure(newConfiguration)
+            .AddTestInfrastructure()
+            .AddApplication();
+        servicesBuilder.AddSingleton(_ => newConfiguration);
+        servicesBuilder.AddSingleton<IConfiguration>(_ => newConfiguration);
+        _services = servicesBuilder.BuildServiceProvider();
+        mediator = _services.GetRequiredService<IMediator>();
+    }
+
+    public async ValueTask InitializeAsync()
+    {
         var config = _services.GetRequiredService<IConfigurationRoot>();
-        using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
-        conn.Open();
-        new NpgsqlCommand(
+        await using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
+        await conn.OpenAsync();
+        await new NpgsqlCommand(
             $"CREATE DATABASE {config["DbName"]} WITH TABLESPACE = {config["VirtualTableSpace"]};",
             conn
-        ).ExecuteNonQuery();
+        ).ExecuteNonQueryAsync();
         try
         {
-            using var scope = _services.CreateScope();
-            using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
-            dbContext.Database.Migrate();
-
-            mediator = _services.GetRequiredService<IMediator>();
-            var x = _services.GetRequiredService<ILogger<BaseTestingClass>>();
+            await using var scope = _services.CreateAsyncScope();
+            await using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
+            await dbContext.Database.MigrateAsync();
         }
         catch (Exception)
         {
-            Dispose();
+            await DisposeAsync();
             throw;
         }
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         var config = _services.GetRequiredService<IConfigurationRoot>();
-        using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
-        conn.Open();
-        new NpgsqlCommand(
+        await using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
+        await conn.OpenAsync();
+        await new NpgsqlCommand(
             $"UPDATE pg_database SET datallowconn = 'false' WHERE datname = '{config["DbName"]}';",
             conn
-        ).ExecuteNonQuery();
-        new NpgsqlCommand(
+        ).ExecuteNonQueryAsync();
+        await new NpgsqlCommand(
             $"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{config["DbName"]}';",
             conn
-        ).ExecuteNonQuery();
-        new NpgsqlCommand($"DROP DATABASE {config["DbName"]};", conn).ExecuteNonQuery();
+        ).ExecuteNonQueryAsync();
+        await new NpgsqlCommand($"DROP DATABASE {config["DbName"]};", conn).ExecuteNonQueryAsync();
         GC.SuppressFinalize(this);
     }
 }
