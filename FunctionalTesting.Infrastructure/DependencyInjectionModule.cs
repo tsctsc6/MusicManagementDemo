@@ -15,7 +15,7 @@ public static class DependencyInjectionModule
         services.AddSingleton<IMusicInfoParser, MusicInfoParser>();
         services.AddSingleton<IFileStreamProvider, FileStreamProvider>();
 
-        services.AddSingleton(typeof(ILogger), typeof(NullLogger));
+        services.AddSingleton<ILogger, NullLogger>();
         services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
 
         return services;
