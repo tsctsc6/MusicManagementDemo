@@ -72,18 +72,8 @@ public class BaseTestingClass : IAsyncLifetime
 
     public async ValueTask DisposeAsync()
     {
-        var config = _services.GetRequiredService<IConfigurationRoot>();
-        await using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
-        await conn.OpenAsync();
-        await new NpgsqlCommand(
-            $"UPDATE pg_database SET datallowconn = 'false' WHERE datname = '{config["DbName"]}';",
-            conn
-        ).ExecuteNonQueryAsync();
-        await new NpgsqlCommand(
-            $"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{config["DbName"]}';",
-            conn
-        ).ExecuteNonQueryAsync();
-        await new NpgsqlCommand($"DROP DATABASE {config["DbName"]};", conn).ExecuteNonQueryAsync();
+        var dbContext = _services.GetRequiredService<IDbContext>();
+        await dbContext.Database.EnsureDeletedAsync();
         GC.SuppressFinalize(this);
     }
 }
