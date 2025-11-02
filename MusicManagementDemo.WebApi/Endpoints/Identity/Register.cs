@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using MusicManagementDemo.Application.UseCase.Identity.Register;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Identity;

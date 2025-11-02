@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
@@ -14,7 +14,7 @@ internal sealed class CreateJobCommandHandler(
     ILogger<CreateJobCommandHandler> logger
 ) : IRequestHandler<CreateJobCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         CreateJobCommand request,
         CancellationToken cancellationToken
     )

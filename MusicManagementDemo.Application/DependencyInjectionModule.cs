@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Mediator;
 using Microsoft.Extensions.DependencyInjection;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.JobHandlers;
@@ -11,13 +12,20 @@ public static class DependencyInjectionModule
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddSingleton<IJobManager, JobManager>();
-
-        services.AddMediatR(cfg =>
+        services.AddMediator(options =>
         {
-            cfg.RegisterServicesFromAssemblyContaining(typeof(DependencyInjectionModule));
-            cfg.AddOpenBehavior(typeof(ExceptionHandlingBehavior<,>));
-            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
-            cfg.AddOpenBehavior(typeof(LoggingBehaviour<,>));
+            options.Namespace = "MusicManagementDemo.Mediator";
+            options.ServiceLifetime = ServiceLifetime.Scoped;
+            options.GenerateTypesAsInternal = true;
+            options.NotificationPublisherType = typeof(ForeachAwaitPublisher);
+            options.Assemblies = [typeof(DependencyInjectionModule)];
+            options.PipelineBehaviors =
+            [
+                typeof(ExceptionHandlingBehavior<,>),
+                typeof(ValidationBehavior<,>),
+                typeof(LoggingBehaviour<,>),
+            ];
+            options.StreamPipelineBehaviors = [];
         });
         services.AddValidatorsFromAssemblyContaining(
             typeof(DependencyInjectionModule),

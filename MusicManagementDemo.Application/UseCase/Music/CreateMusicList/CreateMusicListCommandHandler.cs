@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
@@ -12,7 +12,7 @@ internal sealed class CreateMusicListCommandHandler(
     ILogger<CreateMusicListCommandHandler> logger
 ) : IRequestHandler<CreateMusicListCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         CreateMusicListCommand request,
         CancellationToken cancellationToken
     )

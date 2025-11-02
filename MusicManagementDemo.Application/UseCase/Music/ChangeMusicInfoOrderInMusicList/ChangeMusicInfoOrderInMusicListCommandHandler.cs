@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
@@ -13,7 +13,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
     ILogger<ChangeMusicInfoOrderInMusicListCommandHandler> logger
 ) : IRequestHandler<ChangeMusicInfoOrderInMusicListCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         ChangeMusicInfoOrderInMusicListCommand request,
         CancellationToken cancellationToken
     )

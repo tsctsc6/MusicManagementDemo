@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Nodes;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Domain.Entity.Management;

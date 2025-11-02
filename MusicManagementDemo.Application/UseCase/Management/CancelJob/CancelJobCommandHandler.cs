@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
@@ -6,12 +6,12 @@ using RustSharp;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CancelJob;
 
-public class CancelJobCommandHandler(
+internal sealed class CancelJobCommandHandler(
     IJobManager jobManager,
     ILogger<CancelJobCommandHandler> logger
 ) : IRequestHandler<CancelJobCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         CancelJobCommand request,
         CancellationToken cancellationToken
     )

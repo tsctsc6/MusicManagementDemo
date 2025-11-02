@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 

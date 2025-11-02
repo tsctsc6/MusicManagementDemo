@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
@@ -9,7 +9,7 @@ namespace MusicManagementDemo.Application.UseCase.Management.ReadAllStorage;
 internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbContext)
     : IRequestHandler<ReadAllStorageQuery, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         ReadAllStorageQuery request,
         CancellationToken cancellationToken
     )

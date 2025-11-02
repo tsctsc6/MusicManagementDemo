@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using RustSharp;
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetMusicStream;

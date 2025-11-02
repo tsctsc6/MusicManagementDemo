@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,7 +15,7 @@ internal sealed class RegisterCommandHandler(
     ILogger<RegisterCommandHandler> logger
 ) : IRequestHandler<RegisterCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         RegisterCommand request,
         CancellationToken cancellationToken
     )

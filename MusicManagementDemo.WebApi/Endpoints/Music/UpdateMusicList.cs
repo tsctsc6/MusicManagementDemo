@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using MusicManagementDemo.Application.UseCase.Music.UpdateMusicList;
 using MusicManagementDemo.WebApi.Utils;

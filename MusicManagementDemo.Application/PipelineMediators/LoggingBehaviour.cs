@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace MusicManagementDemo.Application.PipelineMediators;
@@ -8,14 +8,14 @@ internal sealed class LoggingBehaviour<TRequest, TResponse>(
 ) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    public async Task<TResponse> Handle(
+    public async ValueTask<TResponse> Handle(
         TRequest request,
-        RequestHandlerDelegate<TResponse> next,
+        MessageHandlerDelegate<TRequest, TResponse> next,
         CancellationToken cancellationToken
     )
     {
         logger.LogInformation("Request - {@request}", request);
-        var response = await next(cancellationToken);
+        var response = await next(request, cancellationToken);
         logger.LogInformation("Response - {@response}", response);
         return response;
     }

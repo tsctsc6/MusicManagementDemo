@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
@@ -12,7 +12,7 @@ internal sealed class CreateStorageCommandHandler(
     ILogger<CreateStorageCommandHandler> logger
 ) : IRequestHandler<CreateStorageCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         CreateStorageCommand request,
         CancellationToken cancellationToken
     )

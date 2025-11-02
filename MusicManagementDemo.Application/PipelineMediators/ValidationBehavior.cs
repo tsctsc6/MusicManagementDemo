@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Application.Responses;
 
@@ -11,9 +11,9 @@ internal sealed class ValidationBehavior<TRequest, TResponse>(
 ) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    public async Task<TResponse> Handle(
+    public async ValueTask<TResponse> Handle(
         TRequest request,
-        RequestHandlerDelegate<TResponse> next,
+        MessageHandlerDelegate<TRequest, TResponse> next,
         CancellationToken cancellationToken
     )
     {
@@ -33,6 +33,6 @@ internal sealed class ValidationBehavior<TRequest, TResponse>(
             return (TResponse)(object)ServiceResult.Err(406, errorMessages);
         }
 
-        return await next(cancellationToken);
+        return await next(request, cancellationToken);
     }
 }

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
 using MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
@@ -9,7 +9,7 @@ namespace MusicManagementDemo.Application.UseCase.Music.ReadAllMusicList;
 internal sealed class ReadAllMusicListQueryHandler(IMusicAppDbContext dbContext)
     : IRequestHandler<ReadAllMusicListQuery, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         ReadAllMusicListQuery request,
         CancellationToken cancellationToken
     )

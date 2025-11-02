@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
@@ -7,14 +7,14 @@ using RustSharp;
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetMusicStream;
 
-public class GetMusicStreamQueryHandler(
+internal sealed class GetMusicStreamQueryHandler(
     IMusicAppDbContext musicDbContext,
     IManagementAppDbContext managementDbContext,
     IFileStreamProvider fileStreamProvider,
     ILogger<GetMusicStreamQueryHandler> logger
 ) : IRequestHandler<GetMusicStreamQuery, Option<Stream>>
 {
-    public async Task<Option<Stream>> Handle(
+    public async ValueTask<Option<Stream>> Handle(
         GetMusicStreamQuery request,
         CancellationToken cancellationToken
     )

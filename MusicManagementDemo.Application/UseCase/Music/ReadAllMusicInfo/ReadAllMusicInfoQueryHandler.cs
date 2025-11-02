@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
@@ -13,7 +13,7 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(
     ILogger<ReadAllMusicInfoQueryHandler> logger
 ) : IRequestHandler<ReadAllMusicInfoQuery, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         ReadAllMusicInfoQuery request,
         CancellationToken cancellationToken
     )

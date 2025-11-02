@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadJob;

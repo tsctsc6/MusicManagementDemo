@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -16,7 +16,7 @@ internal sealed class LoginCommandHandler(
     ILogger<LoginCommandHandler> logger
 ) : IRequestHandler<LoginCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         LoginCommand request,
         CancellationToken cancellationToken
     )

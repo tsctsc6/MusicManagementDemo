@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
@@ -12,7 +12,7 @@ internal sealed class UpdateStorageCommandHandler(
     ILogger<UpdateStorageCommandHandler> logger
 ) : IRequestHandler<UpdateStorageCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         UpdateStorageCommand request,
         CancellationToken cancellationToken
     )

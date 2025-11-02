@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using MediatR;
+using Mediator;
 using MusicManagementDemo.Application.UseCase.Identity.Logout;
 using MusicManagementDemo.WebApi.Utils;
 using RustSharp;

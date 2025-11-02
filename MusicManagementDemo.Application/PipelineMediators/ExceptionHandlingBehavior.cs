@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Application.Responses;
 
@@ -9,15 +9,15 @@ internal sealed class ExceptionHandlingBehavior<TRequest, TResponse>(
 ) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    public async Task<TResponse> Handle(
+    public async ValueTask<TResponse> Handle(
         TRequest request,
-        RequestHandlerDelegate<TResponse> next,
+        MessageHandlerDelegate<TRequest, TResponse> next,
         CancellationToken cancellationToken
     )
     {
         try
         {
-            return await next(cancellationToken);
+            return await next(request, cancellationToken);
         }
         catch (Exception ex)
         {

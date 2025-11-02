@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
@@ -12,7 +12,7 @@ internal sealed class UpdateMusicListCommandHandler(
     ILogger<UpdateMusicListCommandHandler> logger
 ) : IRequestHandler<UpdateMusicListCommand, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         UpdateMusicListCommand request,
         CancellationToken cancellationToken
     )

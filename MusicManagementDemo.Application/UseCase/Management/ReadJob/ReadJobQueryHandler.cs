@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
@@ -7,12 +7,12 @@ using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadJob;
 
-public class ReadJobQueryHandler(
+internal sealed class ReadJobQueryHandler(
     IManagementAppDbContext dbContext,
     ILogger<ReadJobQueryHandler> logger
 ) : IRequestHandler<ReadJobQuery, IServiceResult>
 {
-    public async Task<IServiceResult> Handle(
+    public async ValueTask<IServiceResult> Handle(
         ReadJobQuery request,
         CancellationToken cancellationToken
     )
