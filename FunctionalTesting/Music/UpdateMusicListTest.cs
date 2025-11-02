@@ -17,12 +17,12 @@ public class UpdateMusicListTest : BaseTestingClass
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
+        userId = Guid.Parse(regResult.Data!.GetPropertyValue("Id")!.ToString()!);
         var createMusicListResult = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
-        musicListId = Guid.Parse(createMusicListResult.Data!.GetProperty("Id")!.ToString()!);
+        musicListId = Guid.Parse(createMusicListResult.Data!.GetPropertyValue("Id")!.ToString()!);
     }
 
     [Fact]

@@ -17,7 +17,7 @@ public class GetMusicStreamTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
+        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
         var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -26,7 +26,7 @@ public class GetMusicStreamTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
+        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
 
         var readAllMusicInfoResult = await Mediator.Send(
@@ -36,7 +36,7 @@ public class GetMusicStreamTest : BaseTestingClass
         musicInfoIds =
         [
             .. (readAllMusicInfoResult.Data! as IEnumerable<object>)!.Select(o =>
-                Guid.Parse(o.GetProperty("Id")!.ToString()!)
+                Guid.Parse(o.GetPropertyValue("Id")!.ToString()!)
             ),
         ];
     }

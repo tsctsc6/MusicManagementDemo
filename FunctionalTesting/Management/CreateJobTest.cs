@@ -16,7 +16,7 @@ public class CreateJobTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
+        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
         var result = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -40,15 +40,15 @@ public class CreateJobTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
+        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
         var result = await Mediator.Send(
             new ReadJobQuery(jobId),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
-        var completedAt = result.Data?.GetProperty("CompletedAt");
-        var success = result.Data?.GetProperty("Success");
+        var completedAt = result.Data?.GetPropertyValue("CompletedAt");
+        var success = result.Data?.GetPropertyValue("Success");
         Assert.NotNull(completedAt);
         Assert.Equal(false, success);
     }
@@ -60,7 +60,7 @@ public class CreateJobTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage13"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
+        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
         var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -69,15 +69,15 @@ public class CreateJobTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
+        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
         var result = await Mediator.Send(
             new ReadJobQuery(jobId),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
-        var completedAt = result.Data?.GetProperty("CompletedAt");
-        var success = result.Data?.GetProperty("Success");
+        var completedAt = result.Data?.GetPropertyValue("CompletedAt");
+        var success = result.Data?.GetPropertyValue("Success");
         Assert.NotNull(completedAt);
         Assert.Equal(false, success);
     }
@@ -89,7 +89,7 @@ public class CreateJobTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
+        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
         var sb = new StringBuilder(600);
         for (int i = 0; i < 20; i++)
         {

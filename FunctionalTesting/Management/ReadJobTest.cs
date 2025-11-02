@@ -15,7 +15,7 @@ public class ReadJobTest : BaseTestingClass
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
+        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
         var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -24,7 +24,7 @@ public class ReadJobTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
+        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
         var result = await Mediator.Send(
             new ReadJobQuery(jobId),

@@ -23,17 +23,17 @@ public class ReadAllStorageTest : BaseTestingClass
             new CreateStorageCommand("a", "X:\\a"),
             TestContext.Current.CancellationToken
         );
-        storageIds.Add((int)result.Data!.GetProperty("Id")!);
+        storageIds.Add((int)result.Data!.GetPropertyValue("Id")!);
         result = await Mediator.Send(
             new CreateStorageCommand("b", "X:\\b"),
             TestContext.Current.CancellationToken
         );
-        storageIds.Add((int)result.Data!.GetProperty("Id")!);
+        storageIds.Add((int)result.Data!.GetPropertyValue("Id")!);
         result = await Mediator.Send(
             new CreateStorageCommand("c", "X:\\c"),
             TestContext.Current.CancellationToken
         );
-        storageIds.Add((int)result.Data!.GetProperty("Id")!);
+        storageIds.Add((int)result.Data!.GetPropertyValue("Id")!);
     }
 
     [Fact]

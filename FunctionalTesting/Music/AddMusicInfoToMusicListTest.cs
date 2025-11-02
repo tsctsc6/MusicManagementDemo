@@ -21,18 +21,18 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
+        userId = Guid.Parse(regResult.Data!.GetPropertyValue("Id")!.ToString()!);
         var createMusicListResult = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
-        musicListId = Guid.Parse(createMusicListResult.Data!.GetProperty("Id")!.ToString()!);
+        musicListId = Guid.Parse(createMusicListResult.Data!.GetPropertyValue("Id")!.ToString()!);
 
         var createStorageResult = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
+        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
         var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -41,7 +41,7 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
+        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
 
         var readAllMusicInfoResult = await Mediator.Send(
@@ -51,7 +51,7 @@ public class AddMusicInfoToMusicListTest : BaseTestingClass
         musicInfoIds =
         [
             .. (readAllMusicInfoResult.Data! as IEnumerable<object>)!.Select(o =>
-                Guid.Parse(o.GetProperty("Id")!.ToString()!)
+                Guid.Parse(o.GetPropertyValue("Id")!.ToString()!)
             ),
         ];
     }
