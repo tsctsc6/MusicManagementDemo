@@ -11,12 +11,12 @@ public class DeleteMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await mediator.Send(
+        var regResult = await Mediator.Send(
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
         userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
-        var createMusicListResult = await mediator.Send(
+        var createMusicListResult = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
@@ -27,7 +27,7 @@ public class DeleteMusicListTest : BaseTestingClass
     public async Task Normal()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new DeleteMusicListCommand(userId, musicListId),
             TestContext.Current.CancellationToken
         );
@@ -39,7 +39,7 @@ public class DeleteMusicListTest : BaseTestingClass
     public async Task MusicListNotExist()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new DeleteMusicListCommand(userId, Guid.Empty),
             TestContext.Current.CancellationToken
         );

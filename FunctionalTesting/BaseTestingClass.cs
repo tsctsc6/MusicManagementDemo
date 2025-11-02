@@ -12,8 +12,8 @@ namespace FunctionalTesting;
 
 public class BaseTestingClass : IAsyncLifetime
 {
-    protected readonly IServiceProvider _services;
-    protected IMediator mediator;
+    protected readonly IServiceProvider ServiceProvider;
+    protected readonly IMediator Mediator;
 
     protected BaseTestingClass()
     {
@@ -44,13 +44,13 @@ public class BaseTestingClass : IAsyncLifetime
             .AddApplication();
         servicesBuilder.AddSingleton(_ => newConfiguration);
         servicesBuilder.AddSingleton<IConfiguration>(_ => newConfiguration);
-        _services = servicesBuilder.BuildServiceProvider();
-        mediator = _services.GetRequiredService<IMediator>();
+        ServiceProvider = servicesBuilder.BuildServiceProvider();
+        Mediator = ServiceProvider.GetRequiredService<IMediator>();
     }
 
     public async ValueTask InitializeAsync()
     {
-        var config = _services.GetRequiredService<IConfigurationRoot>();
+        var config = ServiceProvider.GetRequiredService<IConfigurationRoot>();
         await using var conn = new NpgsqlConnection(config["ConnectionStrings:Postgres"]);
         await conn.OpenAsync();
         await new NpgsqlCommand(
@@ -59,7 +59,7 @@ public class BaseTestingClass : IAsyncLifetime
         ).ExecuteNonQueryAsync();
         try
         {
-            await using var scope = _services.CreateAsyncScope();
+            await using var scope = ServiceProvider.CreateAsyncScope();
             await using var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>();
             await dbContext.Database.MigrateAsync();
         }
@@ -72,7 +72,7 @@ public class BaseTestingClass : IAsyncLifetime
 
     public async ValueTask DisposeAsync()
     {
-        var dbContext = _services.GetRequiredService<IDbContext>();
+        var dbContext = ServiceProvider.GetRequiredService<IDbContext>();
         await dbContext.Database.EnsureDeletedAsync();
         GC.SuppressFinalize(this);
     }

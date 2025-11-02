@@ -10,7 +10,7 @@ public class UpdateStorageTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var createStorageResult = await mediator.Send(
+        var createStorageResult = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
@@ -21,7 +21,7 @@ public class UpdateStorageTest : BaseTestingClass
     public async Task Normal()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new UpdateStorageCommand(storageId, "Test2", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
@@ -32,7 +32,7 @@ public class UpdateStorageTest : BaseTestingClass
     [Fact]
     public async Task NotExist()
     {
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new UpdateStorageCommand(114514, "Test2", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
@@ -49,7 +49,7 @@ public class UpdateStorageTest : BaseTestingClass
             sb.Append("abdefghi123");
         }
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new UpdateStorageCommand(storageId, sb.ToString(), "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
@@ -66,7 +66,7 @@ public class UpdateStorageTest : BaseTestingClass
             sb.Append("abdefghi123\\");
         }
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new UpdateStorageCommand(storageId, "Test", sb.ToString()),
             TestContext.Current.CancellationToken
         );

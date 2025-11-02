@@ -13,12 +13,12 @@ public class ReadAllMusicInfoTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var createStorageResult = await mediator.Send(
+        var createStorageResult = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
         var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
-        var createJobResult = await mediator.Send(
+        var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
                 "ddd",
@@ -28,7 +28,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
         );
         var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
-        var readAllMusicInfoResult = await mediator.Send(
+        var readAllMusicInfoResult = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
             TestContext.Current.CancellationToken
         );
@@ -55,7 +55,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     public async Task Normal(NormalArgs args)
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicInfoQuery(
                 args.IsReferenceIdNull ? null : musicInfoIds[1],
                 10,
@@ -72,7 +72,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     public async Task MinPageSize()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 0, false, string.Empty),
             TestContext.Current.CancellationToken
         );
@@ -84,7 +84,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     public async Task MaxPageSize()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 30, false, string.Empty),
             TestContext.Current.CancellationToken
         );
@@ -96,7 +96,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     public async Task Empty()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
             TestContext.Current.CancellationToken
         );
@@ -107,7 +107,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
     [Fact]
     public async Task Search()
     {
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 10, false, "right asx"),
             TestContext.Current.CancellationToken
         );
@@ -123,7 +123,7 @@ public class ReadAllMusicInfoTest : BaseTestingClass
         {
             sb.Append("abcdefgh123");
         }
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 10, false, sb.ToString()),
             TestContext.Current.CancellationToken
         );

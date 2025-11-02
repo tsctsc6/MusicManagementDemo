@@ -18,23 +18,23 @@ public class RemoveMusicInfoFromMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await mediator.Send(
+        var regResult = await Mediator.Send(
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
         userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
-        var createMusicListResult = await mediator.Send(
+        var createMusicListResult = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
         musicListId = Guid.Parse(createMusicListResult.Data!.GetProperty("Id")!.ToString()!);
 
-        var createStorageResult = await mediator.Send(
+        var createStorageResult = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
         var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
-        var createJobResult = await mediator.Send(
+        var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
                 "ddd",
@@ -45,7 +45,7 @@ public class RemoveMusicInfoFromMusicListTest : BaseTestingClass
         var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
 
-        var readAllMusicInfoResult = await mediator.Send(
+        var readAllMusicInfoResult = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
             TestContext.Current.CancellationToken
         );
@@ -57,7 +57,7 @@ public class RemoveMusicInfoFromMusicListTest : BaseTestingClass
         ];
         for (int i = 0; i < 6; i++)
         {
-            await mediator.Send(
+            await Mediator.Send(
                 new AddMusicInfoToMusicListCommand(userId, musicListId, musicInfoIds[i]),
                 TestContext.Current.CancellationToken
             );
@@ -71,7 +71,7 @@ public class RemoveMusicInfoFromMusicListTest : BaseTestingClass
     public async Task Normal(int removeIndex)
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new RemoveMusicInfoFromMusicListCommand(userId, musicListId, musicInfoIds[removeIndex]),
             TestContext.Current.CancellationToken
         );
@@ -83,7 +83,7 @@ public class RemoveMusicInfoFromMusicListTest : BaseTestingClass
     public async Task MusicInfoNotExist()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new RemoveMusicInfoFromMusicListCommand(userId, musicListId, Guid.Empty),
             TestContext.Current.CancellationToken
         );
@@ -95,7 +95,7 @@ public class RemoveMusicInfoFromMusicListTest : BaseTestingClass
     public async Task MusicListNotExist()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new RemoveMusicInfoFromMusicListCommand(userId, Guid.Empty, musicInfoIds[1]),
             TestContext.Current.CancellationToken
         );

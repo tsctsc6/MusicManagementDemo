@@ -8,7 +8,7 @@ public class CreateStorageTest : BaseTestingClass
     [Fact]
     public async Task Normal()
     {
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
@@ -19,11 +19,11 @@ public class CreateStorageTest : BaseTestingClass
     [Fact]
     public async Task Repeatedly()
     {
-        await mediator.Send(
+        await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
@@ -39,7 +39,7 @@ public class CreateStorageTest : BaseTestingClass
         {
             sb.Append("abdefghi123");
         }
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new CreateStorageCommand(sb.ToString(), "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
@@ -55,7 +55,7 @@ public class CreateStorageTest : BaseTestingClass
         {
             sb.Append("abdefghi123\\");
         }
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new CreateStorageCommand("Test", sb.ToString()),
             TestContext.Current.CancellationToken
         );

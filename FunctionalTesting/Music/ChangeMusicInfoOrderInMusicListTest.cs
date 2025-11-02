@@ -18,23 +18,23 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await mediator.Send(
+        var regResult = await Mediator.Send(
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
         userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
-        var createMusicListResult = await mediator.Send(
+        var createMusicListResult = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
         musicListId = Guid.Parse(createMusicListResult.Data!.GetProperty("Id")!.ToString()!);
 
-        var createStorageResult = await mediator.Send(
+        var createStorageResult = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
         var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
-        var createJobResult = await mediator.Send(
+        var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
                 "ddd",
@@ -45,7 +45,7 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
         var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
 
-        var readAllMusicInfoResult = await mediator.Send(
+        var readAllMusicInfoResult = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
             TestContext.Current.CancellationToken
         );
@@ -57,7 +57,7 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
         ];
         for (int i = 0; i < 6; i++)
         {
-            await mediator.Send(
+            await Mediator.Send(
                 new AddMusicInfoToMusicListCommand(userId, musicListId, musicInfoIds[i]),
                 TestContext.Current.CancellationToken
             );
@@ -92,7 +92,7 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
             prevMusicInfoId = musicInfoIds[args.MoveToBeforeIndex - 1];
             nextMusicInfoId = musicInfoIds[args.MoveToBeforeIndex];
         }
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ChangeMusicInfoOrderInMusicListCommand(
                 userId,
                 musicListId,
@@ -131,7 +131,7 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
                 Assert.Fail();
                 break;
         }
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ChangeMusicInfoOrderInMusicListCommand(
                 userId,
                 musicListId,
@@ -152,7 +152,7 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
         var targetMusicInfoId = musicInfoIds[1];
         var prevMusicInfoId = musicInfoIds[2];
         var nextMusicInfoId = musicInfoIds[3];
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ChangeMusicInfoOrderInMusicListCommand(
                 userId,
                 Guid.Empty,
@@ -173,7 +173,7 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
         var targetMusicInfoId = musicInfoIds[1];
         var prevMusicInfoId = musicInfoIds[2];
         var nextMusicInfoId = musicInfoIds[4];
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ChangeMusicInfoOrderInMusicListCommand(
                 userId,
                 musicListId,
@@ -194,7 +194,7 @@ public class ChangeMusicInfoOrderInMusicListTest : BaseTestingClass
         var targetMusicInfoId = musicInfoIds[1];
         var prevMusicInfoId = musicInfoIds[1];
         var nextMusicInfoId = musicInfoIds[2];
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ChangeMusicInfoOrderInMusicListCommand(
                 userId,
                 musicListId,

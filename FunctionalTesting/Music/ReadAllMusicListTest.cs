@@ -11,14 +11,14 @@ public class ReadAllMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync(int createMusicListCount)
     {
-        var regResult = await mediator.Send(
+        var regResult = await Mediator.Send(
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
         userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
         for (int i = 0; i < createMusicListCount; i++)
         {
-            var createMusicListResult = await mediator.Send(
+            var createMusicListResult = await Mediator.Send(
                 new CreateMusicListCommand(userId, "New MusicList"),
                 TestContext.Current.CancellationToken
             );
@@ -43,7 +43,7 @@ public class ReadAllMusicListTest : BaseTestingClass
     public async Task Normal(NormalArgs args)
     {
         await PrepareAsync(3);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicListQuery(
                 userId,
                 args.IsReferenceIdNull ? null : musicListIds[1],
@@ -60,7 +60,7 @@ public class ReadAllMusicListTest : BaseTestingClass
     public async Task MinPageSize()
     {
         await PrepareAsync(3);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicListQuery(userId, null, 0, false),
             TestContext.Current.CancellationToken
         );
@@ -72,7 +72,7 @@ public class ReadAllMusicListTest : BaseTestingClass
     public async Task MaxPageSize()
     {
         await PrepareAsync(3);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicListQuery(userId, null, 30, false),
             TestContext.Current.CancellationToken
         );
@@ -84,7 +84,7 @@ public class ReadAllMusicListTest : BaseTestingClass
     public async Task Empty()
     {
         await PrepareAsync(0);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllMusicListQuery(userId, null, 10, false),
             TestContext.Current.CancellationToken
         );

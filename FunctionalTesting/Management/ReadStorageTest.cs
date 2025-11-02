@@ -8,12 +8,12 @@ public class ReadStorageTest : BaseTestingClass
     [Fact]
     public async Task Normal()
     {
-        var createStorageResult = await mediator.Send(
+        var createStorageResult = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
         var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadStorageQuery(storageId),
             TestContext.Current.CancellationToken
         );
@@ -24,7 +24,7 @@ public class ReadStorageTest : BaseTestingClass
     [Fact]
     public async Task NotExist()
     {
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadStorageQuery(0721),
             TestContext.Current.CancellationToken
         );

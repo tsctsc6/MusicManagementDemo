@@ -13,12 +13,12 @@ public class UpdateMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await mediator.Send(
+        var regResult = await Mediator.Send(
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
         userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
-        var createMusicListResult = await mediator.Send(
+        var createMusicListResult = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
@@ -29,7 +29,7 @@ public class UpdateMusicListTest : BaseTestingClass
     public async Task Normal()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new UpdateMusicListCommand(userId, musicListId, "New MusicList2"),
             TestContext.Current.CancellationToken
         );
@@ -41,7 +41,7 @@ public class UpdateMusicListTest : BaseTestingClass
     public async Task NotExist()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new UpdateMusicListCommand(userId, Guid.Empty, "New MusicList2"),
             TestContext.Current.CancellationToken
         );
@@ -58,7 +58,7 @@ public class UpdateMusicListTest : BaseTestingClass
         {
             sb.Append("New MusicList2");
         }
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new UpdateMusicListCommand(userId, musicListId, sb.ToString()),
             TestContext.Current.CancellationToken
         );

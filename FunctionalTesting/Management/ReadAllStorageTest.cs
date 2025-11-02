@@ -19,17 +19,17 @@ public class ReadAllStorageTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new CreateStorageCommand("a", "X:\\a"),
             TestContext.Current.CancellationToken
         );
         storageIds.Add((int)result.Data!.GetProperty("Id")!);
-        result = await mediator.Send(
+        result = await Mediator.Send(
             new CreateStorageCommand("b", "X:\\b"),
             TestContext.Current.CancellationToken
         );
         storageIds.Add((int)result.Data!.GetProperty("Id")!);
-        result = await mediator.Send(
+        result = await Mediator.Send(
             new CreateStorageCommand("c", "X:\\c"),
             TestContext.Current.CancellationToken
         );
@@ -39,7 +39,7 @@ public class ReadAllStorageTest : BaseTestingClass
     [Fact]
     public async Task Empty()
     {
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllStorageQuery(null, 10, false),
             TestContext.Current.CancellationToken
         );
@@ -50,7 +50,7 @@ public class ReadAllStorageTest : BaseTestingClass
     [Fact]
     public async Task ZeroPageSize()
     {
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllStorageQuery(null, 0, false),
             TestContext.Current.CancellationToken
         );
@@ -61,7 +61,7 @@ public class ReadAllStorageTest : BaseTestingClass
     [Fact]
     public async Task MaxPageSize()
     {
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllStorageQuery(null, 30, false),
             TestContext.Current.CancellationToken
         );
@@ -74,7 +74,7 @@ public class ReadAllStorageTest : BaseTestingClass
     public async Task ThreeAscWithReferenceId(ThreeAscWithReferenceIdArgs args)
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new ReadAllStorageQuery(args.IsReferenceIdNull ? null : storageIds[1], 10, args.Asc),
             TestContext.Current.CancellationToken
         );

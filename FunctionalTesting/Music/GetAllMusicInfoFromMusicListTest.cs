@@ -18,23 +18,23 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync(int addToMusicListCount)
     {
-        var regResult = await mediator.Send(
+        var regResult = await Mediator.Send(
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
         userId = Guid.Parse(regResult.Data!.GetProperty("Id")!.ToString()!);
-        var createMusicListResult = await mediator.Send(
+        var createMusicListResult = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
         musicListId = Guid.Parse(createMusicListResult.Data!.GetProperty("Id")!.ToString()!);
 
-        var createStorageResult = await mediator.Send(
+        var createStorageResult = await Mediator.Send(
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
         var storageId = (int)createStorageResult.Data!.GetProperty("Id")!;
-        var createJobResult = await mediator.Send(
+        var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
                 "ddd",
@@ -45,7 +45,7 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
         var jobId = (long)createJobResult.Data?.GetProperty("JobId")!;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
 
-        var readAllMusicInfoResult = await mediator.Send(
+        var readAllMusicInfoResult = await Mediator.Send(
             new ReadAllMusicInfoQuery(null, 10, false, string.Empty),
             TestContext.Current.CancellationToken
         );
@@ -57,7 +57,7 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
         ];
         for (int i = 0; i < addToMusicListCount; i++)
         {
-            await mediator.Send(
+            await Mediator.Send(
                 new AddMusicInfoToMusicListCommand(userId, musicListId, musicInfoIds[i]),
                 TestContext.Current.CancellationToken
             );
@@ -91,7 +91,7 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
     public async Task Normal(NormalArgs args)
     {
         await PrepareAsync(args.AddToMusicListCount);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new GetAllMusicInfoFromMusicListQuery(
                 userId,
                 musicListId,
@@ -109,7 +109,7 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
     public async Task Empty()
     {
         await PrepareAsync(0);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new GetAllMusicInfoFromMusicListQuery(userId, musicListId, 10, null, false),
             TestContext.Current.CancellationToken
         );
@@ -122,7 +122,7 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
     public async Task MinPageSize()
     {
         await PrepareAsync(3);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new GetAllMusicInfoFromMusicListQuery(userId, musicListId, 0, null, false),
             TestContext.Current.CancellationToken
         );
@@ -135,7 +135,7 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
     public async Task MaxPageSize()
     {
         await PrepareAsync(3);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new GetAllMusicInfoFromMusicListQuery(userId, musicListId, 30, null, false),
             TestContext.Current.CancellationToken
         );
@@ -148,7 +148,7 @@ public class GetAllMusicInfoFromMusicListTest : BaseTestingClass
     public async Task MusicListNotExist()
     {
         await PrepareAsync(0);
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new GetAllMusicInfoFromMusicListQuery(userId, Guid.Empty, 30, null, false),
             TestContext.Current.CancellationToken
         );

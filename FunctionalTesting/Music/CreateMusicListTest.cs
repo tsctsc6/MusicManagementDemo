@@ -10,7 +10,7 @@ public class CreateMusicListTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await mediator.Send(
+        var regResult = await Mediator.Send(
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
@@ -21,7 +21,7 @@ public class CreateMusicListTest : BaseTestingClass
     public async Task Normal()
     {
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
@@ -33,11 +33,11 @@ public class CreateMusicListTest : BaseTestingClass
     public async Task Repeatedly()
     {
         await PrepareAsync();
-        await mediator.Send(
+        await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new CreateMusicListCommand(userId, "New MusicList"),
             TestContext.Current.CancellationToken
         );
@@ -54,7 +54,7 @@ public class CreateMusicListTest : BaseTestingClass
             sb.Append("abcdefgh123");
         }
         await PrepareAsync();
-        var result = await mediator.Send(
+        var result = await Mediator.Send(
             new CreateMusicListCommand(userId, sb.ToString()),
             TestContext.Current.CancellationToken
         );
