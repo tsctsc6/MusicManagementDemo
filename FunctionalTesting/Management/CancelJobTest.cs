@@ -1,4 +1,6 @@
 ﻿using System.Text.Json.Nodes;
+using FunctionalTesting.Provisions;
+using MediatR;
 using MusicManagementDemo.Application.UseCase.Management.CancelJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
@@ -8,15 +10,18 @@ namespace FunctionalTesting.Management;
 
 public class CancelJobTest : BaseTestingClass
 {
-    [Fact]
-    public async Task Normal()
+    private int storageId;
+    private long jobId;
+
+    private async Task PrepareAsync()
     {
-        var createStorageResult = await Mediator.Send(
+        storageId = await ManagementProvision.CreateStorageAsync(
+            Mediator,
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
-        var createJobResult = await Mediator.Send(
+        jobId = await ManagementProvision.CreateJobAsync(
+            Mediator,
             new CreateJobCommand(
                 JobType.ScanIncremental,
                 "ddd",
@@ -24,7 +29,12 @@ public class CancelJobTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
+    }
+
+    [Fact]
+    public async Task Normal()
+    {
+        await PrepareAsync();
         await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
         var result = await Mediator.Send(
             new CancelJobCommand(jobId),

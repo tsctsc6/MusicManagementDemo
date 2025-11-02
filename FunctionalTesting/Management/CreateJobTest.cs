@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json.Nodes;
+using FunctionalTesting.Provisions;
 using MusicManagementDemo.Application.UseCase.Management.CreateJob;
 using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 using MusicManagementDemo.Application.UseCase.Management.ReadJob;
@@ -9,14 +10,21 @@ namespace FunctionalTesting.Management;
 
 public class CreateJobTest : BaseTestingClass
 {
-    [Fact]
-    public async Task Normal()
+    private int storageId;
+
+    private async Task PrepareAsync()
     {
-        var createStorageResult = await Mediator.Send(
+        storageId = await ManagementProvision.CreateStorageAsync(
+            Mediator,
             new CreateStorageCommand("Test", "X:\\storage1"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
+    }
+
+    [Fact]
+    public async Task Normal()
+    {
+        await PrepareAsync();
         var result = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -56,11 +64,11 @@ public class CreateJobTest : BaseTestingClass
     [Fact]
     public async Task StoragePathNotFound()
     {
-        var createStorageResult = await Mediator.Send(
+        storageId = await ManagementProvision.CreateStorageAsync(
+            Mediator,
             new CreateStorageCommand("Test", "X:\\storage13"),
             TestContext.Current.CancellationToken
         );
-        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
         var createJobResult = await Mediator.Send(
             new CreateJobCommand(
                 JobType.ScanIncremental,
@@ -85,13 +93,9 @@ public class CreateJobTest : BaseTestingClass
     [Fact]
     public async Task InvalidDescription()
     {
-        var createStorageResult = await Mediator.Send(
-            new CreateStorageCommand("Test", "X:\\storage1"),
-            TestContext.Current.CancellationToken
-        );
-        var storageId = (int)createStorageResult.Data!.GetPropertyValue("Id")!;
+        await PrepareAsync();
         var sb = new StringBuilder(600);
-        for (int i = 0; i < 20; i++)
+        for (var i = 0; i < 20; i++)
         {
             sb.Append("abcdefghijklmnopqrstuvwxyz");
         }
