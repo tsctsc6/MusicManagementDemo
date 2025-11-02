@@ -35,7 +35,7 @@ public class CreateStorageTest : BaseTestingClass
     public async Task InvalidName()
     {
         var sb = new StringBuilder();
-        for (int i = 0; i < 10; i++)
+        for (var i = 0; i < 10; i++)
         {
             sb.Append("abdefghi123");
         }
@@ -51,7 +51,7 @@ public class CreateStorageTest : BaseTestingClass
     public async Task InvalidPath()
     {
         var sb = new StringBuilder("X:\\");
-        for (int i = 0; i < 22; i++)
+        for (var i = 0; i < 22; i++)
         {
             sb.Append("abdefghi123\\");
         }
