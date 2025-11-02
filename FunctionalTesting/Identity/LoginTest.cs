@@ -1,4 +1,5 @@
-﻿using MusicManagementDemo.Application.UseCase.Identity.Login;
+﻿using FunctionalTesting.Provisions;
+using MusicManagementDemo.Application.UseCase.Identity.Login;
 using MusicManagementDemo.Application.UseCase.Identity.Register;
 
 namespace FunctionalTesting.Identity;
@@ -9,11 +10,11 @@ public class LoginTest : BaseTestingClass
 
     private async Task PrepareAsync()
     {
-        var regResult = await Mediator.Send(
+        userId = await IdentityProvision.RegisterAsync(
+            Mediator,
             new RegisterCommand(Email: "aaa@aaa.com", UserName: "aaa", Password: "Abc@123"),
             TestContext.Current.CancellationToken
         );
-        userId = Guid.Parse(regResult.Data!.GetPropertyValue("Id")!.ToString()!);
     }
 
     [Fact]
