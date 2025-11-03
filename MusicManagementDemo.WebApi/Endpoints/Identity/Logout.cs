@@ -6,6 +6,7 @@ using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Identity;
 
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class Logout : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

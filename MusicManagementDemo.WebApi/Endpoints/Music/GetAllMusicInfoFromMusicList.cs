@@ -7,6 +7,7 @@ using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class GetAllMusicInfoFromMusicList : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

@@ -7,6 +7,7 @@ using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class UpdateMusicList : IEndpoint
 {
     private sealed record Request(Guid MusicListId, string Name);

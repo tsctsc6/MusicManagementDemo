@@ -4,6 +4,7 @@ using MusicManagementDemo.Application.UseCase.Management.ReadJob;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class ReadJob : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

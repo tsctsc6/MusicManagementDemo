@@ -4,6 +4,7 @@ using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
 public class ReadAllMusicInfo : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

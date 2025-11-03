@@ -4,6 +4,7 @@ using MusicManagementDemo.Application.UseCase.Management.ReadStorage;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class ReadStorage : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

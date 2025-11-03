@@ -4,6 +4,7 @@ using MusicManagementDemo.Application.UseCase.Management.CancelJob;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class CancelJob : IEndpoint
 {
     private sealed record Request(long JobId);
