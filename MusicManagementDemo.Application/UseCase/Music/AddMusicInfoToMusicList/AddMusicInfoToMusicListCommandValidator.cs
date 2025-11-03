@@ -2,6 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
 
+[RegisterScoped<IValidator<AddMusicInfoToMusicListCommand>>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class AddMusicInfoToMusicListCommandValidator
     : AbstractValidator<AddMusicInfoToMusicListCommand>
 {

@@ -2,6 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 
+[RegisterScoped<IValidator<CreateStorageCommand>>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class CreateStorageCommandValidator : AbstractValidator<CreateStorageCommand>
 {
     public CreateStorageCommandValidator()

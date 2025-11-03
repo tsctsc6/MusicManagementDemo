@@ -2,6 +2,9 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.ChangeMusicInfoOrderInMusicList;
 
+[RegisterScoped<IValidator<ChangeMusicInfoOrderInMusicListCommand>>(
+    Duplicate = DuplicateStrategy.Append
+)]
 internal sealed class ChangeMusicInfoOrderInMusicListCommandValidator
     : AbstractValidator<ChangeMusicInfoOrderInMusicListCommand>
 {

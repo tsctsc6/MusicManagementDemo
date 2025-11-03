@@ -12,7 +12,10 @@ internal sealed class MusicInfoUpdater(
     ILogger<MusicInfoUpdater> logger
 ) : INotificationHandler<MusicFileFoundEvent>
 {
-    public async ValueTask Handle(MusicFileFoundEvent notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(
+        MusicFileFoundEvent notification,
+        CancellationToken cancellationToken
+    )
     {
         var newMusicInfo = new List<MusicInfo>(notification.Items.Count());
         foreach (var item in notification.Items)

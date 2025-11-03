@@ -2,6 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;
 
+[RegisterScoped<IValidator<CreateJobCommand>>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class CreateJobCommandValidator : AbstractValidator<CreateJobCommand>
 {
     public CreateJobCommandValidator()

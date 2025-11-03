@@ -2,6 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Register;
 
+[RegisterScoped<IValidator<RegisterCommand>>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
     public RegisterCommandValidator()

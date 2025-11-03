@@ -2,6 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadAllStorage;
 
+[RegisterScoped<IValidator<ReadAllStorageQuery>>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class ReadAllStorageQueryValidator : AbstractValidator<ReadAllStorageQuery>
 {
     public ReadAllStorageQueryValidator()

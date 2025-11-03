@@ -2,6 +2,9 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
 
+[RegisterScoped<IValidator<GetAllMusicInfoFromMusicListQuery>>(
+    Duplicate = DuplicateStrategy.Append
+)]
 internal sealed class GetAllMusicInfoFromMusicListQueryValidator
     : AbstractValidator<GetAllMusicInfoFromMusicListQuery>
 {

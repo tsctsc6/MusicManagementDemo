@@ -2,6 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 
+[RegisterScoped<IValidator<CreateMusicListCommand>>(Duplicate = DuplicateStrategy.Append)]
 internal sealed class CreateMusicListCommandValidator : AbstractValidator<CreateMusicListCommand>
 {
     public CreateMusicListCommandValidator()

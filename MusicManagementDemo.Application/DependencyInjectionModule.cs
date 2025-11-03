@@ -29,10 +29,13 @@ public static class DependencyInjectionModule
             ];
             options.StreamPipelineBehaviors = [];
         });
-        services.AddValidatorsFromAssemblyContaining(
+
+        /*services.AddValidatorsFromAssemblyContaining(
             typeof(DependencyInjectionModule),
             includeInternalTypes: true
-        );
+        );*/
+        services.AddMusicManagementDemoApplication();
+
         return services;
     }
 }
