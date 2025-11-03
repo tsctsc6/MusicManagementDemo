@@ -16,8 +16,6 @@ builder
     .AddAppInfrastructure()
     .AddMusicManagementDemoWebApi();
 
-//builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
-
 var app = builder.Build();
 
 app.UseAuthentication();
