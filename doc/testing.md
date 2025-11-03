@@ -3,14 +3,16 @@
 
 本项目的单元测试方法是，通过把内存映射为虚拟硬盘，把测试用的数据库保存在虚拟硬盘中，加快速度的同时，还能避免物理硬盘的过度使用。
 
-> ⚠️ 本文档仅说明 Windows 平台的挂载虚拟硬盘方法。
+> [!warning]
+> 本文档仅说明 Windows 平台的挂载虚拟硬盘方法。
 
 ### 挂载虚拟硬盘
 首先下载 [ImDisk](https://sourceforge.net/projects/imdisk-toolkit/files/) 。
 
 运行 [DeployScript/testing/add-ram-disk.ps1](../DeployScript/testing/add-ram-disk.ps1) 。
 
-> ⚠️ 本项目中的 DeployScript/testing 中的脚本，需要 Windows 11 24H2 及以上。
+> [!warning]
+> 本项目中的 DeployScript/testing 中的脚本，需要 Windows 11 24H2 及以上。
 
 ### 创建 pgsql 的 tablespace
 简单来说， tablespace 是 pgsql 保存数据库的物理位置。
@@ -49,6 +51,10 @@
 ### 清理
 如果调试单元测试，且中途停止，测试数据库不会清理。此时可以运行 [DeployScript/testing/drop-all-testing-db.ps1](../DeployScript/testing/drop-all-testing-db.ps1) 清理所有测试数据库。
 
-> ⚠️ 重启电脑后，虚拟磁盘会消失；如果有测试数据库没有清理，可能会导致 pgsql 严重错误。
+> [!info]
+> 重启电脑后，虚拟磁盘会消失。
+> 
+> 先关机后开机，虚拟磁盘不会消失。
 
-> 先关机后开机，虚拟磁盘不会消失。（大概
+> [!warning]
+> 如果测试数据库太多，导致虚拟磁盘空间不足，可能会导致 pgsql 严重错误。

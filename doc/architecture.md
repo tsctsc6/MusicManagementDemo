@@ -60,6 +60,7 @@ erDiagram
 * 数据库： PostgresSQL 17
 * ORM： EFCore
 * 使用依赖注入，通过 Microsoft.Extensions.DependencyInjection 实现。
-* 使用中介者模式，通过 MediatR 实现。
-* 使用 Result 模式， 通过 RustSharp 实现。
+* 使用 [Injectio](https://github.com/loresoft/Injectio) 库，自动批量注册部分依赖。
+* 使用中介者模式，通过 [Mediator](https://github.com/martinothamar/Mediator) 实现。
+* 使用 Result 模式， 通过 [RustSharp](https://github.com/SlimeNull/RustSharp) 实现。
 * 单元测试使用 xUnit v3.
