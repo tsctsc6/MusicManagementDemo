@@ -2,7 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Login;
 
-[RegisterScoped<IValidator<LoginCommand>>(Duplicate = DuplicateStrategy.Append)]
+[RegisterScoped<IValidator<LoginCommand>>(Duplicate = DuplicateStrategy.Append, Tags = "Validator")]
 internal sealed class LoginCommandValidator : AbstractValidator<LoginCommand>
 {
     public LoginCommandValidator()

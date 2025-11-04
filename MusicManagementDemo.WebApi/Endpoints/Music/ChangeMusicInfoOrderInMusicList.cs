@@ -7,7 +7,7 @@ using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
-[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = "Endpoint")]
 internal sealed class ChangeMusicInfoOrderInMusicList : IEndpoint
 {
     private sealed record Request(

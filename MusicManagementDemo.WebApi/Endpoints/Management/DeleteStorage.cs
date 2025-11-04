@@ -4,7 +4,7 @@ using MusicManagementDemo.Application.UseCase.Management.DeleteStorage;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
-[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = "Endpoint")]
 internal sealed class DeleteStorage : IEndpoint
 {
     private sealed record Request(int Id);

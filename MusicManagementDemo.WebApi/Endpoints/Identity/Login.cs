@@ -3,7 +3,7 @@ using MusicManagementDemo.Application.UseCase.Identity.Login;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Identity;
 
-[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = "Endpoint")]
 internal sealed class Login : IEndpoint
 {
     private sealed record Request(string Email, string UserName, string Password);

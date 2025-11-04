@@ -2,7 +2,10 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetMusicStream;
 
-[RegisterScoped<IValidator<GetMusicStreamQuery>>(Duplicate = DuplicateStrategy.Append)]
+[RegisterScoped<IValidator<GetMusicStreamQuery>>(
+    Duplicate = DuplicateStrategy.Append,
+    Tags = "Validator"
+)]
 public class GetMusicStreamQueryValidator : AbstractValidator<GetMusicStreamQuery>
 {
     public GetMusicStreamQueryValidator()

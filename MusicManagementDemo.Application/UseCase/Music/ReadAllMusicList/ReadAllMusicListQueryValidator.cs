@@ -2,7 +2,10 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.ReadAllMusicList;
 
-[RegisterScoped<IValidator<ReadAllMusicListQuery>>(Duplicate = DuplicateStrategy.Append)]
+[RegisterScoped<IValidator<ReadAllMusicListQuery>>(
+    Duplicate = DuplicateStrategy.Append,
+    Tags = "Validator"
+)]
 internal sealed class ReadAllMusicListQueryValidator : AbstractValidator<ReadAllMusicListQuery>
 {
     public ReadAllMusicListQueryValidator()

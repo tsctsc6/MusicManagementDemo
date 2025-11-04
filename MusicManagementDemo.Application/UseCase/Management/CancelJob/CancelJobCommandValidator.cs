@@ -2,7 +2,10 @@
 
 namespace MusicManagementDemo.Application.UseCase.Management.CancelJob;
 
-[RegisterScoped<IValidator<CancelJobCommand>>(Duplicate = DuplicateStrategy.Append)]
+[RegisterScoped<IValidator<CancelJobCommand>>(
+    Duplicate = DuplicateStrategy.Append,
+    Tags = "Validator"
+)]
 public class CancelJobCommandValidator : AbstractValidator<CancelJobCommand>
 {
     public CancelJobCommandValidator()

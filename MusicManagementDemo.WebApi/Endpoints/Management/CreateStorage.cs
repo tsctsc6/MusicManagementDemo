@@ -4,7 +4,7 @@ using MusicManagementDemo.Application.UseCase.Management.CreateStorage;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
-[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append)]
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = "Endpoint")]
 internal sealed class CreateStorage : IEndpoint
 {
     private sealed record Request(string Name, string Path);

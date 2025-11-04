@@ -2,7 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadJob;
 
-[RegisterScoped<IValidator<ReadJobQuery>>(Duplicate = DuplicateStrategy.Append)]
+[RegisterScoped<IValidator<ReadJobQuery>>(Duplicate = DuplicateStrategy.Append, Tags = "Validator")]
 public class ReadJobQueryValidator : AbstractValidator<ReadJobQuery>
 {
     public ReadJobQueryValidator()

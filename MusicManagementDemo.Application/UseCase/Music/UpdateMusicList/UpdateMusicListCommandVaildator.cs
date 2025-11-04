@@ -2,7 +2,10 @@
 
 namespace MusicManagementDemo.Application.UseCase.Music.UpdateMusicList;
 
-[RegisterScoped<IValidator<UpdateMusicListCommand>>(Duplicate = DuplicateStrategy.Append)]
+[RegisterScoped<IValidator<UpdateMusicListCommand>>(
+    Duplicate = DuplicateStrategy.Append,
+    Tags = "Validator"
+)]
 internal sealed class UpdateMusicListCommandVaildator : AbstractValidator<UpdateMusicListCommand>
 {
     public UpdateMusicListCommandVaildator()
