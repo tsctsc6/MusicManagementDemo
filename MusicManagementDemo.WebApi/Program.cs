@@ -14,7 +14,7 @@ builder
     .Services.AddApplication()
     .AddDbInfrastructure(builder.Configuration)
     .AddAppInfrastructure()
-    .AddWebApiByInjectio();
+    .AddWebApiByInjectio("Endpoint");
 
 var app = builder.Build();
 
