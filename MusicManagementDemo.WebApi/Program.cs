@@ -14,7 +14,7 @@ builder
     .Services.AddApplication()
     .AddDbInfrastructure(builder.Configuration)
     .AddAppInfrastructure()
-    .AddMusicManagementDemoWebApi();
+    .AddWebApiByInjectio();
 
 var app = builder.Build();
 

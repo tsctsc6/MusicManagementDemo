@@ -34,7 +34,7 @@ public static class DependencyInjectionModule
             typeof(DependencyInjectionModule),
             includeInternalTypes: true
         );*/
-        services.AddMusicManagementDemoApplication();
+        services.AddApplicationByInjectio();
 
         return services;
     }
