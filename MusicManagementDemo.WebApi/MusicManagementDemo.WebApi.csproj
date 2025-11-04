@@ -3,7 +3,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <InjectioName>AddWebApiByInjectio</InjectioName>
+        <InjectioName>WebApiByInjectio</InjectioName>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Injectio" Version="5.1.0" />
