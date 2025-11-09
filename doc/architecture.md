@@ -5,17 +5,18 @@ title: 项目结构图
 ---
 flowchart TD
     subgraph Src
-    WebApi --> AppInfrastructure
-    WebApi --> DbInfrastructure
+    WebApi --> Infrastructure.Core
+    WebApi --> Infrastructure.Database
     WebApi --> Application
-    AppInfrastructure --> Abstractions
-    DbInfrastructure --> Abstractions
+    Infrastructure.Core --> Abstractions
+    Infrastructure.Database --> Abstractions
     Application --> Abstractions
     Abstractions --> Domain
     end
 
     subgraph Functional_Testing
-    FunctionalTesting --> DbInfrastructure
+    FunctionalTesting --> Infrastructure.Core
+    FunctionalTesting --> Infrastructure.Database
     FunctionalTesting --> Application
     FunctionalTesting --> FunctionalTesting.Infrastructure
     FunctionalTesting.Infrastructure --> Abstractions

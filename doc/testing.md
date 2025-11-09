@@ -17,7 +17,7 @@
 ### 创建 pgsql 的 tablespace
 简单来说， tablespace 是 pgsql 保存数据库的物理位置。
 
-使用 [DeployScript/testing/reset-pg-ram-tablespace.ps1](../DeployScript/testing/reset-pg-ram-tablespace.ps1) 创建 tablespace 。
+使用 [DeployScript/testing/add-pg-ram-tablespace.ps1](../DeployScript/testing/add-pg-ram-tablespace.ps1) 创建 tablespace 。
 
 更多相关命令，查看 [DeployScript/testing/pg-ram-disk.txt](../DeployScript/testing/pg-ram-disk.txt)
 
