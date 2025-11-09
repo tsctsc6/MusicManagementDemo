@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.AppInfrastructure", "MusicManagementDemo.AppInfrastructure\MusicManagementDemo.AppInfrastructure.csproj", "{21C50602-C156-449F-9C53-E2D658889CA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Infrastructure.Core", "MusicManagementDemo.Infrastructure.Core\MusicManagementDemo.Infrastructure.Core.csproj", "{21C50602-C156-449F-9C53-E2D658889CA4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Domain", "MusicManagementDemo.Domain\MusicManagementDemo.Domain.csproj", "{85A388AD-F06C-4561-9A71-9CBDF0AACC63}"
 EndProject
@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{D73A0538-911
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functional_Testing", "Functional_Testing", "{1CB10A34-4797-4380-A5F1-1662EBF2FEBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.DbInfrastructure", "MusicManagementDemo.DbInfrastructure\MusicManagementDemo.DbInfrastructure.csproj", "{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManagementDemo.Infrastructure.Database", "MusicManagementDemo.Infrastructure.Database\MusicManagementDemo.Infrastructure.Database.csproj", "{5EE2CD9E-8F20-491B-93D1-BF5C188A8877}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTesting", "FunctionalTesting\FunctionalTesting.csproj", "{16D68286-8FEB-4ED9-AA85-8D8AFA819D84}"
 EndProject

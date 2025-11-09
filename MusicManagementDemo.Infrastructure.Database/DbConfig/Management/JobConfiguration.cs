@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MusicManagementDemo.Domain.Entity.Management;
 
-namespace MusicManagementDemo.DbInfrastructure.DbConfig.Management;
+namespace MusicManagementDemo.Infrastructure.Database.DbConfig.Management;
 
 public class JobConfiguration(JsonSerializerOptions jsonSerializerOptions)
     : IEntityTypeConfiguration<Job>

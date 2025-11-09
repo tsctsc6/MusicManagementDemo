@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
-using MusicManagementDemo.DbInfrastructure.DbConfig.Identity;
-using MusicManagementDemo.DbInfrastructure.DbConfig.Management;
-using MusicManagementDemo.DbInfrastructure.DbConfig.Music;
 using MusicManagementDemo.Domain.Entity.Identity;
 using MusicManagementDemo.Domain.Entity.Management;
 using MusicManagementDemo.Domain.Entity.Music;
+using MusicManagementDemo.Infrastructure.Database.DbConfig.Identity;
+using MusicManagementDemo.Infrastructure.Database.DbConfig.Management;
+using MusicManagementDemo.Infrastructure.Database.DbConfig.Music;
 
-namespace MusicManagementDemo.DbInfrastructure.Database;
+namespace MusicManagementDemo.Infrastructure.Database.Database;
 
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
     : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options),

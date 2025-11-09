@@ -5,7 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application;
-using MusicManagementDemo.DbInfrastructure;
+using MusicManagementDemo.Infrastructure.Core;
+using MusicManagementDemo.Infrastructure.Database;
 using Npgsql;
 
 namespace FunctionalTesting;
@@ -39,8 +40,9 @@ public class BaseTestingClass : IAsyncLifetime
             .Build();
 
         servicesBuilder
-            .AddDbInfrastructure(newConfiguration)
-            .AddTestInfrastructure()
+            .AddDatabaseInfrastructure(newConfiguration)
+            .AddTestingInfrastructure()
+            .AddSharedInfrastructure(newConfiguration)
             .AddApplication();
         servicesBuilder.AddSingleton(_ => newConfiguration);
         servicesBuilder.AddSingleton<IConfiguration>(_ => newConfiguration);

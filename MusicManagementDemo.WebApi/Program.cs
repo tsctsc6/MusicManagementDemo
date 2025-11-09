@@ -1,6 +1,6 @@
-using MusicManagementDemo.AppInfrastructure;
 using MusicManagementDemo.Application;
-using MusicManagementDemo.DbInfrastructure;
+using MusicManagementDemo.Infrastructure.Core;
+using MusicManagementDemo.Infrastructure.Database;
 using MusicManagementDemo.WebApi.Endpoints;
 using Serilog;
 
@@ -12,8 +12,9 @@ builder.Services.AddOpenApi();
 
 builder
     .Services.AddApplication()
-    .AddDbInfrastructure(builder.Configuration)
-    .AddAppInfrastructure()
+    .AddDatabaseInfrastructure(builder.Configuration)
+    .AddSharedInfrastructure(builder.Configuration)
+    .AddRealInfrastructure()
     .AddWebApiByInjectio("Endpoint");
 
 var app = builder.Build();

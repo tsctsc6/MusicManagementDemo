@@ -5,111 +5,57 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
-using MusicManagementDemo.DbInfrastructure.Database;
-using MusicManagementDemo.DbInfrastructure.Jwt;
-using MusicManagementDemo.Domain.Entity.Identity;
+using MusicManagementDemo.Infrastructure.Core.JobHandler;
+using MusicManagementDemo.Infrastructure.Core.Jwt;
+using Serilog;
 
-namespace MusicManagementDemo.DbInfrastructure;
+namespace MusicManagementDemo.Infrastructure.Core;
 
 public static class DependencyInjectionModule
 {
-    public static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new()
-    {
-        DefaultBufferSize = 1024,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        MaxDepth = 12,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        AllowTrailingCommas = false,
-        WriteIndented = false,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-    };
-
-    public static IServiceCollection AddDbInfrastructure(
+    public static IServiceCollection AddSharedInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration
     )
     {
-        services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
-
-        services.AddDatabase(configuration.GetConnectionString("Default") ?? string.Empty);
-
-        services
-            .AddIdentity<ApplicationUser, IdentityRole<Guid>>()
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
-
         services.AddJwt(configuration);
         services.AddAuthorization();
+        services.AddSingleton<IJwtManager, JwtManager>();
 
         services.AddJsonOptions();
-
-        services.AddSingleton<IJwtManager, JwtManager>();
 
         return services;
     }
 
-    private static IServiceCollection AddDatabase(
-        this IServiceCollection services,
-        string connectionString
+    public static IServiceCollection AddRealInfrastructure(
+        this IServiceCollection services
     )
     {
-        services.AddDbContext<AppDbContext>(options =>
-        {
-            options
-                .UseNpgsql(connectionString)
-                .UseSeeding(
-                    (d2, _) =>
-                    {
-                        var d = (AppDbContext)d2;
-                        d.Database.ExecuteSqlRaw(
-                            DbFunctions.DefineGetMusicInfoInMusicListReturnType
-                        );
-                        d.Database.ExecuteSqlRaw(DbFunctions.DefineGetMusicInfoInMusicList);
-                        d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
-                        d.SaveChanges();
-                    }
-                )
-                .UseAsyncSeeding(
-                    async (d2, _, ct) =>
-                    {
-                        var d = (AppDbContext)d2;
-                        await d.Database.ExecuteSqlRawAsync(
-                            DbFunctions.DefineGetMusicInfoInMusicListReturnType,
-                            ct
-                        );
-                        await d.Database.ExecuteSqlRawAsync(
-                            DbFunctions.DefineGetMusicInfoInMusicList,
-                            cancellationToken: ct
-                        );
-                        await d.Roles.AddAsync(
-                            new() { Name = "Admin", NormalizedName = "ADMIN" },
-                            ct
-                        );
-                        await d.SaveChangesAsync(ct);
-                    }
-                );
-            ;
-#if DEBUG
-            options.EnableSensitiveDataLogging();
-#endif
-        });
-        services.AddScoped<IDbContext, AppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
-        services.AddScoped<IIdentityDbContext, AppDbContext>(sp =>
-            sp.GetRequiredService<AppDbContext>()
-        );
-        services.AddScoped<IManagementAppDbContext, AppDbContext>(sp =>
-            sp.GetRequiredService<AppDbContext>()
-        );
-        services.AddScoped<IMusicAppDbContext, AppDbContext>(sp =>
-            sp.GetRequiredService<AppDbContext>()
-        );
+        services.AddSingleton<IFileEnumerator, FileEnumerator>();
+        services.AddSingleton<IMusicInfoParser, MusicInfoParser>();
+        services.AddSingleton<IFileStreamProvider, FileStreamProvider>();
+
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.File(
+                path: Path.Combine(
+                    Path.GetDirectoryName(Environment.ProcessPath)!,
+                    "logs",
+                    "log-.txt"
+                ),
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 7,
+                rollOnFileSizeLimit: true,
+                fileSizeLimitBytes: 10000000
+            )
+            .CreateLogger();
+        services.AddSerilog();
 
         return services;
     }

@@ -1,7 +1,7 @@
 ﻿using MusicManagementDemo.Abstractions;
 using RustSharp;
 
-namespace MusicManagementDemo.AppInfrastructure;
+namespace MusicManagementDemo.Infrastructure.Core;
 
 internal class FileStreamProvider : IFileStreamProvider
 {

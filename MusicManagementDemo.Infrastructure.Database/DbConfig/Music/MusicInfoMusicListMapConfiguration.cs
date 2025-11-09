@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MusicManagementDemo.Domain.Entity.Music;
 
-namespace MusicManagementDemo.DbInfrastructure.DbConfig.Music;
+namespace MusicManagementDemo.Infrastructure.Database.DbConfig.Music;
 
 public class MusicInfoMusicListMapConfiguration : IEntityTypeConfiguration<MusicInfoMusicListMap>
 {

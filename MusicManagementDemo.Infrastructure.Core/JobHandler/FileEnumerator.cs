@@ -1,7 +1,7 @@
 ﻿using MusicManagementDemo.Abstractions;
 using RustSharp;
 
-namespace MusicManagementDemo.AppInfrastructure.JobHandler;
+namespace MusicManagementDemo.Infrastructure.Core.JobHandler;
 
 internal sealed class FileEnumerator : IFileEnumerator
 {

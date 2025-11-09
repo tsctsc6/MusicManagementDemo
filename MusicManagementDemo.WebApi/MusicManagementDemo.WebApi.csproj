@@ -16,8 +16,8 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\MusicManagementDemo.Application\MusicManagementDemo.Application.csproj" />
-        <ProjectReference Include="..\MusicManagementDemo.DbInfrastructure\MusicManagementDemo.DbInfrastructure.csproj" />
-        <ProjectReference Include="..\MusicManagementDemo.AppInfrastructure\MusicManagementDemo.AppInfrastructure.csproj" />
+        <ProjectReference Include="..\MusicManagementDemo.Infrastructure.Database\MusicManagementDemo.Infrastructure.Database.csproj" />
+        <ProjectReference Include="..\MusicManagementDemo.Infrastructure.Core\MusicManagementDemo.Infrastructure.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
         <!-- 发布时排除单个文件 -->

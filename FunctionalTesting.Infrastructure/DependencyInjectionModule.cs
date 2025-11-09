@@ -9,7 +9,7 @@ namespace FunctionalTesting.Infrastructure;
 
 public static class DependencyInjectionModule
 {
-    public static IServiceCollection AddTestInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddTestingInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<IFileEnumerator, FileEnumerator>();
         services.AddSingleton<IMusicInfoParser, MusicInfoParser>();

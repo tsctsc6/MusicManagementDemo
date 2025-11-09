@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Mediator;
+﻿using Mediator;
 using Microsoft.Extensions.DependencyInjection;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.JobHandlers;

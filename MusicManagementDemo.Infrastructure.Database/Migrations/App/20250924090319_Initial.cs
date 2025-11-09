@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
+
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
 
-#nullable disable
-
-namespace MusicManagementDemo.DbInfrastructure.Migrations.App
+namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
 {
     /// <inheritdoc />
     public partial class Initial : Migration
