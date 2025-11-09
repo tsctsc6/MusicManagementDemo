@@ -43,7 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{5F60
 		DeployScript\testing\drop-all-testing-db.ps1 = DeployScript\testing\drop-all-testing-db.ps1
 		DeployScript\testing\pg-ram-disk.txt = DeployScript\testing\pg-ram-disk.txt
 		DeployScript\testing\remove-ram-disk.ps1 = DeployScript\testing\remove-ram-disk.ps1
-		DeployScript\testing\reset-pg-ram-tablespace.ps1 = DeployScript\testing\reset-pg-ram-tablespace.ps1
+		DeployScript\testing\add-pg-ram-tablespace.ps1 = DeployScript\testing\add-pg-ram-tablespace.ps1
+		DeployScript\testing\remove-pg-ram-tablespace.ps1 = DeployScript\testing\remove-pg-ram-tablespace.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{E1898659-8573-42B6-8769-95AD1A5BE797}"
