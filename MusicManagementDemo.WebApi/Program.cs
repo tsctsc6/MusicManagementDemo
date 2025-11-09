@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using MusicManagementDemo.Application;
 using MusicManagementDemo.Infrastructure.Core;
 using MusicManagementDemo.Infrastructure.Database;
@@ -17,7 +18,48 @@ builder
     .AddRealInfrastructure()
     .AddWebApiByInjectio("Endpoint");
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "FromConfiguration",
+        policy =>
+        {
+            var corsConfiguration =
+                builder.Configuration.GetSection("CorsPolicy").Get<CorsPolicy>()
+                ?? new CorsPolicy();
+            if (corsConfiguration.Origins.Contains("*"))
+            {
+                policy.AllowAnyOrigin();
+            }
+            else
+            {
+                policy.WithOrigins([.. corsConfiguration.Origins]);
+            }
+
+            if (corsConfiguration.Methods.Contains("*"))
+            {
+                policy.AllowAnyMethod();
+            }
+            else
+            {
+                policy.WithMethods([.. corsConfiguration.Methods]);
+            }
+
+            if (corsConfiguration.Headers.Contains("*"))
+            {
+                policy.AllowAnyHeader();
+            }
+            else
+            {
+                policy.WithHeaders([.. corsConfiguration.Headers]);
+            }
+        }
+    );
+});
+
 var app = builder.Build();
+
+app.UseCors("FromConfiguration");
 
 app.UseAuthentication();
 app.UseAuthorization();
