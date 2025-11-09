@@ -33,9 +33,7 @@ public static class DependencyInjectionModule
         return services;
     }
 
-    public static IServiceCollection AddRealInfrastructure(
-        this IServiceCollection services
-    )
+    public static IServiceCollection AddRealInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<IFileEnumerator, FileEnumerator>();
         services.AddSingleton<IMusicInfoParser, MusicInfoParser>();
