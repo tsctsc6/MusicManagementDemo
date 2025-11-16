@@ -1,0 +1,39 @@
+<Solution>
+  <Folder Name="/DeployScript/">
+    <File Path="DeployScript/deploy.ps1" />
+    <File Path="DeployScript/migrations_command.txt" />
+  </Folder>
+  <Folder Name="/DeployScript/testing/">
+    <File Path="DeployScript/testing/add-pg-ram-tablespace.ps1" />
+    <File Path="DeployScript/testing/add-ram-disk.ps1" />
+    <File Path="DeployScript/testing/drop-all-testing-db.ps1" />
+    <File Path="DeployScript/testing/pg-ram-disk.txt" />
+    <File Path="DeployScript/testing/remove-pg-ram-tablespace.ps1" />
+    <File Path="DeployScript/testing/remove-ram-disk.ps1" />
+  </Folder>
+  <Folder Name="/doc/">
+    <File Path="doc/architecture.md" />
+    <File Path="doc/code-architecture.md" />
+    <File Path="doc/DDD.md" />
+    <File Path="doc/testing.md" />
+    <File Path="doc/web-api.md" />
+  </Folder>
+  <Folder Name="/Functional_Testing/">
+    <Project Path="FunctionalTesting.Infrastructure/FunctionalTesting.Infrastructure.csproj" />
+    <Project Path="FunctionalTesting/FunctionalTesting.csproj" />
+  </Folder>
+  <Folder Name="/SolutionItems/">
+    <File Path=".csharpierrc.yaml" />
+    <File Path=".gitignore" />
+    <File Path="MusicManagementDemo.sln.DotSettings" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Src/">
+    <Project Path="MusicManagementDemo.Abstractions/MusicManagementDemo.Abstractions.csproj" />
+    <Project Path="MusicManagementDemo.Application/MusicManagementDemo.Application.csproj" />
+    <Project Path="MusicManagementDemo.Domain/MusicManagementDemo.Domain.csproj" />
+    <Project Path="MusicManagementDemo.Infrastructure.Core/MusicManagementDemo.Infrastructure.Core.csproj" />
+    <Project Path="MusicManagementDemo.Infrastructure.Database/MusicManagementDemo.Infrastructure.Database.csproj" />
+    <Project Path="MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj" />
+  </Folder>
+</Solution>
