@@ -18,13 +18,4 @@ public sealed record ServiceResult(
     {
         return new ServiceResult(IsFinish: true, Code: code, Data: null, Errors: errors);
     }
-
-    /// <summary>
-    /// 表示业务仍未完成，还有后续步骤
-    /// </summary>
-    /// <returns></returns>
-    public static ServiceResult Suspend()
-    {
-        return new ServiceResult(IsFinish: false, Code: 200, Data: null, Errors: null);
-    }
 }
