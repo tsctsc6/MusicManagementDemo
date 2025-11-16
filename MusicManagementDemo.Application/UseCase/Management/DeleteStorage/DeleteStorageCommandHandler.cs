@@ -40,6 +40,6 @@ internal sealed class DeleteStorageCommandHandler(
             logger.LogError(e, "Error during delete storage: {@storageToDelete}", storageToDelete);
             return ServiceResult.Err(503, ["内部错误"]);
         }
-        return ServiceResult.Ok();
+        return ServiceResult.Ok(new DeleteStorageCommandResponse());
     }
 }

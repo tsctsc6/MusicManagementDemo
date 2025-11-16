@@ -32,6 +32,6 @@ internal sealed class CreateMusicListCommandHandler(
             logger.LogError(e, "Create MisicList failed");
             return ServiceResult.Err(503, ["创建失败"]);
         }
-        return ServiceResult.Ok(new { musicListToAdd.Id });
+        return ServiceResult.Ok(new CreateMusicListCommandResponse(musicListToAdd.Id));
     }
 }

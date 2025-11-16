@@ -1,0 +1,3 @@
+﻿namespace MusicManagementDemo.Application.UseCase.Music.ChangeMusicInfoOrderInMusicList;
+
+public sealed record ChangeMusicInfoOrderInMusicListCommandResponse;

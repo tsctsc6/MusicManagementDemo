@@ -40,6 +40,6 @@ internal sealed class UpdateMusicListCommandHandler(
             logger.LogError(e, "Can't update MusicList {@MusicList}", musicListToUpdate);
             return ServiceResult.Err(503, ["内部错误"]);
         }
-        return ServiceResult.Ok();
+        return ServiceResult.Ok(new UpdateMusicListCommandResponse());
     }
 }

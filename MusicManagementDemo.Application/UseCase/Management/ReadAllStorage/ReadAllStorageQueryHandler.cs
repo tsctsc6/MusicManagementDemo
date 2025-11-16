@@ -34,6 +34,7 @@ internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbConte
         var musicListsToRead = await storagesToRead
             .Take(request.PageSize)
             .AsNoTracking()
+            .Select(e => new ReadAllStorageQueryResponse(e.Id, e.Name, e.Path))
             .ToArrayAsync(cancellationToken: cancellationToken);
         return ServiceResult.Ok(musicListsToRead);
     }

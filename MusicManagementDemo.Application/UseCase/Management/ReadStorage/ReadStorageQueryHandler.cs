@@ -26,12 +26,7 @@ internal sealed class ReadStorageQueryHandler(
             return ServiceResult.Err(503, ["没有找到对应的存储"]);
         }
         return ServiceResult.Ok(
-            new
-            {
-                storageToRead.Id,
-                storageToRead.Name,
-                storageToRead.Path,
-            }
+            new ReadStorageQueryResponse(storageToRead.Id, storageToRead.Name, storageToRead.Path)
         );
     }
 }

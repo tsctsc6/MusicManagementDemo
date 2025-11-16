@@ -26,18 +26,17 @@ internal sealed class ReadJobQueryHandler(
             return ServiceResult.Err(406, ["Job not found"]);
         }
         return ServiceResult.Ok(
-            new
-            {
+            new ReadJobQueryResponse(
                 jobToRead.Id,
-                Type = jobToRead.Type.ToString(),
-                jobToRead.JobArgs,
-                Status = jobToRead.Status.ToString(),
+                jobToRead.Type,
+                jobToRead.JobArgs.ToJsonString(),
+                jobToRead.Status,
                 jobToRead.Description,
                 jobToRead.ErrorMesage,
                 jobToRead.Success,
                 jobToRead.CreatedAt,
-                jobToRead.CompletedAt,
-            }
+                jobToRead.CompletedAt
+            )
         );
     }
 }

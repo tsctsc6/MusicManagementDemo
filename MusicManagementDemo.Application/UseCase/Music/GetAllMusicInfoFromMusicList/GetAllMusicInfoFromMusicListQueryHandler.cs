@@ -36,19 +36,18 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
                 request.PageSize,
                 request.Asc
             )
-            .Select(x => new
-            {
+            .Select(x => new GetAllMusicInfoFromMusicListQueryResponseMusicInfo(
                 x.Id,
                 x.Title,
                 x.Artist,
-                x.Album,
-            });
+                x.Album
+            ));
         var musicInfosToRead = await musicInfosToReadQuery.ToArrayAsync(
             cancellationToken: cancellationToken
         );
 
         return ServiceResult.Ok(
-            new { MusicListName = musicListToRead.Name, MusicInfos = musicInfosToRead }
+            new GetAllMusicInfoFromMusicListQueryResponse(musicListToRead.Name, musicInfosToRead)
         );
     }
 }

@@ -179,7 +179,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandHandler(
             request.TargetMusicInfoId,
             request.MusicListId
         );
-        return ServiceResult.Ok();
+        return ServiceResult.Ok(new ChangeMusicInfoOrderInMusicListCommandResponse());
     }
 
     /// <summary>

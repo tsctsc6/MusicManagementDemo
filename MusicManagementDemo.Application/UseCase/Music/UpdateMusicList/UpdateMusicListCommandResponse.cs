@@ -1,0 +1,3 @@
+﻿namespace MusicManagementDemo.Application.UseCase.Music.UpdateMusicList;
+
+public sealed record UpdateMusicListCommandResponse;

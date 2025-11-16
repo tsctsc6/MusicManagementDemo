@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -58,16 +59,12 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(
         }
         var musicListsToRead = await musicInfosToReadQuery
             .Take(request.PageSize)
-            .Select(m => new
-            {
-                m.Id,
-                m.Title,
-                m.Artist,
-                m.Album,
-            })
             .AsNoTracking()
+            .Select(m => new ReadAllMusicInfoQueryResponse(m.Id, m.Title, m.Artist, m.Album))
             .ToArrayAsync(cancellationToken: cancellationToken);
-        return ServiceResult.Ok(musicListsToRead);
+        return ServiceResult.Ok(
+            new ReadOnlyCollection<ReadAllMusicInfoQueryResponse>(musicListsToRead)
+        );
     }
 
     [GeneratedRegex(@"\s+", RegexOptions.None, 3000)]

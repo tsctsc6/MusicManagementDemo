@@ -56,6 +56,6 @@ internal sealed class DeleteMusicListCommandHandler(
             return ServiceResult.Err(503, ["内部错误"]);
         }
         await transaction.CommitAsync(cancellationToken);
-        return ServiceResult.Ok();
+        return ServiceResult.Ok(new DeleteMusicListCommandResponse());
     }
 }

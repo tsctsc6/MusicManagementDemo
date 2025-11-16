@@ -50,6 +50,6 @@ internal sealed class LoginCommandHandler(
         );
         logger.LogInformation("User {userId} logged in.", user.Id);
 
-        return ServiceResult.Ok(new { token = tokenStr });
+        return ServiceResult.Ok(new LoginCommandResponse(tokenStr));
     }
 }

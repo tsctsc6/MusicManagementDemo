@@ -1,0 +1,3 @@
+﻿namespace MusicManagementDemo.Application.UseCase.Music.DeleteMusicList;
+
+public sealed record DeleteMusicListCommandResponse;

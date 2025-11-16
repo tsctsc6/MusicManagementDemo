@@ -44,6 +44,6 @@ internal sealed class RegisterCommandHandler(
             await userMgr.AddToRoleAsync(user, adminRole.NormalizedName!);
             logger.LogInformation("User {userId} is admin.", user.Id);
         }
-        return ServiceResult.Ok(new { user.Id });
+        return ServiceResult.Ok(new RegisterCommandResponse(user.Id));
     }
 }

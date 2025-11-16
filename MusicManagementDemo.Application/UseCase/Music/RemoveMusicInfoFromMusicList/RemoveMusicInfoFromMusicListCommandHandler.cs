@@ -98,6 +98,6 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
 
         await transaction.CommitAsync(cancellationToken);
         logger.LogInformation("MusicInfoMap {Id} Removed", musicInfoMapToRemove.MusicInfoId);
-        return ServiceResult.Ok();
+        return ServiceResult.Ok(new RemoveMusicInfoFromMusicListCommandResponse());
     }
 }

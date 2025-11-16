@@ -28,7 +28,7 @@ internal sealed class CancelJobCommandHandler(
                 return ServiceResult.Err(503, [errResult.Value]);
             case OkResult<long, string> okResult:
                 logger.LogInformation("{err}", okResult.Value);
-                return ServiceResult.Ok(new { JobId = okResult.Value });
+                return ServiceResult.Ok(new CancelJobCommandResponse(okResult.Value));
             default:
                 logger.LogInformation("Unknown type {@result}", result);
                 return ServiceResult.Err(503, ["内部错误"]);

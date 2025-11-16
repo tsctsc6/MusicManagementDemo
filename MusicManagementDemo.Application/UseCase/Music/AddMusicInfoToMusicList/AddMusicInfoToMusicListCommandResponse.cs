@@ -1,0 +1,3 @@
+﻿namespace MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
+
+public sealed record AddMusicInfoToMusicListCommandResponse;

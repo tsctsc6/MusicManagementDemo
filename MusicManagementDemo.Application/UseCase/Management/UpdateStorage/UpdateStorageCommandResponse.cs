@@ -1,0 +1,3 @@
+﻿namespace MusicManagementDemo.Application.UseCase.Management.UpdateStorage;
+
+public sealed record UpdateStorageCommandResponse;

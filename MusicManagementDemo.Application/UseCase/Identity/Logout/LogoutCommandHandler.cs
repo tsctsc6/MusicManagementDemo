@@ -41,6 +41,6 @@ internal sealed class LogoutCommandHandler(
         }
 
         logger.LogInformation("User {userId} logged out.", user.Id);
-        return ServiceResult.Ok();
+        return ServiceResult.Ok(new LogoutCommandResponse());
     }
 }

@@ -98,6 +98,6 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
             request.MusicInfoId,
             request.MusicListId
         );
-        return ServiceResult.Ok();
+        return ServiceResult.Ok(new AddMusicInfoToMusicListCommandResponse());
     }
 }
