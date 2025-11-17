@@ -5,11 +5,13 @@ using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.PipelineMediators;
 
-internal sealed class ValidationBehavior<TRequest, TResponse>(
+internal sealed class ValidationBehavior<TRequest, TResponse, T>(
     IEnumerable<IValidator<TRequest>> validators,
-    ILogger<ValidationBehavior<TRequest, TResponse>> logger
+    ILogger<ValidationBehavior<TRequest, TResponse, T>> logger
 ) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
+    where TResponse : ApiResult<T>
+    where T : class
 {
     public async ValueTask<TResponse> Handle(
         TRequest request,
@@ -30,7 +32,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse>(
             string[] errorMessages = [.. failures.Select(f => f.ErrorMessage)];
             // ReSharper disable once CoVariantArrayConversion
             logger.LogError("Validation failed: {@errorMessages}", errorMessages);
-            return (TResponse)(object)ApiResult<>.Err(406, errorMessages);
+            return (TResponse)ApiResult<T>.Err(406, string.Join("\n", errorMessages));
         }
 
         return await next(request, cancellationToken);
