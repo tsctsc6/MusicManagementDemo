@@ -1,21 +1,20 @@
-﻿using MusicManagementDemo.Abstractions;
+﻿namespace MusicManagementDemo.Application.Responses;
 
-namespace MusicManagementDemo.Application.Responses;
-
-public sealed record ServiceResult(
-    bool IsFinish,
-    int? Code,
-    object? Data,
-    IReadOnlyList<string>? Errors
-) : IServiceResult
+public sealed record ServiceResult<T>(bool IsFinish, int? Code, T? Data, string? ErrorMessage)
+    where T : class
 {
-    public static ServiceResult Ok(object? data = null)
+    public static ServiceResult<T> Ok(T? data = null)
     {
-        return new ServiceResult(IsFinish: true, Code: 200, Data: data, Errors: null);
+        return new ServiceResult<T>(IsFinish: true, Code: 200, Data: data, ErrorMessage: null);
     }
 
-    public static ServiceResult Err(int code, IReadOnlyList<string>? errors = null)
+    public static ServiceResult<T> Err(int code, string? errorMessage = null)
     {
-        return new ServiceResult(IsFinish: true, Code: code, Data: null, Errors: errors);
+        return new ServiceResult<T>(
+            IsFinish: true,
+            Code: code,
+            Data: null,
+            ErrorMessage: errorMessage
+        );
     }
 }
