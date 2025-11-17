@@ -30,7 +30,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse>(
             string[] errorMessages = [.. failures.Select(f => f.ErrorMessage)];
             // ReSharper disable once CoVariantArrayConversion
             logger.LogError("Validation failed: {@errorMessages}", errorMessages);
-            return (TResponse)(object)ServiceResult.Err(406, errorMessages);
+            return (TResponse)(object)ApiResult<>.Err(406, errorMessages);
         }
 
         return await next(request, cancellationToken);
