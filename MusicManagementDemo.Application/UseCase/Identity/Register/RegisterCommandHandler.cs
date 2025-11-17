@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
@@ -26,7 +25,7 @@ internal sealed class RegisterCommandHandler(
         if (!result.Succeeded)
         {
             logger.LogError("Create user failed, reason: {@result}", result);
-            return ServiceResult.Err(503, [.. result.Errors.Select(e => e.Description)]);
+            return ApiResult<>.Err(503, [.. result.Errors.Select(e => e.Description)]);
         }
         logger.LogInformation("User {userId} registered.", user.Id);
 
@@ -39,11 +38,11 @@ internal sealed class RegisterCommandHandler(
             if (adminRole is null)
             {
                 logger.LogError("Role Admin is not exist.");
-                return ServiceResult.Err(503, ["内部错误"]);
+                return ApiResult<>.Err(503, ["内部错误"]);
             }
             await userMgr.AddToRoleAsync(user, adminRole.NormalizedName!);
             logger.LogInformation("User {userId} is admin.", user.Id);
         }
-        return ServiceResult.Ok(new RegisterCommandResponse(user.Id));
+        return ApiResult<>.Ok(new RegisterCommandResponse(user.Id));
     }
 }

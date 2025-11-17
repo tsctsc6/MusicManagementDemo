@@ -1,5 +1,4 @@
 ﻿using Mediator;
-using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
 

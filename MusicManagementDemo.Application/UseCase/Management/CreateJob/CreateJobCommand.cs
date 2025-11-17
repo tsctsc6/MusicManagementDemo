@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Nodes;
 using Mediator;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Domain.Entity.Management;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;

@@ -62,7 +62,7 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(
             .AsNoTracking()
             .Select(m => new ReadAllMusicInfoQueryResponse(m.Id, m.Title, m.Artist, m.Album))
             .ToArrayAsync(cancellationToken: cancellationToken);
-        return ServiceResult.Ok(
+        return ApiResult<>.Ok(
             new ReadOnlyCollection<ReadAllMusicInfoQueryResponse>(musicListsToRead)
         );
     }

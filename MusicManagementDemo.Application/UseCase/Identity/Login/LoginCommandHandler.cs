@@ -25,7 +25,7 @@ internal sealed class LoginCommandHandler(
         if (user == null)
         {
             logger.LogError("User {userId} not found.", request.Email);
-            return ServiceResult.Err(5004, ["邮箱或密码错误"]);
+            return ApiResult<>.Err(5004, ["邮箱或密码错误"]);
         }
 
         var signInRes = await signInMgr.CheckPasswordSignInAsync(user, request.Password, false);
@@ -36,7 +36,7 @@ internal sealed class LoginCommandHandler(
                 request.Email,
                 signInRes
             );
-            return ServiceResult.Err(5004, ["邮箱或密码错误"]);
+            return ApiResult<>.Err(5004, ["邮箱或密码错误"]);
         }
 
         var roles = await userMgr.GetRolesAsync(user);
@@ -50,6 +50,6 @@ internal sealed class LoginCommandHandler(
         );
         logger.LogInformation("User {userId} logged in.", user.Id);
 
-        return ServiceResult.Ok(new LoginCommandResponse(tokenStr));
+        return ApiResult<>.Ok(new LoginCommandResponse(tokenStr));
     }
 }

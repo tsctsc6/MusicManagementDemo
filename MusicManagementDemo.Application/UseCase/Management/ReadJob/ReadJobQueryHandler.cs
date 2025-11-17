@@ -1,7 +1,6 @@
 ﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
@@ -23,9 +22,9 @@ internal sealed class ReadJobQueryHandler(
         if (jobToRead is null)
         {
             logger.LogError("Job {RequestId} not found", request.Id);
-            return ServiceResult.Err(406, ["Job not found"]);
+            return ApiResult<>.Err(406, ["Job not found"]);
         }
-        return ServiceResult.Ok(
+        return ApiResult<>.Ok(
             new ReadJobQueryResponse(
                 jobToRead.Id,
                 jobToRead.Type,

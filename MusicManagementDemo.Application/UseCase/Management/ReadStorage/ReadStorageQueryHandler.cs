@@ -1,7 +1,6 @@
 ﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
@@ -23,9 +22,9 @@ internal sealed class ReadStorageQueryHandler(
         if (storageToRead is null)
         {
             logger.LogError("storage {id} not found", request.Id);
-            return ServiceResult.Err(503, ["没有找到对应的存储"]);
+            return ApiResult<>.Err(503, ["没有找到对应的存储"]);
         }
-        return ServiceResult.Ok(
+        return ApiResult<>.Ok(
             new ReadStorageQueryResponse(storageToRead.Id, storageToRead.Name, storageToRead.Path)
         );
     }

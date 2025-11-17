@@ -25,13 +25,13 @@ internal sealed class CancelJobCommandHandler(
         {
             case ErrResult<long, string> errResult:
                 logger.LogError("{err}", errResult.Value);
-                return ServiceResult.Err(503, [errResult.Value]);
+                return ApiResult<>.Err(503, [errResult.Value]);
             case OkResult<long, string> okResult:
                 logger.LogInformation("{err}", okResult.Value);
-                return ServiceResult.Ok(new CancelJobCommandResponse(okResult.Value));
+                return ApiResult<>.Ok(new CancelJobCommandResponse(okResult.Value));
             default:
                 logger.LogInformation("Unknown type {@result}", result);
-                return ServiceResult.Err(503, ["内部错误"]);
+                return ApiResult<>.Err(503, ["内部错误"]);
         }
     }
 }

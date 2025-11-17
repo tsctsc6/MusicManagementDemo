@@ -1,6 +1,5 @@
 ﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
@@ -36,6 +35,6 @@ internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbConte
             .AsNoTracking()
             .Select(e => new ReadAllStorageQueryResponse(e.Id, e.Name, e.Path))
             .ToArrayAsync(cancellationToken: cancellationToken);
-        return ServiceResult.Ok(musicListsToRead);
+        return ApiResult<>.Ok(musicListsToRead);
     }
 }

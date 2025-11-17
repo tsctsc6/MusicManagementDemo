@@ -1,7 +1,6 @@
 ﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
@@ -25,7 +24,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
         )
         {
             logger.LogError("MusicList {MusicListId} not found", request.MusicListId);
-            return ServiceResult.Err(404, ["MusicList not found"]);
+            return ApiResult<>.Err(404, ["MusicList not found"]);
         }
 
         var musicInfoMapToRemove = await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
@@ -35,7 +34,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
         if (musicInfoMapToRemove is null)
         {
             logger.LogError("MusicInfo {MusicInfoId} not found", request.MusicInfoId);
-            return ServiceResult.Err(404, ["musicInfoMapToRemove not found"]);
+            return ApiResult<>.Err(404, ["musicInfoMapToRemove not found"]);
         }
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
@@ -58,7 +57,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
                     "Prev MusicInfo {MusicInfoId} not found",
                     musicInfoMapToRemove.PrevId
                 );
-                return ServiceResult.Err(404, ["musicInfoMapPrev not found"]);
+                return ApiResult<>.Err(404, ["musicInfoMapPrev not found"]);
             }
             musicInfoMapPrev.NextId = musicInfoMapToRemove.NextId;
             expectedSubmitCount++;
@@ -77,7 +76,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
                     "Next MusicInfo {MusicInfoId} not found",
                     musicInfoMapToRemove.NextId
                 );
-                return ServiceResult.Err(404, ["musicInfoMapNext not found"]);
+                return ApiResult<>.Err(404, ["musicInfoMapNext not found"]);
             }
             musicInfoMapNext.PrevId = musicInfoMapToRemove.PrevId;
             expectedSubmitCount++;
@@ -93,11 +92,11 @@ internal sealed class RemoveMusicInfoFromMusicListCommandHandler(
                 expectedSubmitCount,
                 submitCount
             );
-            return ServiceResult.Err(404, ["Delete Failed"]);
+            return ApiResult<>.Err(404, ["Delete Failed"]);
         }
 
         await transaction.CommitAsync(cancellationToken);
         logger.LogInformation("MusicInfoMap {Id} Removed", musicInfoMapToRemove.MusicInfoId);
-        return ServiceResult.Ok(new RemoveMusicInfoFromMusicListCommandResponse());
+        return ApiResult<>.Ok(new RemoveMusicInfoFromMusicListCommandResponse());
     }
 }

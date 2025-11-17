@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
@@ -42,7 +41,7 @@ internal sealed class ReadAllMusicListQueryHandler(IMusicAppDbContext dbContext)
             .AsNoTracking()
             .Select(e => new ReadAllMusicListQueryResponse(e.Id, e.Name, e.CreatedAt))
             .ToArrayAsync(cancellationToken: cancellationToken);
-        return ServiceResult.Ok(
+        return ApiResult<>.Ok(
             new ReadOnlyCollection<ReadAllMusicListQueryResponse>(musicListsToRead)
         );
     }

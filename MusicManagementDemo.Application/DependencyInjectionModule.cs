@@ -22,7 +22,6 @@ public static class DependencyInjectionModule
             // options.Assemblies = [typeof(DependencyInjectionModule).Assembly];
             options.PipelineBehaviors =
             [
-                typeof(ExceptionHandlingBehavior<,>),
                 typeof(ValidationBehavior<,>),
                 typeof(LoggingBehaviour<,>),
             ];

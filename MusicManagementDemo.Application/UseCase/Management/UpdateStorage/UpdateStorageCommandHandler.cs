@@ -1,7 +1,6 @@
 ﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
@@ -24,7 +23,7 @@ internal sealed class UpdateStorageCommandHandler(
         if (storageToUpdate is null)
         {
             logger.LogError("storage {id} not found", request.Id);
-            return ServiceResult.Err(404, ["没有找到对应存储"]);
+            return ApiResult<>.Err(404, ["没有找到对应存储"]);
         }
 
         storageToUpdate.Name = request.Name;
@@ -35,15 +34,15 @@ internal sealed class UpdateStorageCommandHandler(
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)
             {
                 logger.LogError("Update storage failed, {@storageToUpdate}", storageToUpdate);
-                return ServiceResult.Err(503, ["内部错误"]);
+                return ApiResult<>.Err(503, ["内部错误"]);
             }
         }
         catch (Exception e)
         {
             logger.LogError(e, "Update storage failed, {@storageToUpdate}", storageToUpdate);
-            return ServiceResult.Err(503, ["内部错误"]);
+            return ApiResult<>.Err(503, ["内部错误"]);
         }
 
-        return ServiceResult.Ok(new UpdateStorageCommandResponse());
+        return ApiResult<>.Ok(new UpdateStorageCommandResponse());
     }
 }

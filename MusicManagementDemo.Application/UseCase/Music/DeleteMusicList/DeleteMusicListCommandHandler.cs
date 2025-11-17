@@ -1,7 +1,6 @@
 ﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
@@ -23,7 +22,7 @@ internal sealed class DeleteMusicListCommandHandler(
         if (musicListToDelete is null)
         {
             logger.LogError("MusicList {MusicListId} not found", request.MusicListId);
-            return ServiceResult.Err(404, ["没有找到对应的歌单"]);
+            return ApiResult<>.Err(404, ["没有找到对应的歌单"]);
         }
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
             cancellationToken
@@ -43,7 +42,7 @@ internal sealed class DeleteMusicListCommandHandler(
                 expectedSubmitCount,
                 submitCount
             );
-            return ServiceResult.Err(503, ["内部错误"]);
+            return ApiResult<>.Err(503, ["内部错误"]);
         }
         if (
             await dbContext
@@ -53,9 +52,9 @@ internal sealed class DeleteMusicListCommandHandler(
         {
             await transaction.RollbackAsync(cancellationToken);
             logger.LogError("Error in delete MusicList {MusicListId}", request.MusicListId);
-            return ServiceResult.Err(503, ["内部错误"]);
+            return ApiResult<>.Err(503, ["内部错误"]);
         }
         await transaction.CommitAsync(cancellationToken);
-        return ServiceResult.Ok(new DeleteMusicListCommandResponse());
+        return ApiResult<>.Ok(new DeleteMusicListCommandResponse());
     }
 }

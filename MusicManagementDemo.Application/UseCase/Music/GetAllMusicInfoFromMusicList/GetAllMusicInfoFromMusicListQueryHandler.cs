@@ -1,7 +1,6 @@
 ﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 
@@ -26,7 +25,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
         if (musicListToRead is null)
         {
             logger.LogError("MusicList {MusicListId} not found", request.MusicListId);
-            return ServiceResult.Err(404, ["MusicList not found"]);
+            return ApiResult<>.Err(404, ["MusicList not found"]);
         }
 
         var musicInfosToReadQuery = dbContext
@@ -46,7 +45,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
             cancellationToken: cancellationToken
         );
 
-        return ServiceResult.Ok(
+        return ApiResult<>.Ok(
             new GetAllMusicInfoFromMusicListQueryResponse(musicListToRead.Name, musicInfosToRead)
         );
     }
