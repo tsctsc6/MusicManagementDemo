@@ -22,7 +22,7 @@ public static class DependencyInjectionModule
             // options.Assemblies = [typeof(DependencyInjectionModule).Assembly];
             options.PipelineBehaviors =
             [
-                typeof(ValidationBehavior<,>),
+                typeof(ValidationBehavior<,,>),
                 typeof(LoggingBehaviour<,>),
             ];
             options.StreamPipelineBehaviors = [];
