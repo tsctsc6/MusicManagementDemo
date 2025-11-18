@@ -1,8 +1,9 @@
-﻿#nullable disable
-
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
+
+#nullable disable
 
 namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
 {

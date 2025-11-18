@@ -9,7 +9,7 @@ using NpgsqlTypes;
 
 #nullable disable
 
-namespace MusicManagementDemo.DbInfrastructure.Migrations.App
+namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
