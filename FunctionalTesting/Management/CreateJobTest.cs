@@ -48,15 +48,15 @@ public class CreateJobTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
+        var jobId = createJobResult.Data!.JobId;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
         var result = await Mediator.Send(
             new ReadJobQuery(jobId),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
-        var completedAt = result.Data?.GetPropertyValue("CompletedAt");
-        var success = result.Data?.GetPropertyValue("Success");
+        var completedAt = result.Data?.CompletedAt;
+        var success = result.Data?.Success;
         Assert.NotNull(completedAt);
         Assert.Equal(false, success);
     }
@@ -77,15 +77,15 @@ public class CreateJobTest : BaseTestingClass
             ),
             TestContext.Current.CancellationToken
         );
-        var jobId = (long)createJobResult.Data?.GetPropertyValue("JobId")!;
+        var jobId = createJobResult.Data!.JobId;
         await Task.Delay(TimeSpan.FromSeconds(6), TestContext.Current.CancellationToken);
         var result = await Mediator.Send(
             new ReadJobQuery(jobId),
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(result);
-        var completedAt = result.Data?.GetPropertyValue("CompletedAt");
-        var success = result.Data?.GetPropertyValue("Success");
+        var completedAt = result.Data?.CompletedAt;
+        var success = result.Data?.Success;
         Assert.NotNull(completedAt);
         Assert.Equal(false, success);
     }

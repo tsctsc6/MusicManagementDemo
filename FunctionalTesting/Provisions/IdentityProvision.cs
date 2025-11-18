@@ -12,6 +12,6 @@ public static class IdentityProvision
     )
     {
         var result = await mediator.Send(command, cancellationToken);
-        return Guid.Parse(result.Data!.GetPropertyValue("Id")!.ToString()!);
+        return result.Data!.Id;
     }
 }

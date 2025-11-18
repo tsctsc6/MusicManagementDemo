@@ -13,7 +13,7 @@ public static class ManagementProvision
     )
     {
         var result = await mediator.Send(command, cancellationToken);
-        return (int)result.Data!.GetPropertyValue("Id")!;
+        return result.Data!.Id;
     }
 
     public static async Task<long> CreateJobAsync(
@@ -23,6 +23,6 @@ public static class ManagementProvision
     )
     {
         var result = await mediator.Send(command, cancellationToken);
-        return (long)result.Data?.GetPropertyValue("JobId")!;
+        return result.Data!.JobId;
     }
 }

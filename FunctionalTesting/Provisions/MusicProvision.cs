@@ -13,8 +13,8 @@ public static class MusicProvision
         CancellationToken cancellationToken = default
     )
     {
-        var createMusicListResult = await mediator.Send(command, cancellationToken);
-        return Guid.Parse(createMusicListResult.Data!.GetPropertyValue("Id")!.ToString()!);
+        var result = await mediator.Send(command, cancellationToken);
+        return result.Data!.Id;
     }
 
     public static async Task AddMusicInfoToMusicListAsync(
@@ -23,7 +23,7 @@ public static class MusicProvision
         CancellationToken cancellationToken = default
     )
     {
-        var createMusicListResult = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(command, cancellationToken);
     }
 
     public static async Task<Guid[]> ReadAllMusicInfoAsync(
@@ -33,11 +33,6 @@ public static class MusicProvision
     )
     {
         var result = await mediator.Send(query, cancellationToken);
-        return
-        [
-            .. (result.Data! as IEnumerable<object>)!.Select(o =>
-                Guid.Parse(o.GetPropertyValue("Id")!.ToString()!)
-            ),
-        ];
+        return [.. result.Data!.Select(e => e.Id)];
     }
 }
