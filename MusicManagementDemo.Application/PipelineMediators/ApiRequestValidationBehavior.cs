@@ -1,20 +1,20 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using FluentValidation;
+using FluentValidation.Results;
 using Mediator;
-using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.PipelineMediators;
 
-internal sealed class ApiRequestValidationBehavior<TRequest, T>(
-    IEnumerable<IValidator<TRequest>> validators,
-    ILogger<ApiRequestValidationBehavior<TRequest, T>> logger
-) : IPipelineBehavior<TRequest, ApiResult<T>>
-    where TRequest : IRequest<ApiResult<T>>
-    where T : class
+internal sealed class ApiRequestValidationBehavior<TRequest, TResponse>(
+    IEnumerable<IValidator<TRequest>> validators
+) : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
+    where TResponse : IApiResult, new()
 {
-    public async ValueTask<ApiResult<T>> Handle(
+    public async ValueTask<TResponse> Handle(
         TRequest request,
-        MessageHandlerDelegate<TRequest, ApiResult<T>> next,
+        MessageHandlerDelegate<TRequest, TResponse> next,
         CancellationToken cancellationToken
     )
     {
@@ -28,12 +28,36 @@ internal sealed class ApiRequestValidationBehavior<TRequest, T>(
 
         if (failures.Length != 0)
         {
-            string[] errorMessages = [.. failures.Select(f => f.ErrorMessage)];
-            // ReSharper disable once CoVariantArrayConversion
-            logger.LogError("Validation failed: {@errorMessages}", errorMessages);
-            return ApiResult<T>.Err(406, string.Join("\n", errorMessages));
+            return CreateErrorResponse(failures);
         }
 
         return await next(request, cancellationToken);
     }
+
+    private TResponse CreateErrorResponse(ValidationFailure[] failures)
+    {
+        string[] errorMessages = [.. failures.Select(f => f.ErrorMessage)];
+        return (TResponse)new TResponse().CreateError(406, string.Join("\n", errorMessages));
+    }
+
+    /*private TResponse CreateErrorResponseByReflection(ValidationFailure[] failures)
+    {
+        var responseType = typeof(TResponse);
+        if (
+            !responseType.IsGenericType
+            || responseType.GetGenericTypeDefinition() != typeof(ApiResult<>)
+        )
+        {
+            throw new InvalidOperationException("TResponse 必须是 ApiResult<T> 的泛型类型");
+        }
+        var errMethod = responseType.GetMethod(
+            "Err",
+            BindingFlags.Public | BindingFlags.Static,
+            [typeof(int), typeof(string)]
+        );
+        string[] errorMessages = [.. failures.Select(f => f.ErrorMessage)];
+        if (errMethod == null)
+            throw new InvalidOperationException("找不到 ApiResult<T>.Err(string) 方法");
+        return (TResponse)errMethod.Invoke(null, [406, string.Join("\n", errorMessages)])!;
+    }*/
 }
