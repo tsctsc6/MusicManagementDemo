@@ -59,6 +59,26 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// 全局异常处理
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/error");
+}
+
+app.MapMethods(
+    "/error",
+    ["GET", "POST"],
+    () =>
+        TypedResults.InternalServerError(
+            new
+            {
+                IsFinish = true,
+                Code = "500",
+                ErrorMessage = "Internal Server Error",
+            }
+        )
+);
+
 app.UseCors("FromConfiguration");
 
 app.UseAuthentication();
