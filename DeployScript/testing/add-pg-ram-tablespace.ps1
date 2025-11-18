@@ -8,7 +8,7 @@ $env:PGUSER = $pgUser
 $env:PGHOST = $pgHost
 $env:PGPORT = $pgPort
 
-psql -d postgres -c "CREATE TABLESPACE ram_tablespace LOCATION 'R:/pg_ram_db';"
+psql --csv -d postgres -c "CREATE TABLESPACE ram_tablespace LOCATION 'R:/pg_ram_db';"
 
 Remove-Item Env:PGPASSWORD
 Remove-Item Env:PGUSER

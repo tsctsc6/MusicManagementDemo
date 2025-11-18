@@ -12,7 +12,7 @@ $env:PGHOST = $pgHost
 $env:PGPORT = $pgPort
 
 # 获取匹配前缀的数据库列表（连接到系统数据库 'postgres'）
-$dbs = & psql -d postgres -Atc "SELECT datname FROM pg_database WHERE datname LIKE '$prefix%' AND datname NOT IN ('postgres', 'template0', 'template1');"
+$dbs = & psql --csv -d postgres -Atc "SELECT datname FROM pg_database WHERE datname LIKE '$prefix%' AND datname NOT IN ('postgres', 'template0', 'template1');"
 
 # 如果没有匹配的数据库，输出消息并退出
 if (-not $dbs) {
@@ -21,12 +21,14 @@ if (-not $dbs) {
     exit
 }
 
+$dbs = $dbs.Split("`r`n");
+
 # 遍历每个匹配的数据库
 foreach ($db in $dbs) {
     Write-Host "处理数据库: $db"
 
     # 终止数据库的所有现有连接（除了当前会话）
-    & psql -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$db' AND pid <> pg_backend_pid();"
+    & psql --csv -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$db' AND pid <> pg_backend_pid();"
 
     # 删除数据库
     & dropdb --if-exists $db
