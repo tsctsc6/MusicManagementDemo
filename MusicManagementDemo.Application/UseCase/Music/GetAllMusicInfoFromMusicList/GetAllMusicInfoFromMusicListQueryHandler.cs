@@ -3,15 +3,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList.GetAllMusicInfoFromMusicListQueryResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
 
 internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
     IMusicAppDbContext dbContext,
     ILogger<GetAllMusicInfoFromMusicListQueryHandler> logger
-) : IRequestHandler<GetAllMusicInfoFromMusicListQuery, IServiceResult>
+)
+    : IRequestHandler<
+        GetAllMusicInfoFromMusicListQuery,
+        ApiResult<GetAllMusicInfoFromMusicListQueryResponse>
+    >
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<GetAllMusicInfoFromMusicListQueryResponse>> Handle(
         GetAllMusicInfoFromMusicListQuery request,
         CancellationToken cancellationToken
     )
@@ -25,7 +30,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
         if (musicListToRead is null)
         {
             logger.LogError("MusicList {MusicListId} not found", request.MusicListId);
-            return ApiResult<>.Err(404, ["MusicList not found"]);
+            return Err(404, "MusicList not found");
         }
 
         var musicInfosToReadQuery = dbContext
@@ -45,7 +50,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
             cancellationToken: cancellationToken
         );
 
-        return ApiResult<>.Ok(
+        return Ok(
             new GetAllMusicInfoFromMusicListQueryResponse(musicListToRead.Name, musicInfosToRead)
         );
     }

@@ -5,6 +5,7 @@ using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Management;
 using RustSharp;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Management.CreateJob.CreateJobCommandResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Management.CreateJob;
 
@@ -12,9 +13,9 @@ internal sealed class CreateJobCommandHandler(
     IManagementAppDbContext dbContext,
     IJobManager jobManager,
     ILogger<CreateJobCommandHandler> logger
-) : IRequestHandler<CreateJobCommand, IServiceResult>
+) : IRequestHandler<CreateJobCommand, ApiResult<CreateJobCommandResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<CreateJobCommandResponse>> Handle(
         CreateJobCommand request,
         CancellationToken cancellationToken
     )
@@ -33,13 +34,13 @@ internal sealed class CreateJobCommandHandler(
         {
             case ErrResult<long, string> errResult:
                 logger.LogError("{err}", errResult.Value);
-                return ApiResult<>.Err(503, [errResult.Value]);
+                return Err(503, errResult.Value);
             case OkResult<long, string> okResult:
                 logger.LogInformation("{err}", okResult.Value);
-                return ApiResult<>.Ok(new CreateJobCommandResponse(okResult.Value));
+                return Ok(new CreateJobCommandResponse(okResult.Value));
             default:
                 logger.LogInformation("Unknown type {@result}", result);
-                return ApiResult<>.Err(503, ["内部错误"]);
+                return Err(503, "内部错误");
         }
     }
 }

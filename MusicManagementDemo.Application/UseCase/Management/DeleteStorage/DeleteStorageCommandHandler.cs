@@ -3,15 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Management.DeleteStorage.DeleteStorageCommandResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Management.DeleteStorage;
 
 internal sealed class DeleteStorageCommandHandler(
     IManagementAppDbContext dbContext,
     ILogger<DeleteStorageCommandHandler> logger
-) : IRequestHandler<DeleteStorageCommand, IServiceResult>
+) : IRequestHandler<DeleteStorageCommand, ApiResult<DeleteStorageCommandResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<DeleteStorageCommandResponse>> Handle(
         DeleteStorageCommand request,
         CancellationToken cancellationToken
     )
@@ -23,7 +24,7 @@ internal sealed class DeleteStorageCommandHandler(
         if (storageToDelete is null)
         {
             logger.LogError("Storage with id: {RequestId} not found", request.Id);
-            return ApiResult<>.Err(404, ["未找到对应的存储"]);
+            return Err(404, "未找到对应的存储");
         }
         dbContext.Storages.Remove(storageToDelete);
         try
@@ -31,14 +32,14 @@ internal sealed class DeleteStorageCommandHandler(
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)
             {
                 logger.LogError("Error during delete storage: {@storageToDelete}", storageToDelete);
-                return ApiResult<>.Err(503, ["内部错误"]);
+                return Err(503, "内部错误");
             }
         }
         catch (Exception e)
         {
             logger.LogError(e, "Error during delete storage: {@storageToDelete}", storageToDelete);
-            return ApiResult<>.Err(503, ["内部错误"]);
+            return Err(503, "内部错误");
         }
-        return ApiResult<>.Ok(new DeleteStorageCommandResponse());
+        return Ok(new DeleteStorageCommandResponse());
     }
 }

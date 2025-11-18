@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Identity.Login.LoginCommandResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Login;
 
@@ -14,9 +15,9 @@ internal sealed class LoginCommandHandler(
     IJwtManager jwtManager,
     IConfiguration config,
     ILogger<LoginCommandHandler> logger
-) : IRequestHandler<LoginCommand, IServiceResult>
+) : IRequestHandler<LoginCommand, ApiResult<LoginCommandResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<LoginCommandResponse>> Handle(
         LoginCommand request,
         CancellationToken cancellationToken
     )
@@ -25,7 +26,7 @@ internal sealed class LoginCommandHandler(
         if (user == null)
         {
             logger.LogError("User {userId} not found.", request.Email);
-            return ApiResult<>.Err(5004, ["邮箱或密码错误"]);
+            return Err(5004, "邮箱或密码错误");
         }
 
         var signInRes = await signInMgr.CheckPasswordSignInAsync(user, request.Password, false);
@@ -36,7 +37,7 @@ internal sealed class LoginCommandHandler(
                 request.Email,
                 signInRes
             );
-            return ApiResult<>.Err(5004, ["邮箱或密码错误"]);
+            return Err(5004, "邮箱或密码错误");
         }
 
         var roles = await userMgr.GetRolesAsync(user);
@@ -50,6 +51,6 @@ internal sealed class LoginCommandHandler(
         );
         logger.LogInformation("User {userId} logged in.", user.Id);
 
-        return ApiResult<>.Ok(new LoginCommandResponse(tokenStr));
+        return Ok(new LoginCommandResponse(tokenStr));
     }
 }

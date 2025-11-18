@@ -1,4 +1,5 @@
 ﻿using Mediator;
+using MusicManagementDemo.Application.Responses;
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
 
@@ -8,4 +9,4 @@ public sealed record GetAllMusicInfoFromMusicListQuery(
     int PageSize,
     Guid? ReferenceId,
     bool Asc
-) : IRequest<IServiceResult>;
+) : IRequest<ApiResult<GetAllMusicInfoFromMusicListQueryResponse>>;

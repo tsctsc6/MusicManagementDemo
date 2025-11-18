@@ -3,15 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Music.DeleteMusicList.DeleteMusicListCommandResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Music.DeleteMusicList;
 
 internal sealed class DeleteMusicListCommandHandler(
     IMusicAppDbContext dbContext,
     ILogger<DeleteMusicListCommandHandler> logger
-) : IRequestHandler<DeleteMusicListCommand, IServiceResult>
+) : IRequestHandler<DeleteMusicListCommand, ApiResult<DeleteMusicListCommandResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<DeleteMusicListCommandResponse>> Handle(
         DeleteMusicListCommand request,
         CancellationToken cancellationToken
     )
@@ -22,7 +23,7 @@ internal sealed class DeleteMusicListCommandHandler(
         if (musicListToDelete is null)
         {
             logger.LogError("MusicList {MusicListId} not found", request.MusicListId);
-            return ApiResult<>.Err(404, ["没有找到对应的歌单"]);
+            return Err(404, "没有找到对应的歌单");
         }
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
             cancellationToken
@@ -42,7 +43,7 @@ internal sealed class DeleteMusicListCommandHandler(
                 expectedSubmitCount,
                 submitCount
             );
-            return ApiResult<>.Err(503, ["内部错误"]);
+            return Err(503, "内部错误");
         }
         if (
             await dbContext
@@ -52,9 +53,9 @@ internal sealed class DeleteMusicListCommandHandler(
         {
             await transaction.RollbackAsync(cancellationToken);
             logger.LogError("Error in delete MusicList {MusicListId}", request.MusicListId);
-            return ApiResult<>.Err(503, ["内部错误"]);
+            return Err(503, "内部错误");
         }
         await transaction.CommitAsync(cancellationToken);
-        return ApiResult<>.Ok(new DeleteMusicListCommandResponse());
+        return Ok(new DeleteMusicListCommandResponse());
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Identity;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Identity.Register.RegisterCommandResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Register;
 
@@ -12,9 +13,9 @@ internal sealed class RegisterCommandHandler(
     UserManager<ApplicationUser> userMgr,
     IIdentityDbContext dbContext,
     ILogger<RegisterCommandHandler> logger
-) : IRequestHandler<RegisterCommand, IServiceResult>
+) : IRequestHandler<RegisterCommand, ApiResult<RegisterCommandResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<RegisterCommandResponse>> Handle(
         RegisterCommand request,
         CancellationToken cancellationToken
     )
@@ -25,7 +26,7 @@ internal sealed class RegisterCommandHandler(
         if (!result.Succeeded)
         {
             logger.LogError("Create user failed, reason: {@result}", result);
-            return ApiResult<>.Err(503, [.. result.Errors.Select(e => e.Description)]);
+            return Err(503, string.Join("\n", result.Errors.Select(e => e.Description)));
         }
         logger.LogInformation("User {userId} registered.", user.Id);
 
@@ -38,11 +39,11 @@ internal sealed class RegisterCommandHandler(
             if (adminRole is null)
             {
                 logger.LogError("Role Admin is not exist.");
-                return ApiResult<>.Err(503, ["内部错误"]);
+                return Err(503, "内部错误");
             }
             await userMgr.AddToRoleAsync(user, adminRole.NormalizedName!);
             logger.LogInformation("User {userId} is admin.", user.Id);
         }
-        return ApiResult<>.Ok(new RegisterCommandResponse(user.Id));
+        return Ok(new RegisterCommandResponse(user.Id));
     }
 }

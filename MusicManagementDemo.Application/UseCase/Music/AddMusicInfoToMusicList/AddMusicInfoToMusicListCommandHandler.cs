@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Music;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList.AddMusicInfoToMusicListCommandResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
 
@@ -14,9 +15,13 @@ namespace MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
 internal sealed class AddMusicInfoToMusicListCommandHandler(
     IMusicAppDbContext dbContext,
     ILogger<AddMusicInfoToMusicListCommandHandler> logger
-) : IRequestHandler<AddMusicInfoToMusicListCommand, IServiceResult>
+)
+    : IRequestHandler<
+        AddMusicInfoToMusicListCommand,
+        ApiResult<AddMusicInfoToMusicListCommandResponse>
+    >
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<AddMusicInfoToMusicListCommandResponse>> Handle(
         AddMusicInfoToMusicListCommand request,
         CancellationToken cancellationToken
     )
@@ -28,7 +33,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
         if (musicListWhichAddMusicInfo is null)
         {
             logger.LogError("MusicList {musicListId} not found", request.MusicListId);
-            return ApiResult<>.Err(404, ["没有找到歌单"]);
+            return Err(404, "没有找到歌单");
         }
 
         // 歌单中是否存在该歌曲
@@ -40,7 +45,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
         )
         {
             logger.LogError("MusicInfo {musicInfoId} already exist", request.MusicInfoId);
-            return ApiResult<>.Err(404, ["该歌曲已存在该歌单中"]);
+            return Err(404, "该歌曲已存在该歌单中");
         }
 
         // 歌曲是否存在
@@ -52,7 +57,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
         )
         {
             logger.LogError("MusicInfo {musicInfoId} not exist", request.MusicInfoId);
-            return ApiResult<>.Err(404, ["该歌曲不存在"]);
+            return Err(404, "该歌曲不存在");
         }
 
         // 查询歌单最后的歌曲
@@ -88,7 +93,7 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
                 expectedSubmitCount,
                 submitCount
             );
-            return ApiResult<>.Err(503, ["添加歌曲失败"]);
+            return Err(503, "添加歌曲失败");
         }
 
         await transaction.CommitAsync(cancellationToken);
@@ -97,6 +102,6 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
             request.MusicInfoId,
             request.MusicListId
         );
-        return ApiResult<>.Ok(new AddMusicInfoToMusicListCommandResponse());
+        return Ok(new AddMusicInfoToMusicListCommandResponse());
     }
 }

@@ -1,20 +1,20 @@
-﻿using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo.ReadAllMusicInfoQueryResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Music.ReadAllMusicInfo;
 
 internal sealed partial class ReadAllMusicInfoQueryHandler(
     IMusicAppDbContext dbContext,
     ILogger<ReadAllMusicInfoQueryHandler> logger
-) : IRequestHandler<ReadAllMusicInfoQuery, IServiceResult>
+) : IRequestHandler<ReadAllMusicInfoQuery, ApiResult<ReadAllMusicInfoQueryResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<ReadAllMusicInfoQueryResponse>> Handle(
         ReadAllMusicInfoQuery request,
         CancellationToken cancellationToken
     )
@@ -60,11 +60,9 @@ internal sealed partial class ReadAllMusicInfoQueryHandler(
         var musicListsToRead = await musicInfosToReadQuery
             .Take(request.PageSize)
             .AsNoTracking()
-            .Select(m => new ReadAllMusicInfoQueryResponse(m.Id, m.Title, m.Artist, m.Album))
+            .Select(m => new ReadAllMusicInfoQueryResponseItem(m.Id, m.Title, m.Artist, m.Album))
             .ToArrayAsync(cancellationToken: cancellationToken);
-        return ApiResult<>.Ok(
-            new ReadOnlyCollection<ReadAllMusicInfoQueryResponse>(musicListsToRead)
-        );
+        return Ok(new ReadAllMusicInfoQueryResponse(musicListsToRead));
     }
 
     [GeneratedRegex(@"\s+", RegexOptions.None, 3000)]

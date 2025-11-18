@@ -1,15 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using Mediator;
+﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Music.ReadAllMusicList.ReadAllMusicListQueryResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Music.ReadAllMusicList;
 
 internal sealed class ReadAllMusicListQueryHandler(IMusicAppDbContext dbContext)
-    : IRequestHandler<ReadAllMusicListQuery, IServiceResult>
+    : IRequestHandler<ReadAllMusicListQuery, ApiResult<ReadAllMusicListQueryResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<ReadAllMusicListQueryResponse>> Handle(
         ReadAllMusicListQuery request,
         CancellationToken cancellationToken
     )
@@ -39,10 +39,8 @@ internal sealed class ReadAllMusicListQueryHandler(IMusicAppDbContext dbContext)
             .Where(e => e.UserId == request.UserId)
             .Take(request.PageSize)
             .AsNoTracking()
-            .Select(e => new ReadAllMusicListQueryResponse(e.Id, e.Name, e.CreatedAt))
+            .Select(e => new ReadAllMusicListQueryResponseItem(e.Id, e.Name, e.CreatedAt))
             .ToArrayAsync(cancellationToken: cancellationToken);
-        return ApiResult<>.Ok(
-            new ReadOnlyCollection<ReadAllMusicListQueryResponse>(musicListsToRead)
-        );
+        return Ok(new ReadAllMusicListQueryResponse(musicListsToRead));
     }
 }

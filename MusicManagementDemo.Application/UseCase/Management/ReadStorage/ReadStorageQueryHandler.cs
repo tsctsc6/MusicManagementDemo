@@ -3,15 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Management.ReadStorage.ReadStorageQueryResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadStorage;
 
 internal sealed class ReadStorageQueryHandler(
     IManagementAppDbContext dbContext,
     ILogger<ReadStorageQueryHandler> logger
-) : IRequestHandler<ReadStorageQuery, IServiceResult>
+) : IRequestHandler<ReadStorageQuery, ApiResult<ReadStorageQueryResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<ReadStorageQueryResponse>> Handle(
         ReadStorageQuery request,
         CancellationToken cancellationToken
     )
@@ -22,9 +23,9 @@ internal sealed class ReadStorageQueryHandler(
         if (storageToRead is null)
         {
             logger.LogError("storage {id} not found", request.Id);
-            return ApiResult<>.Err(503, ["没有找到对应的存储"]);
+            return Err(503, "没有找到对应的存储");
         }
-        return ApiResult<>.Ok(
+        return Ok(
             new ReadStorageQueryResponse(storageToRead.Id, storageToRead.Name, storageToRead.Path)
         );
     }

@@ -3,15 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Management.ReadJob.ReadJobQueryResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadJob;
 
 internal sealed class ReadJobQueryHandler(
     IManagementAppDbContext dbContext,
     ILogger<ReadJobQueryHandler> logger
-) : IRequestHandler<ReadJobQuery, IServiceResult>
+) : IRequestHandler<ReadJobQuery, ApiResult<ReadJobQueryResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<ReadJobQueryResponse>> Handle(
         ReadJobQuery request,
         CancellationToken cancellationToken
     )
@@ -22,9 +23,9 @@ internal sealed class ReadJobQueryHandler(
         if (jobToRead is null)
         {
             logger.LogError("Job {RequestId} not found", request.Id);
-            return ApiResult<>.Err(406, ["Job not found"]);
+            return Err(406, "Job not found");
         }
-        return ApiResult<>.Ok(
+        return Ok(
             new ReadJobQueryResponse(
                 jobToRead.Id,
                 jobToRead.Type,

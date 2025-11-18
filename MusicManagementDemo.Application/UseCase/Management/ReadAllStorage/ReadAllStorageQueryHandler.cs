@@ -2,39 +2,40 @@
 using Microsoft.EntityFrameworkCore;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Management.ReadAllStorage.ReadAllStorageQueryResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadAllStorage;
 
 internal sealed class ReadAllStorageQueryHandler(IManagementAppDbContext dbContext)
-    : IRequestHandler<ReadAllStorageQuery, IServiceResult>
+    : IRequestHandler<ReadAllStorageQuery, ApiResult<ReadAllStorageQueryResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<ReadAllStorageQueryResponse>> Handle(
         ReadAllStorageQuery request,
         CancellationToken cancellationToken
     )
     {
-        var storagesToRead = dbContext.Storages.AsQueryable();
+        var storagesQueryable = dbContext.Storages.AsQueryable();
         if (request.Asc)
         {
-            storagesToRead = storagesToRead.OrderBy(e => e.Id);
+            storagesQueryable = storagesQueryable.OrderBy(e => e.Id);
             if (request.ReferenceId is not null)
             {
-                storagesToRead = storagesToRead.Where(e => e.Id > request.ReferenceId);
+                storagesQueryable = storagesQueryable.Where(e => e.Id > request.ReferenceId);
             }
         }
         else
         {
-            storagesToRead = storagesToRead.OrderByDescending(e => e.Id);
+            storagesQueryable = storagesQueryable.OrderByDescending(e => e.Id);
             if (request.ReferenceId is not null)
             {
-                storagesToRead = storagesToRead.Where(e => e.Id < request.ReferenceId);
+                storagesQueryable = storagesQueryable.Where(e => e.Id < request.ReferenceId);
             }
         }
-        var musicListsToRead = await storagesToRead
+        var storagesToRead = await storagesQueryable
             .Take(request.PageSize)
             .AsNoTracking()
-            .Select(e => new ReadAllStorageQueryResponse(e.Id, e.Name, e.Path))
+            .Select(e => new ReadAllStorageQueryResponseItem(e.Id, e.Name, e.Path))
             .ToArrayAsync(cancellationToken: cancellationToken);
-        return ApiResult<>.Ok(musicListsToRead);
+        return Ok(new ReadAllStorageQueryResponse(storagesToRead));
     }
 }

@@ -3,15 +3,16 @@ using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Music;
+using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Music.CreateMusicList.CreateMusicListCommandResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Music.CreateMusicList;
 
 internal sealed class CreateMusicListCommandHandler(
     IMusicAppDbContext dbContext,
     ILogger<CreateMusicListCommandHandler> logger
-) : IRequestHandler<CreateMusicListCommand, IServiceResult>
+) : IRequestHandler<CreateMusicListCommand, ApiResult<CreateMusicListCommandResponse>>
 {
-    public async ValueTask<IServiceResult> Handle(
+    public async ValueTask<ApiResult<CreateMusicListCommandResponse>> Handle(
         CreateMusicListCommand request,
         CancellationToken cancellationToken
     )
@@ -23,14 +24,14 @@ internal sealed class CreateMusicListCommandHandler(
             if (await dbContext.SaveChangesAsync(cancellationToken) != 1)
             {
                 logger.LogError("Create MusicList failed");
-                return ApiResult<>.Err(503, ["创建失败"]);
+                return Err(503, "创建失败");
             }
         }
         catch (Exception e)
         {
             logger.LogError(e, "Create MisicList failed");
-            return ApiResult<>.Err(503, ["创建失败"]);
+            return Err(503, "创建失败");
         }
-        return ApiResult<>.Ok(new CreateMusicListCommandResponse(musicListToAdd.Id));
+        return Ok(new CreateMusicListCommandResponse(musicListToAdd.Id));
     }
 }

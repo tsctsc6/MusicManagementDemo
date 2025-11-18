@@ -2,7 +2,7 @@
 
 public sealed record GetAllMusicInfoFromMusicListQueryResponse(
     string MusicListName,
-    IReadOnlyCollection<GetAllMusicInfoFromMusicListQueryResponseMusicInfo> musicInfo
+    IReadOnlyCollection<GetAllMusicInfoFromMusicListQueryResponseMusicInfo> MusicInfo
 );
 
 public sealed record GetAllMusicInfoFromMusicListQueryResponseMusicInfo(
