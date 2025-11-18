@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
 using MusicManagementDemo.WebApi.Utils;
 using RustSharp;
@@ -14,7 +16,12 @@ internal sealed class GetAllMusicInfoFromMusicList : IEndpoint
     {
         app.MapGet(
                 "api/music/get-all-music-info-from-music-list",
-                async (
+                async Task<
+                    Results<
+                        Ok<ApiResult<GetAllMusicInfoFromMusicListQueryResponse>>,
+                        UnauthorizedHttpResult
+                    >
+                > (
                     Guid musicListId,
                     int? pageSize,
                     Guid? referenceId,
@@ -27,8 +34,8 @@ internal sealed class GetAllMusicInfoFromMusicList : IEndpoint
                     var optionalUserId = claimsPrincipal.GetUserId();
                     return optionalUserId switch
                     {
-                        NoneOption<Guid> => Results.Unauthorized(),
-                        SomeOption<Guid> userId => Results.Ok(
+                        NoneOption<Guid> => TypedResults.Unauthorized(),
+                        SomeOption<Guid> userId => TypedResults.Ok(
                             await mediator.Send(
                                 new GetAllMusicInfoFromMusicListQuery(
                                     UserId: userId.Value,

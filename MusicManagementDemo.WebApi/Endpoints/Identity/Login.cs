@@ -18,7 +18,7 @@ internal sealed class Login : IEndpoint
                     new LoginCommand(Email: request.Email, Password: request.Password),
                     cancellationToken
                 );
-                return Results.Ok(result);
+                return TypedResults.Ok(result);
             }
         );
     }

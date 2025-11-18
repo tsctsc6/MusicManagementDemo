@@ -21,7 +21,7 @@ internal sealed class CreateJob : IEndpoint
                         new CreateJobCommand(request.Type, request.Description, request.JobArgs),
                         cancellationToken
                     );
-                    return Results.Ok(result);
+                    return TypedResults.Ok(result);
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });

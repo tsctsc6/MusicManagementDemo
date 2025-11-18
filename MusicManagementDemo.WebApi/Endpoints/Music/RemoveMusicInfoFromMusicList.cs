@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Application.UseCase.Music.RemoveMusicInfoFromMusicList;
 using MusicManagementDemo.WebApi.Utils;
 using RustSharp;
@@ -16,7 +18,12 @@ internal sealed class RemoveMusicInfoFromMusicList : IEndpoint
     {
         app.MapPost(
                 "api/music/remove-music-info-from-music-list",
-                async (
+                async Task<
+                    Results<
+                        Ok<ApiResult<RemoveMusicInfoFromMusicListCommandResponse>>,
+                        UnauthorizedHttpResult
+                    >
+                > (
                     Request request,
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
@@ -26,8 +33,8 @@ internal sealed class RemoveMusicInfoFromMusicList : IEndpoint
                     var optionalUserId = claimsPrincipal.GetUserId();
                     return optionalUserId switch
                     {
-                        NoneOption<Guid> => Results.Unauthorized(),
-                        SomeOption<Guid> userId => Results.Ok(
+                        NoneOption<Guid> => TypedResults.Unauthorized(),
+                        SomeOption<Guid> userId => TypedResults.Ok(
                             await mediator.Send(
                                 new RemoveMusicInfoFromMusicListCommand(
                                     userId.Value,

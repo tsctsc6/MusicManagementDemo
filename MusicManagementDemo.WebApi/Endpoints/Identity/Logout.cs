@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using Mediator;
+using Microsoft.AspNetCore.Http.HttpResults;
+using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Application.UseCase.Identity.Logout;
 using MusicManagementDemo.WebApi.Utils;
 using RustSharp;
@@ -13,7 +15,7 @@ internal sealed class Logout : IEndpoint
     {
         app.MapPost(
                 "api/identity/logout",
-                async (
+                async Task<Results<Ok<ApiResult<LogoutCommandResponse>>, UnauthorizedHttpResult>> (
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
                     CancellationToken cancellationToken
@@ -22,8 +24,8 @@ internal sealed class Logout : IEndpoint
                     var userId = claimsPrincipal.GetUserId();
                     return userId switch
                     {
-                        NoneOption<Guid> => Results.Unauthorized(),
-                        SomeOption<Guid> someOption => Results.Ok(
+                        NoneOption<Guid> => TypedResults.Unauthorized(),
+                        SomeOption<Guid> someOption => TypedResults.Ok(
                             await mediator.Send(
                                 new LogoutCommand(someOption.Value),
                                 cancellationToken

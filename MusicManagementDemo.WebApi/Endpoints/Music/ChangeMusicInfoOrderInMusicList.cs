@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Application.UseCase.Music.ChangeMusicInfoOrderInMusicList;
 using MusicManagementDemo.WebApi.Utils;
 using RustSharp;
@@ -21,7 +23,12 @@ internal sealed class ChangeMusicInfoOrderInMusicList : IEndpoint
     {
         app.MapPost(
                 "api/music/change-music-info-order-in-music-list",
-                async (
+                async Task<
+                    Results<
+                        Ok<ApiResult<ChangeMusicInfoOrderInMusicListCommandResponse>>,
+                        UnauthorizedHttpResult
+                    >
+                > (
                     Request request,
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
@@ -31,8 +38,8 @@ internal sealed class ChangeMusicInfoOrderInMusicList : IEndpoint
                     var optionalUserId = claimsPrincipal.GetUserId();
                     return optionalUserId switch
                     {
-                        NoneOption<Guid> => Results.Unauthorized(),
-                        SomeOption<Guid> userId => Results.Ok(
+                        NoneOption<Guid> => TypedResults.Unauthorized(),
+                        SomeOption<Guid> userId => TypedResults.Ok(
                             await mediator.Send(
                                 new ChangeMusicInfoOrderInMusicListCommand(
                                     userId.Value,

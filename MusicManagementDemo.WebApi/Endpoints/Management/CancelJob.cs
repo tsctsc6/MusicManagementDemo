@@ -19,7 +19,7 @@ internal sealed class CancelJob : IEndpoint
                         new CancelJobCommand(request.JobId),
                         cancellationToken
                     );
-                    return Results.Ok(result);
+                    return TypedResults.Ok(result);
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });

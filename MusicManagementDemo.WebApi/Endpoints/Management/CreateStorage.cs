@@ -19,7 +19,7 @@ internal sealed class CreateStorage : IEndpoint
                         new CreateStorageCommand(Name: request.Name, Path: request.Path),
                         cancellationToken
                     );
-                    return Results.Ok(result);
+                    return TypedResults.Ok(result);
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });

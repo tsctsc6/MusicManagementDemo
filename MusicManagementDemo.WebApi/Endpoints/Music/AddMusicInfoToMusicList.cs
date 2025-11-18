@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
 using MusicManagementDemo.WebApi.Utils;
 using RustSharp;
@@ -16,7 +18,12 @@ internal sealed class AddMusicInfoToMusicList : IEndpoint
     {
         app.MapPost(
                 "api/music/add-music-info-to-music-list",
-                async (
+                async Task<
+                    Results<
+                        Ok<ApiResult<AddMusicInfoToMusicListCommandResponse>>,
+                        UnauthorizedHttpResult
+                    >
+                > (
                     Request request,
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
@@ -26,8 +33,8 @@ internal sealed class AddMusicInfoToMusicList : IEndpoint
                     var optionalUserId = claimsPrincipal.GetUserId();
                     return optionalUserId switch
                     {
-                        NoneOption<Guid> => Results.Unauthorized(),
-                        SomeOption<Guid> userId => Results.Ok(
+                        NoneOption<Guid> => TypedResults.Unauthorized(),
+                        SomeOption<Guid> userId => TypedResults.Ok(
                             await mediator.Send(
                                 new AddMusicInfoToMusicListCommand(
                                     userId.Value,

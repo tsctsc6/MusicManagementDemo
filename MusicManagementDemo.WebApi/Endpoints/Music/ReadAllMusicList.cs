@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Application.UseCase.Music.ReadAllMusicList;
 using MusicManagementDemo.WebApi.Utils;
 using RustSharp;
@@ -14,7 +16,9 @@ internal sealed class ReadAllMusicList : IEndpoint
     {
         app.MapGet(
                 "api/music/read-all-music-list",
-                async (
+                async Task<
+                    Results<Ok<ApiResult<ReadAllMusicListQueryResponse>>, UnauthorizedHttpResult>
+                > (
                     int? pageSize,
                     Guid? referenceId,
                     bool? asc,
@@ -26,8 +30,8 @@ internal sealed class ReadAllMusicList : IEndpoint
                     var optionalUserId = claimsPrincipal.GetUserId();
                     return optionalUserId switch
                     {
-                        NoneOption<Guid> => Results.Unauthorized(),
-                        SomeOption<Guid> userId => Results.Ok(
+                        NoneOption<Guid> => TypedResults.Unauthorized(),
+                        SomeOption<Guid> userId => TypedResults.Ok(
                             await mediator.Send(
                                 new ReadAllMusicListQuery(
                                     UserId: userId.Value,

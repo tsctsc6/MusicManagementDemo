@@ -23,7 +23,7 @@ internal sealed class UpdateStorage : IEndpoint
                         ),
                         cancellationToken
                     );
-                    return Results.Ok(result);
+                    return TypedResults.Ok(result);
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });

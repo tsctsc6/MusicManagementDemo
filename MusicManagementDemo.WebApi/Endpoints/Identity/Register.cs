@@ -22,7 +22,7 @@ internal sealed class Register : IEndpoint
                     ),
                     cancellationToken
                 );
-                return Results.Ok(result);
+                return TypedResults.Ok(result);
             }
         );
     }

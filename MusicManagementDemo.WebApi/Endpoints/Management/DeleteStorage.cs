@@ -19,7 +19,7 @@ internal sealed class DeleteStorage : IEndpoint
                         new DeleteStorageCommand(Id: request.Id),
                         cancellationToken
                     );
-                    return Results.Ok(result);
+                    return TypedResults.Ok(result);
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });

@@ -17,7 +17,7 @@ internal sealed class ReadStorage : IEndpoint
                         new ReadStorageQuery(Id: id),
                         cancellationToken
                     );
-                    return Results.Ok(result);
+                    return TypedResults.Ok(result);
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });

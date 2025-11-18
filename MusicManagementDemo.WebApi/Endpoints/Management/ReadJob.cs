@@ -14,7 +14,7 @@ internal sealed class ReadJob : IEndpoint
                 async (long id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
                     var result = await mediator.Send(new ReadJobQuery(Id: id), cancellationToken);
-                    return Results.Ok(result);
+                    return TypedResults.Ok(result);
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });

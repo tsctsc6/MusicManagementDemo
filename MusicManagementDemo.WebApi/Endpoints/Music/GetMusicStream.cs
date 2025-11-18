@@ -1,5 +1,6 @@
 ﻿using Mediator;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using MusicManagementDemo.Application.UseCase.Music.GetMusicStream;
 using RustSharp;
 
@@ -12,7 +13,7 @@ internal sealed class GetMusicStream : IEndpoint
     {
         app.MapGet(
                 "api/music/get-music-stream/{musicStreamId:guid}",
-                async (
+                async Task<Results<FileStreamHttpResult, NotFound>> (
                     Guid musicStreamId,
                     IMediator mediator,
                     CancellationToken cancellationToken
@@ -24,12 +25,12 @@ internal sealed class GetMusicStream : IEndpoint
                     );
                     return optionalStream switch
                     {
-                        SomeOption<Stream> stream => Results.File(
+                        SomeOption<Stream> stream => TypedResults.File(
                             fileStream: stream.Value,
                             contentType: "video/x-flac",
                             enableRangeProcessing: true
                         ),
-                        _ => Results.NotFound(),
+                        _ => TypedResults.NotFound(),
                     };
                 }
             )
