@@ -10,3 +10,5 @@
 * [web-api 设计](./doc/web-api.md)
 * [代码结构](./doc/code-architecture.md)
 * [单元测试方法](./doc/testing.md)
+
+[<img src="https://fetch.usebruno.com/button.svg" alt="Fetch in Bruno" style="width: 130px; height: 30px;" width="128" height="32">](https://fetch.usebruno.com?url=https%3A%2F%2Fgithub.com%2Ftsctsc6%2FMusicManagementDemo-Bruno.git "target=_blank rel=noopener noreferrer")
