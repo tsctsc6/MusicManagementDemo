@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using MusicManagementDemo.Application;
 using MusicManagementDemo.Infrastructure.Core;
 using MusicManagementDemo.Infrastructure.Database;
-using MusicManagementDemo.WebApi;
 using MusicManagementDemo.WebApi.Endpoints;
 using Serilog;
 using InjectioTags = MusicManagementDemo.WebApi.InjectioTags;
