@@ -28,6 +28,7 @@ internal sealed class CreateJob : IEndpoint
                     return TypedResults.Ok(result);
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" })
+            .WithName(nameof(CreateJob));
     }
 }

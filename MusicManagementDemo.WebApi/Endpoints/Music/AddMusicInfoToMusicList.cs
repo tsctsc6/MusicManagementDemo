@@ -48,6 +48,7 @@ internal sealed class AddMusicInfoToMusicList : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(AddMusicInfoToMusicList));
     }
 }

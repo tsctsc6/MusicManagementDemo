@@ -11,23 +11,24 @@ internal sealed class Register : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-            "api/identity/register",
-            async (
-                RegisterRequest request,
-                IMediator mediator,
-                CancellationToken cancellationToken
-            ) =>
-            {
-                var result = await mediator.Send(
-                    new RegisterCommand(
-                        Email: request.Email,
-                        UserName: request.UserName,
-                        Password: request.Password
-                    ),
-                    cancellationToken
-                );
-                return TypedResults.Ok(result);
-            }
-        );
+                "api/identity/register",
+                async (
+                    RegisterRequest request,
+                    IMediator mediator,
+                    CancellationToken cancellationToken
+                ) =>
+                {
+                    var result = await mediator.Send(
+                        new RegisterCommand(
+                            Email: request.Email,
+                            UserName: request.UserName,
+                            Password: request.Password
+                        ),
+                        cancellationToken
+                    );
+                    return TypedResults.Ok(result);
+                }
+            )
+            .WithName(nameof(Register));
     }
 }

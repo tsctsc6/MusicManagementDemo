@@ -41,6 +41,7 @@ internal sealed class CreateMusicList : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(CreateMusicList));
     }
 }

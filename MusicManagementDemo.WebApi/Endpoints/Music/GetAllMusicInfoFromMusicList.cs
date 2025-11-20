@@ -51,6 +51,7 @@ internal sealed class GetAllMusicInfoFromMusicList : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(GetAllMusicInfoFromMusicList));
     }
 }

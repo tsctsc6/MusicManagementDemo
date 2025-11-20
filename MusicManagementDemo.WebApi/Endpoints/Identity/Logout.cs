@@ -35,6 +35,7 @@ internal sealed class Logout : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .WithName(nameof(Logout));
     }
 }

@@ -34,6 +34,7 @@ internal sealed class GetMusicStream : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(GetMusicStream));
     }
 }

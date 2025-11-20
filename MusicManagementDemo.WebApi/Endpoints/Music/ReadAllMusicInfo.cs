@@ -32,6 +32,7 @@ public class ReadAllMusicInfo : IEndpoint
                     return TypedResults.Ok(result);
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(ReadAllMusicInfo));
     }
 }

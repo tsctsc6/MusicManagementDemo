@@ -45,6 +45,7 @@ internal sealed class UpdateMusicList : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(UpdateMusicList));
     }
 }

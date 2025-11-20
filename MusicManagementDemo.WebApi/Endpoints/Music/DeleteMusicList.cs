@@ -41,6 +41,7 @@ internal sealed class DeleteMusicList : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(DeleteMusicList));
     }
 }

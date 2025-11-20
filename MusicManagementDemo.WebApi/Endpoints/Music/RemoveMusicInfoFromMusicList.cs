@@ -48,6 +48,7 @@ internal sealed class RemoveMusicInfoFromMusicList : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(RemoveMusicInfoFromMusicList));
     }
 }

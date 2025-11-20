@@ -11,15 +11,20 @@ internal sealed class Login : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-            "api/identity/login",
-            async (LoginRequest request, IMediator mediator, CancellationToken cancellationToken) =>
-            {
-                var result = await mediator.Send(
-                    new LoginCommand(Email: request.Email, Password: request.Password),
-                    cancellationToken
-                );
-                return TypedResults.Ok(result);
-            }
-        );
+                "api/identity/login",
+                async (
+                    LoginRequest request,
+                    IMediator mediator,
+                    CancellationToken cancellationToken
+                ) =>
+                {
+                    var result = await mediator.Send(
+                        new LoginCommand(Email: request.Email, Password: request.Password),
+                        cancellationToken
+                    );
+                    return TypedResults.Ok(result);
+                }
+            )
+            .WithName(nameof(Login));
     }
 }

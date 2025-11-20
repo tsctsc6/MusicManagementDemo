@@ -55,6 +55,7 @@ internal sealed class ChangeMusicInfoOrderInMusicList : IEndpoint
                     };
                 }
             )
-            .RequireAuthorization(new AuthorizeAttribute());
+            .RequireAuthorization(new AuthorizeAttribute())
+            .WithName(nameof(ChangeMusicInfoOrderInMusicList));
     }
 }
