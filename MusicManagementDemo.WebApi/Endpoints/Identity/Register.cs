@@ -3,16 +3,20 @@ using MusicManagementDemo.Application.UseCase.Identity.Register;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Identity;
 
+internal sealed record RegisterRequest(string Email, string UserName, string Password);
+
 [RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Endpoint)]
 internal sealed class Register : IEndpoint
 {
-    private sealed record Request(string Email, string UserName, string Password);
-
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
             "api/identity/register",
-            async (Request request, IMediator mediator, CancellationToken cancellationToken) =>
+            async (
+                RegisterRequest request,
+                IMediator mediator,
+                CancellationToken cancellationToken
+            ) =>
             {
                 var result = await mediator.Send(
                     new RegisterCommand(

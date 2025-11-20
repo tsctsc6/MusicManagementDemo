@@ -9,11 +9,11 @@ using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
+internal sealed record DeleteMusicListRequest(Guid MusicListId);
+
 [RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Endpoint)]
 internal sealed class DeleteMusicList : IEndpoint
 {
-    private sealed record Request(Guid MusicListId);
-
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
@@ -21,7 +21,7 @@ internal sealed class DeleteMusicList : IEndpoint
                 async Task<
                     Results<Ok<ApiResult<DeleteMusicListCommandResponse>>, UnauthorizedHttpResult>
                 > (
-                    Request request,
+                    DeleteMusicListRequest request,
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
                     CancellationToken cancellationToken

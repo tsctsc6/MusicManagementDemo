@@ -9,11 +9,11 @@ using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
+sealed record UpdateMusicListRequest(Guid MusicListId, string Name);
+
 [RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Endpoint)]
 internal sealed class UpdateMusicList : IEndpoint
 {
-    private sealed record Request(Guid MusicListId, string Name);
-
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
@@ -21,7 +21,7 @@ internal sealed class UpdateMusicList : IEndpoint
                 async Task<
                     Results<Ok<ApiResult<UpdateMusicListCommandResponse>>, UnauthorizedHttpResult>
                 > (
-                    Request request,
+                    UpdateMusicListRequest request,
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
                     CancellationToken cancellationToken

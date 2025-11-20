@@ -9,16 +9,16 @@ using RustSharp;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Music;
 
+internal sealed record ChangeMusicInfoOrderInMusicListRequest(
+    Guid MusicListId,
+    Guid TargetMusicInfoId,
+    Guid? PrevMusicInfoId,
+    Guid? NextMusicInfoId
+);
+
 [RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Endpoint)]
 internal sealed class ChangeMusicInfoOrderInMusicList : IEndpoint
 {
-    private sealed record Request(
-        Guid MusicListId,
-        Guid TargetMusicInfoId,
-        Guid? PrevMusicInfoId,
-        Guid? NextMusicInfoId
-    );
-
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
@@ -29,7 +29,7 @@ internal sealed class ChangeMusicInfoOrderInMusicList : IEndpoint
                         UnauthorizedHttpResult
                     >
                 > (
-                    Request request,
+                    ChangeMusicInfoOrderInMusicListRequest request,
                     ClaimsPrincipal claimsPrincipal,
                     IMediator mediator,
                     CancellationToken cancellationToken

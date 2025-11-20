@@ -4,16 +4,20 @@ using MusicManagementDemo.Application.UseCase.Management.CancelJob;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
+internal sealed record CancelJobRequest(long JobId);
+
 [RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Endpoint)]
 internal sealed class CancelJob : IEndpoint
 {
-    private sealed record Request(long JobId);
-
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
                 "api/management/Cancel-job",
-                async (Request request, IMediator mediator, CancellationToken cancellationToken) =>
+                async (
+                    CancelJobRequest request,
+                    IMediator mediator,
+                    CancellationToken cancellationToken
+                ) =>
                 {
                     var result = await mediator.Send(
                         new CancelJobCommand(request.JobId),

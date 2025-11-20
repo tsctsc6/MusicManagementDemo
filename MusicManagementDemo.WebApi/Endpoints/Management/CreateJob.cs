@@ -6,16 +6,20 @@ using MusicManagementDemo.Domain.Entity.Management;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
+internal sealed record CreateJobRequest(JobType Type, string Description, JsonNode JobArgs);
+
 [RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Endpoint)]
 internal sealed class CreateJob : IEndpoint
 {
-    private sealed record Request(JobType Type, string Description, JsonNode JobArgs);
-
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
                 "api/management/create-job",
-                async (Request request, IMediator mediator, CancellationToken cancellationToken) =>
+                async (
+                    CreateJobRequest request,
+                    IMediator mediator,
+                    CancellationToken cancellationToken
+                ) =>
                 {
                     var result = await mediator.Send(
                         new CreateJobCommand(request.Type, request.Description, request.JobArgs),
