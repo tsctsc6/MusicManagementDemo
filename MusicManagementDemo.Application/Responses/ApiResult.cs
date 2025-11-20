@@ -8,7 +8,7 @@ public interface IApiResult
 public record ApiResult<T> : IApiResult
     where T : class
 {
-    public bool IsFinish { get; init; } = false;
+    public bool IsFinished { get; init; } = false;
 
     public int Code { get; init; } = 0;
 
@@ -18,9 +18,9 @@ public record ApiResult<T> : IApiResult
 
     public ApiResult() { }
 
-    private ApiResult(bool isFinish, int code, T? data, string? errorMessage)
+    private ApiResult(bool isFinished, int code, T? data, string? errorMessage)
     {
-        IsFinish = isFinish;
+        IsFinished = isFinished;
         Code = code;
         Data = data;
         ErrorMessage = errorMessage;
