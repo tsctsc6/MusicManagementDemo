@@ -6,7 +6,7 @@ using MusicManagementDemo.Domain.Entity.Management;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
-[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = "Endpoint")]
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Endpoint)]
 internal sealed class CreateJob : IEndpoint
 {
     private sealed record Request(JobType Type, string Description, JsonNode JobArgs);

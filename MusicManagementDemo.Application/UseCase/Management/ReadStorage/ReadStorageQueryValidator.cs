@@ -4,7 +4,7 @@ namespace MusicManagementDemo.Application.UseCase.Management.ReadStorage;
 
 [RegisterScoped<IValidator<ReadStorageQuery>>(
     Duplicate = DuplicateStrategy.Append,
-    Tags = "Validator"
+    Tags = InjectioTags.Validator
 )]
 internal sealed class ReadStorageQueryValidator : AbstractValidator<ReadStorageQuery>
 {

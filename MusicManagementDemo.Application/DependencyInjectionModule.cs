@@ -32,7 +32,7 @@ public static class DependencyInjectionModule
             typeof(DependencyInjectionModule),
             includeInternalTypes: true
         );*/
-        services.AddApplicationByInjectio("Validator");
+        services.AddApplicationByInjectio(InjectioTags.Validator);
 
         return services;
     }

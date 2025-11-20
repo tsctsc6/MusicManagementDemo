@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using MusicManagementDemo.Application;
 using MusicManagementDemo.Infrastructure.Core;
 using MusicManagementDemo.Infrastructure.Database;
+using MusicManagementDemo.WebApi;
 using MusicManagementDemo.WebApi.Endpoints;
 using Serilog;
+using InjectioTags = MusicManagementDemo.WebApi.InjectioTags;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,7 @@ builder
     .AddDatabaseInfrastructure(builder.Configuration)
     .AddSharedInfrastructure(builder.Configuration)
     .AddRealInfrastructure()
-    .AddWebApiByInjectio("Endpoint");
+    .AddWebApiByInjectio(InjectioTags.Endpoint);
 
 builder.Services.AddCors(options =>
 {

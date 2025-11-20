@@ -4,7 +4,7 @@ using MusicManagementDemo.Application.UseCase.Management.UpdateStorage;
 
 namespace MusicManagementDemo.WebApi.Endpoints.Management;
 
-[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = "Endpoint")]
+[RegisterTransient<IEndpoint>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Endpoint)]
 internal sealed class UpdateStorage : IEndpoint
 {
     private sealed record Request(int Id, string Name, string Path);

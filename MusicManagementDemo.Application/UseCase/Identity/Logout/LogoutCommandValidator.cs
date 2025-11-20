@@ -2,7 +2,7 @@
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Logout;
 
-[RegisterScoped<IValidator<LogoutCommand>>(Duplicate = DuplicateStrategy.Append, Tags = "Validator")]
+[RegisterScoped<IValidator<LogoutCommand>>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Validator)]
 internal sealed class LogoutCommandValidator : AbstractValidator<LogoutCommand>
 {
     public LogoutCommandValidator()

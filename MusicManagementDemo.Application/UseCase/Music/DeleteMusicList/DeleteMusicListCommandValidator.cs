@@ -4,7 +4,7 @@ namespace MusicManagementDemo.Application.UseCase.Music.DeleteMusicList;
 
 [RegisterScoped<IValidator<DeleteMusicListCommand>>(
     Duplicate = DuplicateStrategy.Append,
-    Tags = "Validator"
+    Tags = InjectioTags.Validator
 )]
 internal sealed class DeleteMusicListCommandValidator : AbstractValidator<DeleteMusicListCommand>
 {

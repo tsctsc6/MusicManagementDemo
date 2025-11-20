@@ -4,7 +4,7 @@ namespace MusicManagementDemo.Application.UseCase.Music.ChangeMusicInfoOrderInMu
 
 [RegisterScoped<IValidator<ChangeMusicInfoOrderInMusicListCommand>>(
     Duplicate = DuplicateStrategy.Append,
-    Tags = "Validator"
+    Tags = InjectioTags.Validator
 )]
 internal sealed class ChangeMusicInfoOrderInMusicListCommandValidator
     : AbstractValidator<ChangeMusicInfoOrderInMusicListCommand>

@@ -4,7 +4,7 @@ namespace MusicManagementDemo.Application.UseCase.Management.UpdateStorage;
 
 [RegisterScoped<IValidator<UpdateStorageCommand>>(
     Duplicate = DuplicateStrategy.Append,
-    Tags = "Validator"
+    Tags = InjectioTags.Validator
 )]
 internal sealed class UpdateStorageCommandValidator : AbstractValidator<UpdateStorageCommand>
 {

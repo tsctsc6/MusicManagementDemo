@@ -4,7 +4,7 @@ namespace MusicManagementDemo.Application.UseCase.Identity.Register;
 
 [RegisterScoped<IValidator<RegisterCommand>>(
     Duplicate = DuplicateStrategy.Append,
-    Tags = "Validator"
+    Tags = InjectioTags.Validator
 )]
 internal sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {

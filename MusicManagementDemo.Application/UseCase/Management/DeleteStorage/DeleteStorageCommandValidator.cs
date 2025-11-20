@@ -4,7 +4,7 @@ namespace MusicManagementDemo.Application.UseCase.Management.DeleteStorage;
 
 [RegisterScoped<IValidator<DeleteStorageCommand>>(
     Duplicate = DuplicateStrategy.Append,
-    Tags = "Validator"
+    Tags = InjectioTags.Validator
 )]
 internal sealed class DeleteStorageCommandValidator : AbstractValidator<DeleteStorageCommand>
 {
