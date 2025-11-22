@@ -46,6 +46,7 @@ internal sealed class UpdateMusicList : IEndpoint
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute())
+            .Produces<UnauthorizedHttpResult>(StatusCodes.Status401Unauthorized)
             .WithName(nameof(UpdateMusicList));
     }
 }

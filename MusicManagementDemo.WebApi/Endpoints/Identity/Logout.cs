@@ -36,6 +36,7 @@ internal sealed class Logout : IEndpoint
                 }
             )
             .RequireAuthorization()
+            .Produces<UnauthorizedHttpResult>(StatusCodes.Status401Unauthorized)
             .WithName(nameof(Logout));
     }
 }

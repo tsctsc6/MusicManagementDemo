@@ -47,6 +47,7 @@ internal sealed class ReadAllMusicList : IEndpoint
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute())
+            .Produces<UnauthorizedHttpResult>(StatusCodes.Status401Unauthorized)
             .WithName(nameof(ReadAllMusicList));
     }
 }

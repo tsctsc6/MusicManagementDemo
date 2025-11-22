@@ -56,6 +56,7 @@ internal sealed class ChangeMusicInfoOrderInMusicList : IEndpoint
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute())
+            .Produces<UnauthorizedHttpResult>(StatusCodes.Status401Unauthorized)
             .WithName(nameof(ChangeMusicInfoOrderInMusicList));
     }
 }

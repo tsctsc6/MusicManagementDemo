@@ -49,6 +49,7 @@ internal sealed class RemoveMusicInfoFromMusicList : IEndpoint
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute())
+            .Produces<UnauthorizedHttpResult>(StatusCodes.Status401Unauthorized)
             .WithName(nameof(RemoveMusicInfoFromMusicList));
     }
 }

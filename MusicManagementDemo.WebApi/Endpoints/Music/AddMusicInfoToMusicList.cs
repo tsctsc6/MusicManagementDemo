@@ -49,6 +49,7 @@ internal sealed class AddMusicInfoToMusicList : IEndpoint
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute())
+            .Produces<UnauthorizedHttpResult>(StatusCodes.Status401Unauthorized)
             .WithName(nameof(AddMusicInfoToMusicList));
     }
 }

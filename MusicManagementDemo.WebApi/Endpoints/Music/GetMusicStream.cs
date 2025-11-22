@@ -1,6 +1,7 @@
 ﻿using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.OpenApi;
 using MusicManagementDemo.Application.UseCase.Music.GetMusicStream;
 using RustSharp;
 
@@ -35,6 +36,42 @@ internal sealed class GetMusicStream : IEndpoint
                 }
             )
             .RequireAuthorization(new AuthorizeAttribute())
+            .AddOpenApiOperationTransformer(
+                (operation, context, ct) =>
+                {
+                    operation.Responses!["200"] = new OpenApiResponse
+                    {
+                        Description = "OK",
+                        Content = new Dictionary<string, OpenApiMediaType>
+                        {
+                            ["video/x-flac"] = new()
+                            {
+                                Schema = new OpenApiSchema
+                                {
+                                    Type = JsonSchemaType.String,
+                                    Format = "binary",
+                                },
+                            },
+                        },
+                    };
+                    operation.Responses!["206"] = new OpenApiResponse
+                    {
+                        Description = "Partial Content",
+                        Content = new Dictionary<string, OpenApiMediaType>
+                        {
+                            ["video/x-flac"] = new()
+                            {
+                                Schema = new OpenApiSchema
+                                {
+                                    Type = JsonSchemaType.String,
+                                    Format = "binary",
+                                },
+                            },
+                        },
+                    };
+                    return Task.CompletedTask;
+                }
+            )
             .WithName(nameof(GetMusicStream));
     }
 }
