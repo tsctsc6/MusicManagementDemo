@@ -11,8 +11,17 @@ $env:PGUSER = $pgUser
 $env:PGHOST = $pgHost
 $env:PGPORT = $pgPort
 
+$queryString = @"
+SELECT row_to_json(t) FROM (
+SELECT datname FROM pg_database
+WHERE
+datname LIKE '$prefix%' AND
+datname NOT IN ('postgres', 'template0', 'template1')
+) t;
+"@
+
 # 获取匹配前缀的数据库列表（连接到系统数据库 'postgres'）
-$dbs = & psql --csv -d postgres -Atc "SELECT datname FROM pg_database WHERE datname LIKE '$prefix%' AND datname NOT IN ('postgres', 'template0', 'template1');"
+$dbs = & psql -d postgres -Atc $queryString
 
 # 如果没有匹配的数据库，输出消息并退出
 if (-not $dbs) {
@@ -25,18 +34,25 @@ $dbs = $dbs.Split("`r`n");
 
 # 遍历每个匹配的数据库
 foreach ($db in $dbs) {
-    Write-Host "处理数据库: $db"
+    $db = $db | ConvertFrom-Json
+    Write-Host "处理数据库: $($db.datname)"
+
+    $disconnectString = @"
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity WHERE datname = '$($db.datname)'
+AND pid <> pg_backend_pid();
+"@
 
     # 终止数据库的所有现有连接（除了当前会话）
-    & psql --csv -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$db' AND pid <> pg_backend_pid();"
+    & psql -d postgres -c $disconnectString > $null
 
     # 删除数据库
-    & dropdb --if-exists $db
+    & dropdb --if-exists $($db.datname)
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "成功删除数据库: $db"
+        Write-Host "成功删除数据库: $($db.datname)"
     }
     else {
-        Write-Host "删除数据库失败: $db"
+        Write-Host "删除数据库失败: $($db.datname)"
     }
 }
 
