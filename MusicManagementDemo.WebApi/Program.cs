@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder
     .Services.AddApplication()
-    .AddDatabaseInfrastructure(builder.Configuration)
+    .AddDatabaseInfrastructure(builder.Configuration, "Default")
     .AddSharedInfrastructure(builder.Configuration)
     .AddRealInfrastructure()
     .AddWebApi(builder.Configuration)

@@ -40,7 +40,7 @@ public class BaseTestingClass : IAsyncLifetime
             .Build();
 
         servicesBuilder
-            .AddDatabaseInfrastructure(newConfiguration)
+            .AddDatabaseInfrastructure(newConfiguration, "Default")
             .AddTestingInfrastructure()
             .AddSharedInfrastructure(newConfiguration)
             .AddApplication();
