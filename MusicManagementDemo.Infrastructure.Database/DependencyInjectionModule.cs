@@ -26,12 +26,15 @@ public static class DependencyInjectionModule
 
     public static IServiceCollection AddDatabaseInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration
+        IConfiguration configuration,
+        string connectionStringName
     )
     {
         services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 
-        services.AddDatabase(configuration.GetConnectionString("Default") ?? string.Empty);
+        services.AddDatabase(
+            configuration.GetConnectionString(connectionStringName) ?? string.Empty
+        );
 
         services
             .AddIdentity<ApplicationUser, IdentityRole<Guid>>()
@@ -46,6 +49,7 @@ public static class DependencyInjectionModule
         string connectionString
     )
     {
+        // 可选：AddDbContextPool
         services.AddDbContext<AppDbContext>(options =>
         {
             options
