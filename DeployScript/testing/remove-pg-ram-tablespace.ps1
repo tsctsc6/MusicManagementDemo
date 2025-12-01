@@ -8,6 +8,7 @@ $env:PGUSER = $pgUser
 $env:PGHOST = $pgHost
 $env:PGPORT = $pgPort
 
+rm R:\pg_ram_db -Recurse
 psql --csv -d postgres -c "DROP TABLESPACE ram_tablespace;"
 
 Remove-Item Env:PGPASSWORD
