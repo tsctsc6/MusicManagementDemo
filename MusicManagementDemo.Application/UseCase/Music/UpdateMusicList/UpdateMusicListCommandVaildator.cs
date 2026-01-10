@@ -11,6 +11,7 @@ internal sealed class UpdateMusicListCommandVaildator : AbstractValidator<Update
     public UpdateMusicListCommandVaildator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.UserId).NotNull();
 

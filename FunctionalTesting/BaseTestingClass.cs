@@ -28,15 +28,13 @@ public class BaseTestingClass : IAsyncLifetime
 
         var newConfiguration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.Testing.json", optional: false, reloadOnChange: true)
-            .AddInMemoryCollection(
-                [
-                    new("DbName", $"functional_testing_{guid}"),
-                    new(
-                        "ConnectionStrings:Default",
-                        $"{oldConnectionString}Database=functional_testing_{guid};"
-                    ),
-                ]
-            )
+            .AddInMemoryCollection([
+                new("DbName", $"functional_testing_{guid}"),
+                new(
+                    "ConnectionStrings:Default",
+                    $"{oldConnectionString}Database=functional_testing_{guid};"
+                ),
+            ])
             .Build();
 
         servicesBuilder

@@ -2,12 +2,16 @@
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Logout;
 
-[RegisterScoped<IValidator<LogoutCommand>>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Validator)]
+[RegisterScoped<IValidator<LogoutCommand>>(
+    Duplicate = DuplicateStrategy.Append,
+    Tags = InjectioTags.Validator
+)]
 internal sealed class LogoutCommandValidator : AbstractValidator<LogoutCommand>
 {
     public LogoutCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(x => x.UserId).NotNull();
     }

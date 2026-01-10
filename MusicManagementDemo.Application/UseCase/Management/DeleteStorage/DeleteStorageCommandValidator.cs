@@ -11,6 +11,7 @@ internal sealed class DeleteStorageCommandValidator : AbstractValidator<DeleteSt
     public DeleteStorageCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.Id).NotNull().GreaterThan(0);
     }

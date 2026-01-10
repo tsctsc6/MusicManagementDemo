@@ -11,6 +11,7 @@ public class GetMusicStreamQueryValidator : AbstractValidator<GetMusicStreamQuer
     public GetMusicStreamQueryValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.MusicInfoId).NotNull();
     }

@@ -12,6 +12,7 @@ internal sealed class AddMusicInfoToMusicListCommandValidator
     public AddMusicInfoToMusicListCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.UserId).NotNull();
 

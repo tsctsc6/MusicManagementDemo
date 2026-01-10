@@ -12,6 +12,7 @@ internal sealed class GetAllMusicInfoFromMusicListQueryValidator
     public GetAllMusicInfoFromMusicListQueryValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.UserId).NotNull();
 

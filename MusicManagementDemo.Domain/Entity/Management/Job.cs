@@ -59,6 +59,7 @@ public enum JobType
     /// 未定义
     /// </summary>
     Undefined,
+
     /// <summary>
     /// 增量扫描音乐文件
     /// </summary>
@@ -71,14 +72,17 @@ public enum JobStatus
     /// 未定义
     /// </summary>
     Undefined,
+
     /// <summary>
     /// 等待开始
     /// </summary>
     WaitingStart,
+
     /// <summary>
     /// 运行中
     /// </summary>
     Running,
+
     /// <summary>
     /// 已完成
     /// </summary>

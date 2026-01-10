@@ -2,12 +2,16 @@
 
 namespace MusicManagementDemo.Application.UseCase.Identity.Login;
 
-[RegisterScoped<IValidator<LoginCommand>>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Validator)]
+[RegisterScoped<IValidator<LoginCommand>>(
+    Duplicate = DuplicateStrategy.Append,
+    Tags = InjectioTags.Validator
+)]
 internal sealed class LoginCommandValidator : AbstractValidator<LoginCommand>
 {
     public LoginCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.Email).NotEmpty().EmailAddress().MaximumLength(256);
 

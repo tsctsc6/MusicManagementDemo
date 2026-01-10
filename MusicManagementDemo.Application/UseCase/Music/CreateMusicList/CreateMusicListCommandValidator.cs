@@ -11,6 +11,7 @@ internal sealed class CreateMusicListCommandValidator : AbstractValidator<Create
     public CreateMusicListCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.UserId).NotNull();
 

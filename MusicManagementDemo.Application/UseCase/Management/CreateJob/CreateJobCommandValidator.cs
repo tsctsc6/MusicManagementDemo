@@ -11,6 +11,7 @@ internal sealed class CreateJobCommandValidator : AbstractValidator<CreateJobCom
     public CreateJobCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.Type).NotNull();
 

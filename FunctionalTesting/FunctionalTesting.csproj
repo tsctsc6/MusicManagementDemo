@@ -1,23 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-		<IsTestingPlatformApplication>true</IsTestingPlatformApplication>
+        <IsTestingPlatformApplication>true</IsTestingPlatformApplication>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.4">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Mediator.Abstractions" Version="3.0.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="xunit.v3" Version="3.2.1" />
     </ItemGroup>
@@ -27,17 +26,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FunctionalTesting.Infrastructure\FunctionalTesting.Infrastructure.csproj" />
-      <ProjectReference Include="..\MusicManagementDemo.Infrastructure.Core\MusicManagementDemo.Infrastructure.Core.csproj" />
-      <ProjectReference Include="..\MusicManagementDemo.Application\MusicManagementDemo.Application.csproj" />
-      <ProjectReference Include="..\MusicManagementDemo.Infrastructure.Database\MusicManagementDemo.Infrastructure.Database.csproj" />
+        <ProjectReference Include="..\FunctionalTesting.Infrastructure\FunctionalTesting.Infrastructure.csproj" />
+        <ProjectReference Include="..\MusicManagementDemo.Infrastructure.Core\MusicManagementDemo.Infrastructure.Core.csproj" />
+        <ProjectReference Include="..\MusicManagementDemo.Application\MusicManagementDemo.Application.csproj" />
+        <ProjectReference Include="..\MusicManagementDemo.Infrastructure.Database\MusicManagementDemo.Infrastructure.Database.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="appsettings.Testing.json" />
-      <Content Include="appsettings.Testing.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
+        <None Remove="appsettings.Testing.json" />
+        <Content Include="appsettings.Testing.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
-
 </Project>

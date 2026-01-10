@@ -2,12 +2,16 @@
 
 namespace MusicManagementDemo.Application.UseCase.Management.ReadJob;
 
-[RegisterScoped<IValidator<ReadJobQuery>>(Duplicate = DuplicateStrategy.Append, Tags = InjectioTags.Validator)]
+[RegisterScoped<IValidator<ReadJobQuery>>(
+    Duplicate = DuplicateStrategy.Append,
+    Tags = InjectioTags.Validator
+)]
 public class ReadJobQueryValidator : AbstractValidator<ReadJobQuery>
 {
     public ReadJobQueryValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.Id).NotEmpty().GreaterThan(0);
     }

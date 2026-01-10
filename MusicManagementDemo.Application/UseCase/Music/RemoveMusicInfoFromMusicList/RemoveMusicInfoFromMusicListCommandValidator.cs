@@ -12,6 +12,7 @@ internal sealed class RemoveMusicInfoFromMusicListCommandValidator
     public RemoveMusicInfoFromMusicListCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.UserId).NotNull();
 

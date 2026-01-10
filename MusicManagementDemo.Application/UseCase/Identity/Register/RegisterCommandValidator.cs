@@ -11,6 +11,7 @@ internal sealed class RegisterCommandValidator : AbstractValidator<RegisterComma
     public RegisterCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(c => c.Email).NotEmpty().EmailAddress().MaximumLength(256);
 

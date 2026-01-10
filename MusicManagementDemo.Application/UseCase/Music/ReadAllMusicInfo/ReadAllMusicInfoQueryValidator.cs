@@ -11,6 +11,7 @@ internal sealed class ReadAllMusicInfoQueryValidator : AbstractValidator<ReadAll
     public ReadAllMusicInfoQueryValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(x => x.ReferenceId);
 

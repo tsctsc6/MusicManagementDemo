@@ -12,6 +12,7 @@ internal sealed class ChangeMusicInfoOrderInMusicListCommandValidator
     public ChangeMusicInfoOrderInMusicListCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(x => x.UserId).NotNull();
 

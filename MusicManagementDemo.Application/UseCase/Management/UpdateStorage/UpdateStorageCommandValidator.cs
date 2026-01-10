@@ -11,6 +11,7 @@ internal sealed class UpdateStorageCommandValidator : AbstractValidator<UpdateSt
     public UpdateStorageCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.Id).NotNull().GreaterThan(0);
 

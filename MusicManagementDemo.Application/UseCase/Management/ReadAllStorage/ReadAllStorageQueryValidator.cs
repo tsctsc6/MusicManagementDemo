@@ -11,6 +11,7 @@ internal sealed class ReadAllStorageQueryValidator : AbstractValidator<ReadAllSt
     public ReadAllStorageQueryValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(x => x.ReferenceId);
 

@@ -11,6 +11,7 @@ public class CancelJobCommandValidator : AbstractValidator<CancelJobCommand>
     public CancelJobCommandValidator()
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(e => e.JobId).NotNull().GreaterThan(0);
     }
