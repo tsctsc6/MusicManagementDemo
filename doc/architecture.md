@@ -57,8 +57,8 @@ erDiagram
 ```
 
 ## 技术方案
-* .NET 9, CSharp 13
-* 数据库： PostgresSQL 17
+* .NET 10, CSharp 14
+* 数据库： PostgresSQL 18
 * ORM： EFCore
 * 使用依赖注入，通过 Microsoft.Extensions.DependencyInjection 实现。
 * 使用 [Injectio](https://github.com/loresoft/Injectio) 库，自动批量注册部分依赖。
