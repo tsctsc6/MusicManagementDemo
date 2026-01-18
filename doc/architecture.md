@@ -1,4 +1,5 @@
 ## 项目结构图
+
 ```mermaid
 ---
 title: 项目结构图
@@ -24,6 +25,7 @@ flowchart TD
 ```
 
 ## 简化的 ER 图
+
 ```mermaid
 ---
 title: 简化的 ER 图
@@ -57,6 +59,7 @@ erDiagram
 ```
 
 ## 技术方案
+
 * .NET 10, CSharp 14
 * 数据库： PostgresSQL 18
 * ORM： EFCore
