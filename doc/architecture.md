@@ -24,6 +24,8 @@ flowchart TD
     end
 ```
 
+把 Infrastructure, Application 分开，通过 Abstractions 中的接口调用。这样是利于单元测试的时候，以模块为单位进行替换。比如说，在对 Application 进行单元测试的时候，不需要访问实际的文件系统，弄一个虚拟的文件系统就行了。这基本是 FunctionalTesting.Infrastructure 做的事情。在启动的时候，根据是单元测试环境还是实际生产环境，调用对应项目的 `DependencyInjectionModule` 进行依赖注入，方便地替换模块。
+
 ## 简化的 ER 图
 
 ```mermaid
