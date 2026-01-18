@@ -1,1 +1,1 @@
-imdisk -D -m R:
+sudo aim_ll -D -m R:
