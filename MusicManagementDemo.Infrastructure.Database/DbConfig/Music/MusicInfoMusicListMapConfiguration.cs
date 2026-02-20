@@ -10,9 +10,7 @@ public class MusicInfoMusicListMapConfiguration : IEntityTypeConfiguration<Music
     {
         builder.HasKey(e => new { e.MusicListId, e.MusicInfoId });
 
-        builder.Property(e => e.PrevId).HasDefaultValueSql("NULL");
-
-        builder.Property(e => e.NextId).HasDefaultValueSql("NULL");
+        builder.Property(e => e.SortingOrder);
 
         builder.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
     }

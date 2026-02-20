@@ -58,10 +58,6 @@ public static class DependencyInjectionModule
                     (d2, _) =>
                     {
                         var d = (AppDbContext)d2;
-                        d.Database.ExecuteSqlRaw(
-                            DbFunctions.DefineGetMusicInfoInMusicListReturnType
-                        );
-                        d.Database.ExecuteSqlRaw(DbFunctions.DefineGetMusicInfoInMusicList);
                         d.Roles.Add(new() { Name = "Admin", NormalizedName = "ADMIN" });
                         d.SaveChanges();
                     }
@@ -70,14 +66,6 @@ public static class DependencyInjectionModule
                     async (d2, _, ct) =>
                     {
                         var d = (AppDbContext)d2;
-                        await d.Database.ExecuteSqlRawAsync(
-                            DbFunctions.DefineGetMusicInfoInMusicListReturnType,
-                            ct
-                        );
-                        await d.Database.ExecuteSqlRawAsync(
-                            DbFunctions.DefineGetMusicInfoInMusicList,
-                            cancellationToken: ct
-                        );
                         await d.Roles.AddAsync(
                             new() { Name = "Admin", NormalizedName = "ADMIN" },
                             ct
