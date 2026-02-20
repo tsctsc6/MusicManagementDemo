@@ -31,7 +31,9 @@ public static class DependencyInjectionModule
 
         services.AddJsonOptions();
 
-        services.AddSingleton<LexoRankManager>(_ => new(CommonCharacterSets.Base62));
+        services.AddSingleton<ILexoRankManager, LexoRankManager>(_ =>
+            new(CommonCharacterSets.Base62)
+        );
 
         return services;
     }

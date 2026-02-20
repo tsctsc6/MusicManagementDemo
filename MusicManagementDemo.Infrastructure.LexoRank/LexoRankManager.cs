@@ -1,9 +1,10 @@
 ﻿using System.Collections.Frozen;
 using System.Numerics;
+using MusicManagementDemo.Abstractions;
 
 namespace MusicManagementDemo.Infrastructure.LexoRank;
 
-public class LexoRankManager
+public class LexoRankManager : ILexoRankManager
 {
     public FrozenDictionary<char, BigInteger> CharacterToBigIntegerMap { get; init; }
 
