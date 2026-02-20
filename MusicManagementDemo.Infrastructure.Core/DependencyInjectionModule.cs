@@ -13,6 +13,7 @@ using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Infrastructure.Core.JobHandler;
 using MusicManagementDemo.Infrastructure.Core.Jwt;
+using MusicManagementDemo.Infrastructure.LexoRank;
 using Serilog;
 
 namespace MusicManagementDemo.Infrastructure.Core;
@@ -29,6 +30,8 @@ public static class DependencyInjectionModule
         services.AddSingleton<IJwtManager, JwtManager>();
 
         services.AddJsonOptions();
+
+        services.AddSingleton<LexoRankManager>(_ => new(CommonCharacterSets.Base62));
 
         return services;
     }
