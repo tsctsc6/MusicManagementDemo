@@ -50,7 +50,7 @@ namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
                 {
                     MusicInfoId = table.Column<Guid>(type: "uuid", nullable: false),
                     MusicListId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SortingOrder = table.Column<string>(type: "text", nullable: false),
+                    SortingOrder = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
@@ -263,6 +263,13 @@ namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MusicInfoMusicListMaps_SortingOrder",
+                schema: "music",
+                table: "MusicInfoMusicListMaps",
+                column: "SortingOrder",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MusicInfos_FilePath",

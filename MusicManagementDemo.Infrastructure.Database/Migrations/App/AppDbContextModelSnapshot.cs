@@ -370,9 +370,13 @@ namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
 
                     b.Property<string>("SortingOrder")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.HasKey("MusicListId", "MusicInfoId");
+
+                    b.HasIndex("SortingOrder")
+                        .IsUnique();
 
                     b.ToTable("MusicInfoMusicListMaps", "music");
                 });

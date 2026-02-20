@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260220105524_Initial")]
+    [Migration("20260220141125_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -373,9 +373,13 @@ namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
 
                     b.Property<string>("SortingOrder")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.HasKey("MusicListId", "MusicInfoId");
+
+                    b.HasIndex("SortingOrder")
+                        .IsUnique();
 
                     b.ToTable("MusicInfoMusicListMaps", "music");
                 });

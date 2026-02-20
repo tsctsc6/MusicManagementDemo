@@ -10,8 +10,10 @@ public class MusicInfoMusicListMapConfiguration : IEntityTypeConfiguration<Music
     {
         builder.HasKey(e => new { e.MusicListId, e.MusicInfoId });
 
-        builder.Property(e => e.SortingOrder);
+        builder.Property(e => e.SortingOrder).HasMaxLength(128);
 
         builder.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
+
+        builder.HasIndex(e => e.SortingOrder).IsUnique();
     }
 }
