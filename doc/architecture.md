@@ -13,6 +13,8 @@ flowchart TD
     Infrastructure.Database --> Abstractions
     Application --> Abstractions
     Abstractions --> Domain
+    Infrastructure.Database --> Infrastructure.LexoRank
+    Infrastructure.LexoRank --> Abstractions
     end
 
     subgraph Functional_Testing

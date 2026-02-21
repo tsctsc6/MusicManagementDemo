@@ -34,6 +34,7 @@
         <Project Path="MusicManagementDemo.Domain/MusicManagementDemo.Domain.csproj" />
         <Project Path="MusicManagementDemo.Infrastructure.Core/MusicManagementDemo.Infrastructure.Core.csproj" />
         <Project Path="MusicManagementDemo.Infrastructure.Database/MusicManagementDemo.Infrastructure.Database.csproj" />
+        <Project Path="MusicManagementDemo.Infrastructure.LexoRank/MusicManagementDemo.Infrastructure.LexoRank.csproj" />
         <Project Path="MusicManagementDemo.WebApi/MusicManagementDemo.WebApi.csproj" />
     </Folder>
 </Solution>

@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251118063113_Initial")]
+    [Migration("20260221110356_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -371,19 +371,21 @@ namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now()");
 
-                    b.Property<Guid?>("NextId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("NULL");
-
-                    b.Property<Guid?>("PrevId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("NULL");
+                    b.Property<string>("SortingOrder")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .UseCollation("C");
 
                     b.HasKey("MusicListId", "MusicInfoId");
 
-                    b.ToTable("MusicInfoMusicListMaps", "music");
+                    b.HasIndex("SortingOrder")
+                        .IsUnique();
+
+                    b.ToTable("MusicInfoMusicListMaps", "music", t =>
+                        {
+                            t.HasCheckConstraint("CK_SortingOrder_PrintableASCII", "\"SortingOrder\" ~ '^[\\x20-\\x7E]*$'");
+                        });
                 });
 
             modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Music.MusicList", b =>

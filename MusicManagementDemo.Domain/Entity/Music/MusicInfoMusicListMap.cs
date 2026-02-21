@@ -16,14 +16,9 @@ public class MusicInfoMusicListMap
     public Guid MusicListId { get; set; }
 
     /// <summary>
-    /// 前一首音乐的 id, null 表示这是第一首
+    /// 用于排序的值，使用 LexoRank 方法，base62
     /// </summary>
-    public Guid? PrevId { get; set; }
-
-    /// <summary>
-    /// 后一首音乐的 id, null 表示这是最后一首
-    /// </summary>
-    public Guid? NextId { get; set; }
+    public string SortingOrder { get; set; } = string.Empty;
 
     /// <summary>
     /// 加入歌单时间

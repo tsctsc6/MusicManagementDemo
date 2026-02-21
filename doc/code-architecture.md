@@ -16,7 +16,7 @@
 
 ### Infrastructure 层
 
-Infrastructure 层分为 Infrastructure.Core 和 Infrastructure.Database 。
+Infrastructure 层分为 Infrastructure.Core, Infrastructure.Database 和 Infrastructure.LexoRank 。
 
 这样划分，是基于，有可能有其他项目会使用这个项目的 DbContext ，比如，另外创建一个项目，每天检查新增用户的数量（这其实是属于运维工具）。
 
@@ -29,6 +29,8 @@ Infrastructure.Core 中，有两个添加依赖注入的公开方法： `AddShar
 在 Infrastructure.Database 的 DbFunctions 文件夹中，还定义了一个存储过程。
 
 数据库迁移在 Infrastructure.Database 的 Migrations 中。
+
+Infrastructure.LexoRank 是 LexoRank 方法的实现，被 Infrastructure.Core 引用，在 Infrastructure.Core 中注册相关服务。
 
 ### Application 层
 

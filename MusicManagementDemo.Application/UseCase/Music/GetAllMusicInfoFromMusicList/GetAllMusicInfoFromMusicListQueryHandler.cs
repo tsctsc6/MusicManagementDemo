@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
+using MusicManagementDemo.Domain.Entity.Music;
 using static MusicManagementDemo.Application.Responses.ApiResult<MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList.GetAllMusicInfoFromMusicListQueryResponse>;
 
 namespace MusicManagementDemo.Application.UseCase.Music.GetAllMusicInfoFromMusicList;
@@ -33,22 +34,57 @@ internal sealed class GetAllMusicInfoFromMusicListQueryHandler(
             return Err(404, "MusicList not found");
         }
 
-        var musicInfosToReadQuery = dbContext
-            .GetMusicInfoInMusicList(
-                request.MusicListId,
-                request.ReferenceId,
-                request.PageSize,
-                request.Asc
+        var beginSortingValue = string.Empty;
+        if (request.ReferenceId is not null)
+        {
+            beginSortingValue =
+                (
+                    await dbContext.MusicInfoMusicListMaps.SingleOrDefaultAsync(
+                        e => e.MusicInfoId == request.ReferenceId,
+                        cancellationToken
+                    )
+                )?.SortingOrder
+                ?? string.Empty;
+        }
+
+        IQueryable<MusicInfoMusicListMap> musicInfosToReadQuery_Map =
+            dbContext.MusicInfoMusicListMaps;
+        if (request.Asc)
+        {
+            musicInfosToReadQuery_Map = musicInfosToReadQuery_Map.OrderBy(e => e.SortingOrder);
+        }
+        else
+        {
+            musicInfosToReadQuery_Map = musicInfosToReadQuery_Map.OrderByDescending(e =>
+                e.SortingOrder
+            );
+        }
+
+        if (string.IsNullOrEmpty(beginSortingValue))
+        {
+            musicInfosToReadQuery_Map = musicInfosToReadQuery_Map.Where(e =>
+                e.MusicListId == request.MusicListId
+            );
+        }
+        else
+        {
+            musicInfosToReadQuery_Map = musicInfosToReadQuery_Map.Where(e =>
+                e.MusicListId == request.MusicListId
+                && string.Compare(e.SortingOrder, beginSortingValue) >= 0
+            );
+        }
+
+        var musicInfosToRead = await (
+            from musicInfoMusicListMap in musicInfosToReadQuery_Map.Take(request.PageSize)
+            join musicInfo in dbContext.MusicInfos
+                on musicInfoMusicListMap.MusicInfoId equals musicInfo.Id
+            select new GetAllMusicInfoFromMusicListQueryResponseMusicInfo(
+                musicInfo.Id,
+                musicInfo.Title,
+                musicInfo.Artist,
+                musicInfo.Album
             )
-            .Select(x => new GetAllMusicInfoFromMusicListQueryResponseMusicInfo(
-                x.Id,
-                x.Title,
-                x.Artist,
-                x.Album
-            ));
-        var musicInfosToRead = await musicInfosToReadQuery.ToArrayAsync(
-            cancellationToken: cancellationToken
-        );
+        ).ToArrayAsync(cancellationToken: cancellationToken);
 
         return Ok(
             new GetAllMusicInfoFromMusicListQueryResponse(musicListToRead.Name, musicInfosToRead)

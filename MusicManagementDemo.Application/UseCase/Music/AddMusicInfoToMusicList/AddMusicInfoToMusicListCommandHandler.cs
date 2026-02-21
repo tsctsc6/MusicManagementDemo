@@ -1,6 +1,7 @@
 ﻿using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MusicManagementDemo.Abstractions;
 using MusicManagementDemo.Abstractions.IDbContext;
 using MusicManagementDemo.Application.Responses;
 using MusicManagementDemo.Domain.Entity.Music;
@@ -14,6 +15,7 @@ namespace MusicManagementDemo.Application.UseCase.Music.AddMusicInfoToMusicList;
 /// <param name="dbContext"></param>
 internal sealed class AddMusicInfoToMusicListCommandHandler(
     IMusicAppDbContext dbContext,
+    ILexoRankManager lexoRankManager,
     ILogger<AddMusicInfoToMusicListCommandHandler> logger
 )
     : IRequestHandler<
@@ -36,18 +38,6 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
             return Err(404, "没有找到歌单");
         }
 
-        // 歌单中是否存在该歌曲
-        if (
-            await dbContext.MusicInfoMusicListMaps.AnyAsync(
-                e => e.MusicListId == request.MusicListId && e.MusicInfoId == request.MusicInfoId,
-                cancellationToken: cancellationToken
-            )
-        )
-        {
-            logger.LogError("MusicInfo {musicInfoId} already exist", request.MusicInfoId);
-            return Err(404, "该歌曲已存在该歌单中");
-        }
-
         // 歌曲是否存在
         if (
             !await dbContext.MusicInfos.AnyAsync(
@@ -60,39 +50,46 @@ internal sealed class AddMusicInfoToMusicListCommandHandler(
             return Err(404, "该歌曲不存在");
         }
 
+        // 歌单中是否存在该歌曲
+        if (
+            await dbContext.MusicInfoMusicListMaps.AnyAsync(
+                e => e.MusicListId == request.MusicListId && e.MusicInfoId == request.MusicInfoId,
+                cancellationToken: cancellationToken
+            )
+        )
+        {
+            logger.LogError("MusicInfo {musicInfoId} already exist", request.MusicInfoId);
+            return Err(404, "该歌曲已存在该歌单中");
+        }
+
         // 查询歌单最后的歌曲
         var lastMusicInfoMap = await dbContext
-            .MusicInfoMusicListMaps.Where(e =>
-                e.MusicListId == request.MusicListId && e.NextId == null
-            )
-            .SingleOrDefaultAsync(cancellationToken: cancellationToken);
-        var expectedSubmitCount = 0;
+            .MusicInfoMusicListMaps.AsNoTracking()
+            .OrderByDescending(e => e.SortingOrder)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
             cancellationToken
         );
+
+        var lastSortingValue = string.Empty;
+        if (lastMusicInfoMap is not null)
+        {
+            lastSortingValue = lastMusicInfoMap.SortingOrder;
+        }
+        var sortingValue = lexoRankManager.Between(lastSortingValue, string.Empty);
+
         var musicInfoMapToAdd = new MusicInfoMusicListMap
         {
             MusicListId = request.MusicListId,
             MusicInfoId = request.MusicInfoId,
+            SortingOrder = sortingValue,
         };
-        if (lastMusicInfoMap is not null)
-        {
-            lastMusicInfoMap.NextId = request.MusicInfoId;
-            dbContext.MusicInfoMusicListMaps.Update(lastMusicInfoMap);
-            musicInfoMapToAdd.PrevId = lastMusicInfoMap.MusicInfoId;
-            expectedSubmitCount++;
-        }
 
         await dbContext.MusicInfoMusicListMaps.AddAsync(musicInfoMapToAdd, cancellationToken);
-        expectedSubmitCount++;
-        var submitCount = await dbContext.SaveChangesAsync(cancellationToken);
-        if (submitCount != expectedSubmitCount)
+        if (await dbContext.SaveChangesAsync(cancellationToken) != 1)
         {
-            logger.LogError(
-                "submitCount is not expected. Expected: {expectedSubmitCount}, in reality: {reality}",
-                expectedSubmitCount,
-                submitCount
-            );
+            logger.LogError("SubmitCount is not expected. Expected: 1");
             return Err(503, "添加歌曲失败");
         }
 
