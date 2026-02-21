@@ -50,12 +50,13 @@ namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
                 {
                     MusicInfoId = table.Column<Guid>(type: "uuid", nullable: false),
                     MusicListId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SortingOrder = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    SortingOrder = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false, collation: "C"),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MusicInfoMusicListMaps", x => new { x.MusicListId, x.MusicInfoId });
+                    table.CheckConstraint("CK_SortingOrder_PrintableASCII", "\"SortingOrder\" ~ '^[\\x20-\\x7E]*$'");
                 });
 
             migrationBuilder.CreateTable(

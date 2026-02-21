@@ -371,14 +371,18 @@ namespace MusicManagementDemo.Infrastructure.Database.Migrations.App
                     b.Property<string>("SortingOrder")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .UseCollation("C");
 
                     b.HasKey("MusicListId", "MusicInfoId");
 
                     b.HasIndex("SortingOrder")
                         .IsUnique();
 
-                    b.ToTable("MusicInfoMusicListMaps", "music");
+                    b.ToTable("MusicInfoMusicListMaps", "music", t =>
+                        {
+                            t.HasCheckConstraint("CK_SortingOrder_PrintableASCII", "\"SortingOrder\" ~ '^[\\x20-\\x7E]*$'");
+                        });
                 });
 
             modelBuilder.Entity("MusicManagementDemo.Domain.Entity.Music.MusicList", b =>

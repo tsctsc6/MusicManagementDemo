@@ -26,7 +26,4 @@
         <ProjectReference Include="..\MusicManagementDemo.Abstractions\MusicManagementDemo.Abstractions.csproj" />
         <ProjectReference Include="..\MusicManagementDemo.Infrastructure.LexoRank\MusicManagementDemo.Infrastructure.LexoRank.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="LexoRank\" />
-    </ItemGroup>
 </Project>
